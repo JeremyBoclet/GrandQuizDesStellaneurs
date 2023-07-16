@@ -123,8 +123,9 @@ while running:
                                 point = 3
 
                     game.current_player.add_point(point)
-                    selection_player_screen.save_points()
                     # selection_player_screen.set_points(game.current_player, point)
+                    selection_player_screen.save_points()
+
                 if game.bad_answer_rect.collidepoint(event.pos):
                     # Mauvaise réponse
                     game.current_ID += 1

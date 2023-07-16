@@ -179,7 +179,7 @@ class Round:
 
     def add_round2_button(self):
         self.group_buttons_round2.add(Button("Gaming", "LoL_Ban", 350, 250, 550, 110))
-        self.group_buttons_round2.add(Button("Mystery", 19, 350, 360, 550, 110))
+        self.group_buttons_round2.add(Button("Mystery", "Audio_Film", 350, 360, 550, 110))
         self.group_buttons_round2.add(Button("Riot_Games", 17, 350, 470, 550, 110))
         self.group_buttons_round2.add(Button("History", 18, 350, 580, 550, 110))
         self.group_buttons_round2.add(Button("Animals", 20, 350, 690, 550, 110))

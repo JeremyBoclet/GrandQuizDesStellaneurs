@@ -25,8 +25,10 @@ class Selection_Player_Screen(pygame.sprite.Sprite):
     def save_points(self):
         for player in self.group_buttons:
             # print("{} {}".format(player.player.name,player.player.total_point))
-            self.bdd.execute_query("UPDATE GrandQuiz.dbo.Players SET PlayerPoint = {} WHERE PlayerName = '{}'".format(
-                player.player.total_point, player.player.name))
+            # self.bdd.execute_query("UPDATE GrandQuiz.dbo.Players SET PlayerPoint = {} WHERE PlayerName = '{}'".format(
+            #    player.player.total_point, player.player.name))
+            print(player.player.total_point)
+            self.bdd.write_points(player.player.total_point,player.player.name)
 
     def set_points(self, current_player, point):
         for player in self.group_buttons:
@@ -36,7 +38,7 @@ class Selection_Player_Screen(pygame.sprite.Sprite):
     def add_players(self):
         y = 50
         x = 50
-        df = self.bdd.read_excel("Players")
+        df = self.bdd.get_players()
         # df = self.bdd.request_query("SELECT PlayerName, Main_Category FROM GrandQuiz.dbo.Players")
         df.reset_index()
 
