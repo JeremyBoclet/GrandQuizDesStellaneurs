@@ -1,0 +1,18 @@
+import pygame
+
+from Models.Buttons.Category.Rounds import Rounds
+
+
+class Selection_Round:
+    def __init__(self, screen):
+        self.screen = screen
+        self.is_selecting_round = True
+        self.group_buttons = pygame.sprite.Group()
+        self.group_buttons.add(Rounds(1, screen))
+        self.group_buttons.add(Rounds(2, screen))
+        self.group_buttons.add(Rounds(3, screen))
+        self.group_buttons.add(Rounds(4, screen))  # Finale
+        self.group_buttons.add(Rounds(5, screen))  # Classement
+
+    def update(self):
+        self.group_buttons.draw(self.screen)
