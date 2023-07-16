@@ -11,8 +11,21 @@ class Rounds(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (650, 150)).convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = self.screen.get_width() / 2 - 325
-        if round_number == 1:
-            spacing = (round_number * 20 + 50)
-        else:
-            spacing = ((round_number - 1) * 90) + 70
-        self.rect.y = spacing + ((round_number - 1) * 100)
+
+        match round_number:
+            case 1:
+                self.rect.y = 40
+            case 3:
+                self.rect.x = self.screen.get_width() / 2 - 660
+                spacing = (2 * 90) + 40
+                self.rect.y = spacing + (2 * 100)
+            case 4:
+                self.rect.x = self.screen.get_width() / 2 + 10
+                spacing = (2 * 90) + 40
+                self.rect.y = spacing + (2 * 100)
+            case 2:
+                spacing = ((round_number - 1) * 90) + 40
+                self.rect.y = spacing + ((round_number - 1) * 100)
+            case 5 | 6:
+                spacing = ((round_number - 1) * 90) + 40
+                self.rect.y = spacing + ((round_number - 3) * 100)

@@ -65,13 +65,16 @@ while running:
         screen_round.update_round3(game.current_player)
         current_round = 3
     elif screen_round.is_round4_active:
-        # Finale
-        screen_round.update_round4(game.current_player, time_in_sec)
+        screen_round.update_round4(game.current_player)
         current_round = 4
-    elif screen_round.is_round5_active:
-        # Classement
-        screen_round.update_round5(game.get_all_players_points())
+    elif screen_round.is_finale_active:
+        # Finale
+        screen_round.update_finale(game.current_player, time_in_sec)
         current_round = 5
+    elif screen_round.is_ranking_active:
+        # Classement
+        screen_round.update_Ranking(game.get_all_players_points())
+        current_round = 6
 
     # Met à jour l'écran
     pygame.display.flip()
@@ -112,6 +115,8 @@ while running:
                         case 3:
                             point = 2
                         case 4:
+                            point = 1
+                        case 5:
                             if game.current_question_category == 0:
                                 # Culture G = 1 Pt
                                 point = 1
@@ -147,6 +152,9 @@ while running:
                     for button in screen_round.group_buttons_round4:
                         if button.category_id == last_question_id:
                             button.had_been_chosen = False
+                    for button in screen_round.group_buttons_finale:
+                        if button.category_id == last_question_id:
+                            button.has_been_chosen = False
                 elif selection_player_screen.is_selecting_player:
                     # Sélection du joueur
                     for button in selection_player_screen.group_buttons:
@@ -161,7 +169,8 @@ while running:
                             screen_round.is_round2_active = (button.round_id == 2)
                             screen_round.is_round3_active = (button.round_id == 3)
                             screen_round.is_round4_active = (button.round_id == 4)
-                            screen_round.is_round5_active = (button.round_id == 5)
+                            screen_round.is_finale_active = (button.round_id == 5)
+                            screen_round.is_ranking_active = (button.round_id == 6)
                             time_in_sec = round_timer
                             selection_round.is_selecting_round = False
                 else:
@@ -205,13 +214,24 @@ while running:
                             for button in screen_round.group_buttons_round3:
                                 if button.rect.collidepoint(event.pos):
                                     time_in_sec = round_timer
-                                    game.get_question_round3(button.category_id)
+                                    game.get_question(button.category_id)
                                     game.is_playing = True
                                     button.had_been_chosen = True
                                     last_question_id = button.category_id
 
-                    # Round 4 (Récupération des questions par rapport à la question sélectionnée)
+                    # Round 4
                     if screen_round.is_round4_active:
+                        if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round and not game.is_playing:
+                            for button in screen_round.group_buttons_round4:
+                                if button.rect.collidepoint(event.pos):
+                                    time_in_sec = round_timer
+                                    game.get_question(button.category_id)
+                                    game.is_playing = True
+                                    button.had_been_chosen = True
+                                    last_question_id = button.category_id
+
+                    # Finale (Récupération des questions par rapport à la question sélectionnée)
+                    if screen_round.is_finale_active:
                         if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
                             for button in screen_round.group_buttons_round4:
                                 if button.rect.collidepoint(event.pos):

@@ -11,8 +11,9 @@ class Selection_Round:
         self.group_buttons.add(Rounds(1, screen))
         self.group_buttons.add(Rounds(2, screen))
         self.group_buttons.add(Rounds(3, screen))
-        self.group_buttons.add(Rounds(4, screen))  # Finale
-        self.group_buttons.add(Rounds(5, screen))  # Classement
+        self.group_buttons.add(Rounds(4, screen))
+        self.group_buttons.add(Rounds(5, screen))  # Finale
+        self.group_buttons.add(Rounds(6, screen))  # Classement
 
     def update(self):
         self.group_buttons.draw(self.screen)

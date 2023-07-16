@@ -16,7 +16,8 @@ class Round:
         self.is_round2_active = False
         self.is_round3_active = False
         self.is_round4_active = False
-        self.is_round5_active = False
+        self.is_finale_active = False
+        self.is_ranking_active = False
 
         self.screen = screen
 
@@ -40,14 +41,18 @@ class Round:
         self.group_buttons_round3 = pygame.sprite.Group()
         self.add_round3_button()
 
-        # Round 4 Finale
+        # Round 4
         self.group_buttons_round4 = pygame.sprite.Group()
-        self.final_category = []
         self.add_round4_button()
 
-        # Round 5 Classement
-        self.group_buttons_round5 = pygame.sprite.Group()
-        self.add_round5_button()
+        # Round Finale
+        self.group_buttons_finale = pygame.sprite.Group()
+        self.final_category = []
+        self.add_finale_button()
+
+        # Round Classement
+        self.group_buttons_ranking = pygame.sprite.Group()
+        self.add_ranking_button()
 
         self.font = pygame.font.SysFont("Verdana", 30)
         self.select_player(Players("Denis", 1), 1)
@@ -67,7 +72,12 @@ class Round:
         self.group_buttons_round3.draw(self.screen)
         self.select_player(current_player, 3)
 
-    def update_round4(self, current_player, time_in_sec):
+    def update_round4(self, current_player):
+        self.already_answered()
+        self.group_buttons_round4.draw(self.screen)
+        self.select_player(current_player,4)
+
+    def update_finale(self, current_player, time_in_sec):
         if time_in_sec == 0 and not self.hide_final:
             self.hide_final = True
             self.hide_final_button()
@@ -89,7 +99,7 @@ class Round:
 
         self.select_player(current_player, 4)
 
-    def update_round5(self, all_players):
+    def update_Ranking(self, all_players):
         self.group_buttons_return_round.empty()
         self.group_buttons_return_round.add(Return_Round(5))
         self.group_buttons_return_round.draw(self.screen)
@@ -168,6 +178,10 @@ class Round:
             if button.had_been_chosen:
                 self.group_buttons_round4.remove(button)
 
+        for button in self.group_buttons_finale:
+            if button.had_been_chosen:
+                self.group_buttons_finale.remove(button)
+
     def add_round1_button(self):
         self.group_buttons_round1.add(Button("Judo", 1, 350, 200, 600, 150))
         self.group_buttons_round1.add(Button("Harry_Potter", 2, 350, 350, 600, 150))
@@ -204,6 +218,9 @@ class Round:
         self.group_buttons_round3.add(Button("Mass_Effect", 7, 1000, 350, 600, 150))
 
     def add_round4_button(self):
+        self.group_buttons_round4.add(Button("LoL_Ban", "LoL_Ban",350, 200, 600, 150))
+
+    def add_finale_button(self):
         button_id = 0
         question_id = 1000
         category_id = 1
@@ -252,7 +269,7 @@ class Round:
                     final_cat['x'] = 200 + x * 150
                     final_cat['y'] = 215 + y * 170
                     final_cat['count'] = count
-                    self.group_buttons_round4.add(Final_Button(final_cat["color"],
+                    self.group_buttons_finale.add(Final_Button(final_cat["color"],
                                                                final_cat["id_question"],
                                                                final_cat['x'],
                                                                final_cat['y'],
@@ -269,17 +286,17 @@ class Round:
                                                        final_cat['count'],
                                                        final_cat["id_category"]))
 
-    def add_round5_button(self):
-        self.group_buttons_round5.add(Button("First", 0, self.screen.get_width() / 2 - 325, 100, 600, 150))
-        self.group_buttons_round5.add(Button("Second", 0, self.screen.get_width() / 2 - 825, 300, 600, 150))
-        self.group_buttons_round5.add(Button("Third", 0, self.screen.get_width() / 2 + 180, 300, 600, 150))
+    def add_ranking_button(self):
+        self.group_buttons_ranking.add(Button("First", 0, self.screen.get_width() / 2 - 325, 100, 600, 150))
+        self.group_buttons_ranking.add(Button("Second", 0, self.screen.get_width() / 2 - 825, 300, 600, 150))
+        self.group_buttons_ranking.add(Button("Third", 0, self.screen.get_width() / 2 + 180, 300, 600, 150))
 
-        self.group_buttons_round5.add(Button("ForthOrMore", 0, 30, 500, 450, 100))
-        self.group_buttons_round5.add(Button("ForthOrMore", 0, 490, 500, 450, 100))
-        self.group_buttons_round5.add(Button("ForthOrMore", 0, 950, 500, 450, 100))
-        self.group_buttons_round5.add(Button("ForthOrMore", 0, 1410, 500, 450, 100))
+        self.group_buttons_ranking.add(Button("ForthOrMore", 0, 30, 500, 450, 100))
+        self.group_buttons_ranking.add(Button("ForthOrMore", 0, 490, 500, 450, 100))
+        self.group_buttons_ranking.add(Button("ForthOrMore", 0, 950, 500, 450, 100))
+        self.group_buttons_ranking.add(Button("ForthOrMore", 0, 1410, 500, 450, 100))
 
-        self.group_buttons_round5.add(Button("ForthOrMore", 0, 30, 600, 450, 100))
+        self.group_buttons_ranking.add(Button("ForthOrMore", 0, 30, 600, 450, 100))
         # self.group_buttons_round5.add(Button("ForthOrMore", 0, 390, 600, 350, 100))
         # self.group_buttons_round4.add(Button("ForthOrMore", 0, 750, 600, 350, 100))
         # self.group_buttons_round4.add(Button("ForthOrMore", 0, 1110, 600, 350, 100))
