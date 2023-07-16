@@ -6,7 +6,7 @@ class Return_Round(pygame.sprite.Sprite):
         super().__init__()
         self.name = "Current Round"
         self.category_id = -10
-        self.image = pygame.image.load("Assets/Round{}.png".format(round)).convert_alpha()
+        self.image = pygame.image.load("../Assets/Round{}.png".format(round)).convert_alpha()
         self.image = pygame.transform.scale(self.image, (400, 100)).convert_alpha()
         self.rect = self.image.get_rect()
 

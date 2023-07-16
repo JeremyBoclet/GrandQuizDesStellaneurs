@@ -7,7 +7,7 @@ class Final_Button(pygame.sprite.Sprite):
         self.name = name
         self.category_id = category_id
         self.read_category_id = real_category_id
-        self.image = pygame.image.load("Assets/Finale/{}.png".format(name)).convert_alpha()
+        self.image = pygame.image.load("../Assets/Finale/{}.png".format(name)).convert_alpha()
         self.image = pygame.transform.scale(self.image, (125, 125)).convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = x

@@ -15,7 +15,7 @@ screen_width = 1500
 screen_height = 1000
 # screen = pygame.display.set_mode((screen_width, screen_height))
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-background = pygame.transform.scale(pygame.image.load("assets/background.jpg").convert_alpha(),
+background = pygame.transform.scale(pygame.image.load("../assets/background.jpg").convert_alpha(),
                                     (screen.get_width(), screen.get_height()))
 # En seconde
 round_timer = 20
@@ -102,6 +102,7 @@ while running:
                         game.display_sound()
                 if game.good_answer_rect.collidepoint(event.pos):
                     # Bonne réponse
+                    game.stop_sound()
                     game.current_ID += 1
                     match current_round:
                         case 1:
@@ -127,8 +128,10 @@ while running:
                 if game.bad_answer_rect.collidepoint(event.pos):
                     # Mauvaise réponse
                     game.current_ID += 1
+                    game.stop_sound()
                 if game.cancel_rect.collidepoint(event.pos):
                     # Annuler
+                    game.stop_sound()
                     game.current_ID = 0
                     game.is_playing = False
                     for button in screen_round.group_buttons_round1:
@@ -187,7 +190,6 @@ while running:
                     # Round 2 (Récupération des questions par rapport à la catégorie sélectionnée)
                     if screen_round.is_round2_active:
                         if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round and not game.is_playing:
-                            print("a")
                             for button in screen_round.group_buttons_round2:
                                 if button.rect.collidepoint(event.pos):
                                     time_in_sec = round_timer

@@ -36,7 +36,8 @@ class Selection_Player_Screen(pygame.sprite.Sprite):
     def add_players(self):
         y = 50
         x = 50
-        df = self.bdd.request_query("SELECT PlayerName, Main_Category FROM GrandQuiz.dbo.Players")
+        df = self.bdd.read_excel("Players")
+        # df = self.bdd.request_query("SELECT PlayerName, Main_Category FROM GrandQuiz.dbo.Players")
         df.reset_index()
 
         for index, row in df.iterrows():

@@ -18,7 +18,7 @@ class Game:
         self.font = pygame.font.SysFont("Futura-bold", 80)
         self.question_font_color = (240, 255, 255)
         self.current_question = ""
-        self.path_external_question = ""
+        self.external_name = ""
         self.is_zoomed = False
         self.current_answer = ""
         self.current_question_category = 0
@@ -40,17 +40,18 @@ class Game:
         self.image_question_rect = ""
         self.is_image_question = False
         self.is_sound_question = False
+        self.is_displaying_sound = False
 
-        self.cancel_image = pygame.image.load("Assets/Cancel.png")
+        self.cancel_image = pygame.image.load("../Assets/Cancel.png")
         self.cancel_image = pygame.transform.scale(self.cancel_image,
                                                    (200, 65)).convert_alpha()
         self.cancel_rect = self.cancel_image.get_rect()
-        self.good_answer_image = pygame.image.load("Assets/Good_Answer.png")
+        self.good_answer_image = pygame.image.load("../Assets/Good_Answer.png")
         self.good_answer_image = pygame.transform.scale(self.good_answer_image,
                                                         (self.button_width, self.button_height)).convert_alpha()
         self.good_answer_rect = self.good_answer_image.get_rect()
 
-        self.bad_answer_image = pygame.image.load("Assets/Bad_Answer.png")
+        self.bad_answer_image = pygame.image.load("../Assets/Bad_Answer.png")
         self.bad_answer_image = pygame.transform.scale(self.bad_answer_image,
                                                        (self.button_width, self.button_height)).convert_alpha()
         self.bad_answer_rect = self.bad_answer_image.get_rect()
@@ -77,16 +78,15 @@ class Game:
 
     def get_question(self, category_id):
         self.questions = []
-        df = self.bdd.get_question(category_id)
+        df = self.bdd.read_excel(category_id)
+        # df = self.bdd.get_question(category_id)
         df.reset_index()
-
         for index, row in df.iterrows():
             question = Questions(row["Question"],
                                  row["Answer"],
-                                 row["Category_ID"],
+                                 category_id,
                                  row["Category_Name"],
                                  row["TypeQuestion"],
-                                 row["PathExternalQuestion"],
                                  row["ExternalName"])
 
             self.questions.append(question)
@@ -116,9 +116,18 @@ class Game:
     def zoom(self):
         self.is_zoomed = not self.is_zoomed
 
+    def stop_sound(self):
+        self.is_displaying_sound = False
+        pygame.mixer.stop()
+
     def display_sound(self):
-        sound = pygame.mixer.Sound(self.path_external_question)
-        pygame.mixer.Sound.play(sound)
+        self.is_displaying_sound = not self.is_displaying_sound
+
+        if self.is_displaying_sound:
+            sound = pygame.mixer.Sound("../Assets/Sounds/" + self.external_name)
+            pygame.mixer.Sound.play(sound)
+        else:
+            pygame.mixer.stop()
 
     def update(self, time_in_sec, use_timer, always_show_answer):
         if self.current_ID == len(self.questions) or (time_in_sec <= 0 and use_timer):
@@ -191,15 +200,15 @@ class Game:
             # affichage de la catégorie
             self.get_category(self.questions[self.current_ID].category_name)
 
-            if self.questions[self.current_ID].type_question == "img" and self.questions[self.current_ID].path_external_question != "":
+            if self.questions[self.current_ID].type_question == "img":
                 # Si image on la montre + zoomable sur clic
-                self.path_external_question = self.questions[self.current_ID].path_external_question
+                self.external_name = self.questions[self.current_ID].external_name
                 self.is_image_question = True
                 self.is_sound_question = False
 
                 # La question est une image
                 self.image_question = pygame.image.load(
-                    "Assets/Annexe/" + self.questions[self.current_ID].external_name)
+                    "../Assets/Annexe/" + self.questions[self.current_ID].external_name)
 
                 if self.is_zoomed:
                     width = self.screen.get_width()
@@ -225,13 +234,18 @@ class Game:
                     pos_x,
                     pos_y, width, height)
 
-            elif self.questions[self.current_ID].type_question == "sound" and self.questions[self.current_ID].path_external_question != "":
+            elif self.questions[self.current_ID].type_question == "audio":
                 self.is_image_question = False
                 self.is_sound_question = True
                 # Si son, image de son + audio sur clic
-                self.path_external_question = self.questions[self.current_ID].path_external_question
+                self.external_name = self.questions[self.current_ID].external_name
 
-                self.image_question = pygame.image.load("Assets/sound.png")
+                self.is_displaying_sound = pygame.mixer.get_busy()
+
+                if self.is_displaying_sound:
+                    self.image_question = pygame.image.load("../Assets/stop_sound.png")
+                else:
+                    self.image_question = pygame.image.load("../Assets/sound.png")
                 self.image_question = pygame.transform.scale(self.image_question,
                                                              (300, 300)).convert_alpha()
 

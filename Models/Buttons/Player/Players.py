@@ -6,7 +6,7 @@ class Players:
         self.name = name
         self.bdd = Bdd()
         self.total_point = 0
-        self.get_players_point()
+        # self.get_players_point()
         self.main_category_id = main_category_id
 
     def add_point(self, point):

@@ -6,9 +6,10 @@ from sqlalchemy.engine import URL
 
 class Bdd:
     def __init__(self):
-        self.connection = pyodbc.connect("DRIVER={ODBC Driver 17 for SQL Server};Server=WEP-LP-JBL;Database=Snake;Trusted_Connection=yes;")
-        connection_url = URL.create("mssql+pyodbc", query={"odbc_connect": "DRIVER={ODBC Driver 17 for SQL Server};Server=WEP-LP-JBL;Database=Snake;Trusted_Connection=yes;"})
-        self.engine = create_engine(connection_url)
+        self.connect = "oui"
+       # self.connection = pyodbc.connect("DRIVER={ODBC Driver 17 for SQL Server};Server=WEP-LP-JBL;Database=Snake;Trusted_Connection=yes;")
+       # connection_url = URL.create("mssql+pyodbc", query={"odbc_connect": "DRIVER={ODBC Driver 17 for SQL Server};Server=WEP-LP-JBL;Database=Snake;Trusted_Connection=yes;"})
+       #  self.engine = create_engine(connection_url)
 
     def execute_query(self, query):
         self.connection.cursor().execute(query)
@@ -41,5 +42,6 @@ class Bdd:
         return df
 
     def read_excel(self, sheet_name):
-        df = pd.read_excel(r"C:\Users\jboclet\PycharmProjects\GrandQuizDesStellaneurs\Questions.xlsx", sheet_name)
+        df = pd.read_excel(r"C:\Developpement\GrandQuizDesStellaneurs\GrandQUizDesStellaneurs\Questions.ods", sheet_name)
+        df = df.sample(frac=1)
         return df
