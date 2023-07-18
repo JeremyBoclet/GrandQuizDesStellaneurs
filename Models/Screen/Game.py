@@ -24,7 +24,7 @@ class Game:
         self.current_question_category = 0
         self.current_answer_rect = pygame.Rect(0, 0, 0, 0)
         self.group_button = pygame.sprite.Group()
-        self.group_button.add(Button("Hide_Answer", -2, (self.screen.get_width() / 2 - 750),
+        self.group_button.add(Button("Hide_Answer", (self.screen.get_width() / 2 - 750),
                                      self.screen.get_height() / 1.6, 1500, 150))
         self.view_cat_group = pygame.sprite.Group()
 
@@ -74,19 +74,17 @@ class Game:
         self.view_cat_group.draw(self.screen)
 
         self.view_cat_group.empty()
-        self.view_cat_group.add(Button(current_category, 1, self.screen.get_width() / 2 - 310, 50, 600, 150))
+        self.view_cat_group.add(Button(current_category, self.screen.get_width() / 2 - 310, 50, 600, 150))
 
     def get_question(self, category_id):
         self.questions = []
         df = self.bdd.read_excel(category_id)
-        print(category_id)
         # df = self.bdd.get_question(category_id)
         df.reset_index()
         for index, row in df.iterrows():
             question = Questions(row["Question"],
                                  row["Answer"],
                                  category_id,
-                                 row["Category_Name"],
                                  row["TypeQuestion"],
                                  row["ExternalName"])
 
@@ -98,18 +96,21 @@ class Game:
         df.reset_index()
 
         for index, row in df.iterrows():
-            question = Questions(row["Question"], row["Answer"], row["Category_ID"], row["Category_Name"],
+            question = Questions(row["Question"], row["Answer"], row["Category_ID"],
                                  row["TypeQuestion"], row["PathExternalQuestion"], row["ExternalName"])
             self.questions.append(question)
 
     def get_final_question(self, question_id):
         self.questions = []
-        df = self.bdd.get_final_question(question_id)
+        df = self.bdd.read_excel("Finale")
         df.reset_index()
         for index, row in df.iterrows():
-            question = Questions(row["Question"], row["Answer"], row["Category_ID"], row["Category_Name"],
-                                 row["TypeQuestion"], row["PathExternalQuestion"], row["ExternalName"])
-            self.questions.append(question)
+            if row["Question_id"] == question_id:
+                print(row["TypeQuestion"])
+                question = Questions(row["Question"], row["Answer"], row["Category_Name"],
+                                     row["TypeQuestion"], row["ExternalName"])
+                self.questions.append(question)
+                break
 
     def get_question_excel(self):
         df = self.bdd.read_excel("Question")
@@ -199,7 +200,7 @@ class Game:
             self.cancel_rect = pygame.Rect(20, self.screen.get_height() - self.cancel_image.get_height(), 200, 65)
 
             # affichage de la catégorie
-            self.get_category(self.questions[self.current_ID].category_name)
+            self.get_category(self.questions[self.current_ID].category_id)
 
             if self.questions[self.current_ID].type_question == "img":
                 # Si image on la montre + zoomable sur clic

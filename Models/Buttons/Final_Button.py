@@ -2,10 +2,10 @@ import pygame
 
 
 class Final_Button(pygame.sprite.Sprite):
-    def __init__(self, name, category_id, x, y, question_num, real_category_id):
+    def __init__(self, name, question_id, x, y, question_num, real_category_id):
         super().__init__()
         self.name = name
-        self.category_id = category_id
+        self.question_id = question_id
         self.read_category_id = real_category_id
         self.image = pygame.image.load("../Assets/Finale/{}.png".format(name)).convert_alpha()
         self.image = pygame.transform.scale(self.image, (125, 125)).convert_alpha()

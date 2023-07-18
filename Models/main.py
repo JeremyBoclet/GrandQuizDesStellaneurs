@@ -18,7 +18,7 @@ screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 background = pygame.transform.scale(pygame.image.load("../assets/background.jpg").convert_alpha(),
                                     (screen.get_width(), screen.get_height()))
 # En seconde
-round_timer = 20
+round_timer = 3
 
 # écran
 game = Game(screen)
@@ -35,7 +35,7 @@ GET_TIME = pygame.USEREVENT + 1
 pygame.time.set_timer(GET_TIME, 1000)
 time_in_sec = round_timer
 current_round = 1
-last_question_id = -1
+last_question_id = ""
 point = 0
 classement_round = 5
 show_answer = False
@@ -97,64 +97,64 @@ while running:
                             game.show_answer = not game.show_answer
                         else:
                             game.show_answer = show_answer
-                if game.is_image_question:
-                    if game.image_question_rect.collidepoint(event.pos):
-                        game.zoom()
-                elif game.is_sound_question:
-                    if game.image_question_rect.collidepoint(event.pos):
-                        game.display_sound()
-                if game.good_answer_rect.collidepoint(event.pos):
-                    # Bonne réponse
-                    game.stop_sound()
-                    game.current_ID += 1
-                    match current_round:
-                        case 1:
-                            point = 2
-                        case 2:
-                            point = 1
-                        case 3:
-                            point = 2
-                        case 4:
-                            point = 1
-                        case 5:
-                            if game.current_question_category == 0:
-                                # Culture G = 1 Pt
-                                point = 1
-                            elif game.current_question_category == game.current_player.main_category_id:
-                                # Catégorie du joueur = 2 Pts
+                    if game.is_image_question:
+                        if game.image_question_rect.collidepoint(event.pos):
+                            game.zoom()
+                    elif game.is_sound_question:
+                        if game.image_question_rect.collidepoint(event.pos):
+                            game.display_sound()
+                    if game.good_answer_rect.collidepoint(event.pos):
+                        # Bonne réponse
+                        game.stop_sound()
+                        game.current_ID += 1
+                        match current_round:
+                            case 1:
                                 point = 2
-                            else:
-                                # Catégorie d'un autre joueur = 3 pts
-                                point = 3
+                            case 2:
+                                point = 1
+                            case 3:
+                                point = 2
+                            case 4:
+                                point = 1
+                            case 5:
+                                if game.current_question_category == 0:
+                                    # Culture G = 1 Pt
+                                    point = 1
+                                elif game.current_question_category == game.current_player.main_category_id:
+                                    # Catégorie du joueur = 2 Pts
+                                    point = 2
+                                else:
+                                    # Catégorie d'un autre joueur = 3 pts
+                                    point = 3
 
-                    game.current_player.add_point(point)
-                    # selection_player_screen.set_points(game.current_player, point)
-                    selection_player_screen.save_points()
+                        game.current_player.add_point(point)
+                        # selection_player_screen.set_points(game.current_player, point)
+                        selection_player_screen.save_points()
 
-                if game.bad_answer_rect.collidepoint(event.pos):
-                    # Mauvaise réponse
-                    game.current_ID += 1
-                    game.stop_sound()
-                if game.cancel_rect.collidepoint(event.pos):
-                    # Annuler
-                    game.stop_sound()
-                    game.current_ID = 0
-                    game.is_playing = False
-                    for button in screen_round.group_buttons_round1:
-                        if button.category_id == last_question_id:
-                            button.had_been_chosen = False
-                    for button in screen_round.group_buttons_round2:
-                        if button.category_id == last_question_id:
-                            button.had_been_chosen = False
-                    for button in screen_round.group_buttons_round3:
-                        if button.category_id == last_question_id:
-                            button.had_been_chosen = False
-                    for button in screen_round.group_buttons_round4:
-                        if button.category_id == last_question_id:
-                            button.had_been_chosen = False
-                    for button in screen_round.group_buttons_finale:
-                        if button.category_id == last_question_id:
-                            button.has_been_chosen = False
+                    if game.bad_answer_rect.collidepoint(event.pos):
+                        # Mauvaise réponse
+                        game.current_ID += 1
+                        game.stop_sound()
+                    if game.cancel_rect.collidepoint(event.pos):
+                        # Annuler
+                        game.stop_sound()
+                        game.current_ID = 0
+                        game.is_playing = False
+                        for button in screen_round.group_buttons_round1:
+                            if button.name == last_question_id:
+                                button.had_been_chosen = False
+                        for button in screen_round.group_buttons_round2:
+                            if button.name == last_question_id:
+                                button.had_been_chosen = False
+                        for button in screen_round.group_buttons_round3:
+                            if button.name == last_question_id:
+                                button.had_been_chosen = False
+                        for button in screen_round.group_buttons_round4:
+                            if button.name == last_question_id:
+                                button.had_been_chosen = False
+                        for button in screen_round.group_buttons_finale:
+                            if button.question_id == last_question_id:
+                                button.had_been_chosen = False
                 elif selection_player_screen.is_selecting_player:
                     # Sélection du joueur
                     for button in selection_player_screen.group_buttons:
@@ -178,6 +178,7 @@ while running:
                     if not selection_player_screen.is_selecting_player and current_round != classement_round:
                         for button in screen_round.group_buttons:
                             if button.rect.collidepoint(event.pos):
+                                print(button.name)
                                 if button.category_id == 0:
                                     selection_player_screen.is_selecting_player = True
                     for button in screen_round.group_buttons_return_round:
@@ -191,8 +192,8 @@ while running:
                             for button in screen_round.group_buttons_round1:
                                 if button.rect.collidepoint(event.pos):
                                     time_in_sec = round_timer
-                                    game.get_question(button.category_id)
-                                    last_question_id = button.category_id
+                                    game.get_question(button.name)
+                                    last_question_id = button.name
                                     button.had_been_chosen = True
                                     # game.get_question_excel()
                                     game.is_playing = True
@@ -203,10 +204,10 @@ while running:
                             for button in screen_round.group_buttons_round2:
                                 if button.rect.collidepoint(event.pos):
                                     time_in_sec = round_timer
-                                    game.get_question(button.category_id)
+                                    game.get_question(button.name)
                                     game.is_playing = True
                                     button.had_been_chosen = True
-                                    last_question_id = button.category_id
+                                    last_question_id = button.name
 
                     # Round 3 (Récupération des questions par rapport à la catégorie sélectionnée)
                     if screen_round.is_round3_active:
@@ -214,10 +215,10 @@ while running:
                             for button in screen_round.group_buttons_round3:
                                 if button.rect.collidepoint(event.pos):
                                     time_in_sec = round_timer
-                                    game.get_question(button.category_id)
+                                    game.get_question(button.name)
                                     game.is_playing = True
                                     button.had_been_chosen = True
-                                    last_question_id = button.category_id
+                                    last_question_id = button.name
 
                     # Round 4
                     if screen_round.is_round4_active:
@@ -225,10 +226,10 @@ while running:
                             for button in screen_round.group_buttons_round4:
                                 if button.rect.collidepoint(event.pos):
                                     time_in_sec = round_timer
-                                    game.get_question(button.category_id)
+                                    game.get_question(button.name)
                                     game.is_playing = True
                                     button.had_been_chosen = True
-                                    last_question_id = button.category_id
+                                    last_question_id = button.name
 
                     # Finale (Récupération des questions par rapport à la question sélectionnée)
                     if screen_round.is_finale_active:
@@ -236,9 +237,8 @@ while running:
                             for button in screen_round.group_buttons_finale:
                                 if button.rect.collidepoint(event.pos):
                                     time_in_sec = round_timer
-                                    print(button.category_id)
-                                    game.get_question("Finale")
+                                    game.get_final_question(button.question_id)
                                     game.is_playing = True
                                     button.had_been_chosen = True
-                                    last_question_id = button.category_id
+                                    last_question_id = button.question_id
 
