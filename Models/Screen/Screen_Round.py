@@ -85,8 +85,9 @@ class Round:
             self.timer.render(time_in_sec)
 
         self.already_answered()
-        self.group_buttons_round4.draw(self.screen)
-        for button in self.group_buttons_round4:
+        self.group_buttons_finale.draw(self.screen)
+
+        for button in self.group_buttons_finale:
             question_num = button.get_num()
             if question_num < 10:
                 x = button.rect.x + 50
@@ -97,14 +98,14 @@ class Round:
 
             self.screen.blit(button.get_question_num(), (x, y))
 
-        self.select_player(current_player, 4)
+        self.select_player(current_player, 5)
 
     def update_Ranking(self, all_players):
         self.group_buttons_return_round.empty()
-        self.group_buttons_return_round.add(Return_Round(5))
+        self.group_buttons_return_round.add(Return_Round(6))
         self.group_buttons_return_round.draw(self.screen)
 
-        self.group_buttons_round5.draw(self.screen)
+        self.group_buttons_ranking.draw(self.screen)
 
         count = 0
         has_changed_row = False
@@ -218,7 +219,22 @@ class Round:
         self.group_buttons_round3.add(Button("Mass_Effect", 7, 1000, 350, 600, 150))
 
     def add_round4_button(self):
-        self.group_buttons_round4.add(Button("LoL_Ban", "LoL_Ban",350, 200, 600, 150))
+        self.group_buttons_round4.add(Button("LoL_Ban", "LoL_Ban", 350, 250, 550, 110))
+        self.group_buttons_round4.add(Button("LoL_Pick", "LoL_Pick", 350, 360, 550, 110))
+        self.group_buttons_round4.add(Button("Audio_Serie", "Audio_Serie", 350, 470, 550, 110))
+        self.group_buttons_round4.add(Button("Audio_Serie", "Audio_Serie", 350, 580, 550, 110))
+        self.group_buttons_round4.add(Button("Audio_Serie", "Audio_Serie", 350, 690, 550, 110))
+        self.group_buttons_round4.add(Button("Audio_Serie", "Audio_Serie", 350, 800, 550, 110))
+        self.group_buttons_round4.add(Button("Audio_Serie", "Audio_Serie", 350, 910, 550, 110))
+
+        self.group_buttons_round4.add(Button("Dessin_Anime", "Dessin_Anime", 1000, 250, 550, 110))
+        self.group_buttons_round4.add(Button("Hymne", "Hymne", 1000, 360, 550, 110))
+        self.group_buttons_round4.add(Button("Audio_Film", "Audio_Film", 1000, 470, 550, 110))
+        self.group_buttons_round4.add(Button("Audio_Serie", "Audio_Serie", 1000, 580, 550, 110))
+        self.group_buttons_round4.add(Button("Audio_Serie", "Audio_Serie", 1000, 690, 550, 110))
+        self.group_buttons_round4.add(Button("Audio_Serie", "Audio_Serie", 1000, 800, 550, 110))
+        self.group_buttons_round4.add(Button("Audio_Serie", "Audio_Serie", 1000, 910, 550, 110))
+        #self.group_buttons_round2.add(Button("Maths", "14", 350, 910, 550, 110))
 
     def add_finale_button(self):
         button_id = 0
@@ -279,7 +295,7 @@ class Round:
     def hide_final_button(self):
         self.group_buttons_round4.empty()
         for final_cat in self.final_category:
-            self.group_buttons_round4.add(Final_Button("Hide_Final",
+            self.group_buttons_finale.add(Final_Button("Hide_Final",
                                                        final_cat["id_question"],
                                                        final_cat['x'],
                                                        final_cat['y'],

@@ -33,9 +33,11 @@ class Bdd:
         return df
 
     def get_final_question(self, question_id):
-        query = "SELECT Question, Answer, Questions.Category_ID, Category_Question.Category_Name, TypeQuestion, " \
-                "PathExternalQuestion, ExternalName FROM GrandQuiz.dbo.Questions INNER JOIN GrandQuiz.dbo.Category_Question on " \
-                "Category_Question.Category_ID = Questions.Category_ID WHERE Question_ID = {}".format(question_id)
+       # query = "SELECT Question, Answer, Questions.Category_ID, Category_Question.Category_Name, TypeQuestion, " \
+       #         "PathExternalQuestion, ExternalName FROM GrandQuiz.dbo.Questions INNER JOIN GrandQuiz.dbo.Category_Question on " \
+       #         "Category_Question.Category_ID = Questions.Category_ID WHERE Question_ID = {}".format(question_id)
+        df = self.read_excel("Finale")
+
         df = pd.read_sql(query, self.engine)
         return df
 

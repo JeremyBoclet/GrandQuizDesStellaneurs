@@ -59,13 +59,13 @@ class Game:
 
 
     def get_all_players_points(self):
-        df = self.bdd.request_query(
-            "SELECT PlayerName, PlayerPoint FROM GrandQuiz.dbo.Players ORDER BY PlayerPoint DESC")
+        # df = self.bdd.request_query("SELECT PlayerName, PlayerPoint FROM GrandQuiz.dbo.Players ORDER BY PlayerPoint DESC")
+        df = self.bdd.get_players()
         df.reset_index()
-
+        df = df.sort_values("Player_Points",ascending=False)
         self.players.clear()
         for index, row in df.iterrows():
-            players = PlayersRanking(row["PlayerName"], row["PlayerPoint"])
+            players = PlayersRanking(row["PlayerName"], row["Player_Points"])
             self.players.append(players)
 
         return self.players
@@ -79,6 +79,7 @@ class Game:
     def get_question(self, category_id):
         self.questions = []
         df = self.bdd.read_excel(category_id)
+        print(category_id)
         # df = self.bdd.get_question(category_id)
         df.reset_index()
         for index, row in df.iterrows():

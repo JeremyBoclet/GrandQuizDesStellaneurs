@@ -233,10 +233,12 @@ while running:
                     # Finale (Récupération des questions par rapport à la question sélectionnée)
                     if screen_round.is_finale_active:
                         if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
-                            for button in screen_round.group_buttons_round4:
+                            for button in screen_round.group_buttons_finale:
                                 if button.rect.collidepoint(event.pos):
                                     time_in_sec = round_timer
-                                    game.get_final_question(button.category_id)
+                                    print(button.category_id)
+                                    game.get_question("Finale")
                                     game.is_playing = True
                                     button.had_been_chosen = True
                                     last_question_id = button.category_id
+

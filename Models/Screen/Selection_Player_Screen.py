@@ -27,7 +27,6 @@ class Selection_Player_Screen(pygame.sprite.Sprite):
             # print("{} {}".format(player.player.name,player.player.total_point))
             # self.bdd.execute_query("UPDATE GrandQuiz.dbo.Players SET PlayerPoint = {} WHERE PlayerName = '{}'".format(
             #    player.player.total_point, player.player.name))
-            print(player.player.total_point)
             self.bdd.write_points(player.player.total_point,player.player.name)
 
     def set_points(self, current_player, point):
