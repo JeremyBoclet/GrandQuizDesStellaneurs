@@ -25,7 +25,7 @@ class Game:
         self.current_answer_rect = pygame.Rect(0, 0, 0, 0)
         self.group_button = pygame.sprite.Group()
         self.group_button.add(Button("Hide_Answer", (self.screen.get_width() / 2 - 750),
-                                     self.screen.get_height() / 1.6, 1500, 150))
+                                     self.screen.get_height() / 1.45, 1500, 150))
         self.view_cat_group = pygame.sprite.Group()
 
         self.show_answer = False
@@ -90,6 +90,8 @@ class Game:
 
             self.questions.append(question)
 
+        print(self.questions.count)
+
     def get_question_round3(self, category_id):
         self.questions = []
         df = self.bdd.get_question_round3(category_id)
@@ -106,7 +108,6 @@ class Game:
         df.reset_index()
         for index, row in df.iterrows():
             if row["Question_id"] == question_id:
-                print(row["TypeQuestion"])
                 question = Questions(row["Question"], row["Answer"], row["Category_Name"],
                                      row["TypeQuestion"], row["ExternalName"])
                 self.questions.append(question)
@@ -156,7 +157,7 @@ class Game:
             bad_answer_pos_y = self.screen.get_height() - self.bad_answer_image.get_height()
 
             # Réponse
-            self.current_answer = self.font.render(self.questions[self.current_ID].answer, True, (255, 170, 0))
+            self.current_answer = self.font.render(self.questions[self.current_ID].answer, True, (0, 255, 0)) #(255, 170, 0)
             self.current_answer_rect = pygame.Rect((self.screen.get_width() - self.current_answer.get_width()) / 2,
                                                    self.screen.get_height() / 1.6,
                                                    350,
@@ -164,7 +165,7 @@ class Game:
 
             self.screen.blit(self.current_answer,
                              ((self.screen.get_width() - self.current_answer.get_width()) / 2,
-                              self.screen.get_height() / 1.5))
+                              self.screen.get_height() / 1.35))
 
             if not self.show_answer and not always_show_answer:
                 self.group_button.draw(self.screen)

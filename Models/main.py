@@ -18,7 +18,7 @@ screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 background = pygame.transform.scale(pygame.image.load("../assets/background.jpg").convert_alpha(),
                                     (screen.get_width(), screen.get_height()))
 # En seconde
-round_timer = 3
+round_timer = 10
 
 # écran
 game = Game(screen)
@@ -37,7 +37,7 @@ time_in_sec = round_timer
 current_round = 1
 last_question_id = ""
 point = 0
-classement_round = 5
+classement_round = 6
 show_answer = False
 
 while running:
@@ -129,7 +129,6 @@ while running:
 
                         game.current_player.add_point(point)
                         # selection_player_screen.set_points(game.current_player, point)
-                        selection_player_screen.save_points()
 
                     if game.bad_answer_rect.collidepoint(event.pos):
                         # Mauvaise réponse
@@ -171,6 +170,8 @@ while running:
                             screen_round.is_round4_active = (button.round_id == 4)
                             screen_round.is_finale_active = (button.round_id == 5)
                             screen_round.is_ranking_active = (button.round_id == 6)
+                            selection_player_screen.save_points()
+
                             time_in_sec = round_timer
                             selection_round.is_selecting_round = False
                 else:
@@ -178,7 +179,6 @@ while running:
                     if not selection_player_screen.is_selecting_player and current_round != classement_round:
                         for button in screen_round.group_buttons:
                             if button.rect.collidepoint(event.pos):
-                                print(button.name)
                                 if button.category_id == 0:
                                     selection_player_screen.is_selecting_player = True
                     for button in screen_round.group_buttons_return_round:
@@ -216,6 +216,7 @@ while running:
                                 if button.rect.collidepoint(event.pos):
                                     time_in_sec = round_timer
                                     game.get_question(button.name)
+                                    print(button.name)
                                     game.is_playing = True
                                     button.had_been_chosen = True
                                     last_question_id = button.name
