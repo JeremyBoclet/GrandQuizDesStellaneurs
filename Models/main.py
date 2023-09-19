@@ -34,6 +34,7 @@ pygame.time.set_timer(SCREEN_UPDATE, 100)
 GET_TIME = pygame.USEREVENT + 1
 pygame.time.set_timer(GET_TIME, 1000)
 time_in_sec = round_timer
+timer_for_sound = 0
 current_round = 1
 last_question_id = ""
 point = 0
@@ -45,7 +46,7 @@ while running:
 
     if game.is_playing:
         # Question
-        game.update(time_in_sec, current_round == 0, show_answer)
+        game.update(time_in_sec, current_round == 0, show_answer, timer_for_sound)
     elif selection_player_screen.is_selecting_player:
         # Sélection du joueur
         selection_player_screen.update(screen)
@@ -87,7 +88,7 @@ while running:
         else:
             if event.type == GET_TIME:
                 time_in_sec -= 1
-
+                timer_for_sound += 1
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # Click de souris
                 if game.is_playing:
@@ -102,6 +103,7 @@ while running:
                             game.zoom()
                     elif game.is_sound_question:
                         if game.image_question_rect.collidepoint(event.pos):
+                            timer_for_sound = 0
                             game.display_sound()
                     if game.good_answer_rect.collidepoint(event.pos):
                         # Bonne réponse
@@ -170,6 +172,7 @@ while running:
                             screen_round.is_round4_active = (button.round_id == 4)
                             screen_round.is_finale_active = (button.round_id == 5)
                             screen_round.is_ranking_active = (button.round_id == 6)
+                            running = (button.round_id != "Quit")
                             selection_player_screen.save_points()
 
                             time_in_sec = round_timer
@@ -243,3 +246,5 @@ while running:
                                     button.had_been_chosen = True
                                     last_question_id = button.question_id
 
+
+pygame.quit()

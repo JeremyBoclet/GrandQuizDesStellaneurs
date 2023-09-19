@@ -46,18 +46,18 @@ class Bdd:
         return df
 
     def read_excel(self, sheet_name):
-        df = pd.read_excel(r"C:\Developpement\GrandQuizDesStellaneurs\GrandQUizDesStellaneurs\Questions.ods", sheet_name)
+        df = pd.read_excel(r"..\Questions.ods", sheet_name)
         df = df.sample(frac=1)
         return df
 
     def get_players(self):
-        df = pd.read_excel(r"C:\Developpement\GrandQuizDesStellaneurs\GrandQUizDesStellaneurs\Players.ods",
+        df = pd.read_excel(r"..\Players.ods",
                            "Players")
         return df
 
     def write_points(self,point,player):
         # First read into dataframe
-        df = pd.read_excel(r"C:\Developpement\GrandQuizDesStellaneurs\GrandQUizDesStellaneurs\Players.ods",
+        df = pd.read_excel(r"..\Players.ods",
                            "Players")
 
         # Change everything to string since we're just writing
@@ -77,5 +77,5 @@ class Bdd:
         # Populate dict() with updated data list
         d.update({"Players": whole_data_list})
         # Finally call save_data() from pyods to store the ods file
-        save_data(r"C:\Developpement\GrandQuizDesStellaneurs\GrandQUizDesStellaneurs\Players.ods", d)
+        save_data(r"..\Players.ods", d)
         # save_ods_from_excel('/Users/gkm/Downloads/Financial Sample.xlsx', '/tmp/sample-financial.ods')
