@@ -1,10 +1,6 @@
 from collections import OrderedDict
 from pyexcel_ods import save_data
 import pandas as pd
-import pyodbc
-from sqlalchemy import create_engine
-from sqlalchemy.engine import URL
-
 
 class Bdd:
     def __init__(self):

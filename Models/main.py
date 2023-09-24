@@ -1,4 +1,3 @@
-import PIL
 import pygame
 
 from Models.Screen.Selection_Player_Screen import Selection_Player_Screen
