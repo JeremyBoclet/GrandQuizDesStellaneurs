@@ -206,7 +206,7 @@ class Round:
         self.group_buttons_round2.add(Button("Nintendo", 1000, 470, 550, 110))
         self.group_buttons_round2.add(Button("Alcool", 1000, 580, 550, 110))
         self.group_buttons_round2.add(Button("Series", 1000, 690, 550, 110))
-        self.group_buttons_round2.add(Button("Code_de_la_Route", 1000, 800, 550, 110))
+        self.group_buttons_round2.add(Button("CodeRoute", 1000, 800, 550, 110))
         self.group_buttons_round2.add(Button("Cuisine", 1000, 910, 550, 110))
 
     def add_round3_button(self):

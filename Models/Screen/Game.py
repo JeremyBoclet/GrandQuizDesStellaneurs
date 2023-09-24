@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys, threading
 
 from Models.Bdd import Bdd
 from Models.Buttons.Button import Button
@@ -57,6 +57,20 @@ class Game:
         self.bad_answer_rect = self.bad_answer_image.get_rect()
         self.timer = Timer(self.screen)
 
+        self.loading_bg = pygame.image.load("../Assets/Loading Bar Background.png")
+        self.loading_bg = pygame.transform.scale(self.loading_bg, (1010, 50)).convert_alpha()
+
+        self.loading_bg_rect = pygame.Rect((self.screen.get_width() - self.loading_bg.get_width()) / 2 - 5,
+                                                   self.screen.get_height() / 1.6,
+                                                   1005,
+                                                   50)
+
+        self.loading_bar = pygame.image.load("../Assets/Loading_Bar.png")
+        self.loading_bar = pygame.transform.scale(self.loading_bar, (10, 50)).convert_alpha()
+
+        self.loading_bar_rect = self.loading_bar.get_rect()
+        self.sound_length = 0
+        self.sound = ""
 
     def get_all_players_points(self):
         # df = self.bdd.request_query("SELECT PlayerName, PlayerPoint FROM GrandQuiz.dbo.Players ORDER BY PlayerPoint DESC")
@@ -127,12 +141,14 @@ class Game:
         self.is_displaying_sound = not self.is_displaying_sound
 
         if self.is_displaying_sound:
-            sound = pygame.mixer.Sound("../Assets/Sounds/" + self.external_name)
-            pygame.mixer.Sound.play(sound)
+            self.sound = pygame.mixer.Sound("../Assets/Sounds/" + self.external_name)
+            # Récupère la longueur de la musique en seconde
+            self.sound_length = int(pygame.mixer.Sound.get_length(self.sound))
+            pygame.mixer.Sound.play(self.sound)
         else:
             pygame.mixer.stop()
 
-    def update(self, time_in_sec, use_timer, always_show_answer):
+    def update(self, time_in_sec, use_timer, always_show_answer, timer_for_sound):
         if self.current_ID == len(self.questions) or (time_in_sec <= 0 and use_timer):
             self.is_playing = False
             self.current_ID = 0
@@ -247,6 +263,24 @@ class Game:
 
                 if self.is_displaying_sound:
                     self.image_question = pygame.image.load("../Assets/stop_sound.png")
+
+                    # Barre de progression
+                    loading_bar_width = int(timer_for_sound / self.sound_length * 1000)
+
+                    if loading_bar_width == 0:
+                        loading_bar_width = 1
+                    elif loading_bar_width > 1000:
+                        loading_bar_width = 1000
+
+                    print(int(loading_bar_width))
+                    self.loading_bar = pygame.transform.scale(self.loading_bar, (loading_bar_width, 50)).convert_alpha()
+                    self.loading_bar_rect = self.loading_bar.get_rect()
+                    self.loading_bar_rect.x = (self.screen.get_width() - self.loading_bg.get_width()) / 2
+                    self.loading_bar_rect.y = self.screen.get_height() / 1.6
+
+                    self.screen.blit(self.loading_bg, self.loading_bg_rect)
+                    self.screen.blit(self.loading_bar, self.loading_bar_rect)
+
                 else:
                     self.image_question = pygame.image.load("../Assets/sound.png")
                 self.image_question = pygame.transform.scale(self.image_question,
@@ -261,6 +295,7 @@ class Game:
 
                 self.screen.blit(self.image_question,
                                  (pos_x, pos_y))
+
 
             else:
                 self.is_image_question = False
