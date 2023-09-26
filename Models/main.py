@@ -17,7 +17,7 @@ screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 background = pygame.transform.scale(pygame.image.load("../assets/background.jpg").convert_alpha(),
                                     (screen.get_width(), screen.get_height()))
 # En seconde
-round_timer = 10
+round_timer = 5
 
 # écran
 game = Game(screen)

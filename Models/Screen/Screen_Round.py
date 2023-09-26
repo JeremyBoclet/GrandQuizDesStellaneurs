@@ -113,8 +113,8 @@ class Round:
             count += 1
             match count:
                 case 1:
-                    x = 790
-                    y = 160
+                    x = 800
+                    y = 180
                     self.show_ranking(x, y, player.player_name, player.player_point)
 
                 case 2:
@@ -141,7 +141,7 @@ class Round:
 
     def show_ranking(self, x, y, player_name, player_point):
         player_point = self.font.render("{} - {} Pts".format(player_name, player_point), True,
-                                        (255, 255, 255))
+                                        (0, 0, 0))
         self.screen.blit(player_point, [x, y])
 
     def select_player(self, current_player, current_round):
@@ -303,7 +303,7 @@ class Round:
                                                        final_cat["id_category"]))
 
     def add_ranking_button(self):
-        self.group_buttons_ranking.add(Button("First", self.screen.get_width() / 2 - 325, 100, 600, 150))
+        self.group_buttons_ranking.add(Button("First", self.screen.get_width() / 2 - 325, 0, 600, 275))
         self.group_buttons_ranking.add(Button("Second", self.screen.get_width() / 2 - 825, 300, 600, 150))
         self.group_buttons_ranking.add(Button("Third", self.screen.get_width() / 2 + 180, 300, 600, 150))
 
