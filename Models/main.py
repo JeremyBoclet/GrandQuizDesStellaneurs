@@ -118,7 +118,7 @@ while running:
                             case 4:
                                 point = 1
                             case 5:
-                                if game.current_question_category == 0:
+                                if game.current_question_category == "Culture_G":
                                     # Culture G = 1 Pt
                                     point = 1
                                 elif game.current_question_category == game.current_player.main_category_id:
