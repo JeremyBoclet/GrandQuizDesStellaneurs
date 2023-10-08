@@ -265,6 +265,9 @@ class Game:
                     self.image_question = pygame.image.load("../Assets/stop_sound.png")
 
                     # Barre de progression
+                    if self.sound_length == 0:
+                        self.sound_length = 1
+
                     loading_bar_width = int(timer_for_sound / self.sound_length * 1000)
 
                     if loading_bar_width == 0:
@@ -272,7 +275,6 @@ class Game:
                     elif loading_bar_width > 1000:
                         loading_bar_width = 1000
 
-                    print(int(loading_bar_width))
                     self.loading_bar = pygame.transform.scale(self.loading_bar, (loading_bar_width, 50)).convert_alpha()
                     self.loading_bar_rect = self.loading_bar.get_rect()
                     self.loading_bar_rect.x = (self.screen.get_width() - self.loading_bg.get_width()) / 2
