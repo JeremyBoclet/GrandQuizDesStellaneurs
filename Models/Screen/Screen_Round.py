@@ -202,7 +202,7 @@ class Round:
         self.group_buttons_round2.add(Button("Maths", 350, 910, 550, 110))
 
         self.group_buttons_round2.add(Button("Science", 1000, 250, 550, 110))
-        self.group_buttons_round2.add(Button("Greek_Mythology", 1000, 360, 550, 110))
+        self.group_buttons_round2.add(Button("History", 1000, 360, 550, 110))
         self.group_buttons_round2.add(Button("Nintendo", 1000, 470, 550, 110))
         self.group_buttons_round2.add(Button("Formula1", 1000, 580, 550, 110))
         self.group_buttons_round2.add(Button("Series", 1000, 690, 550, 110))

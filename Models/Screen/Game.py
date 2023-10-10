@@ -144,6 +144,9 @@ class Game:
             self.sound = pygame.mixer.Sound("../Assets/Sounds/" + self.external_name)
             # Récupère la longueur de la musique en seconde
             self.sound_length = int(pygame.mixer.Sound.get_length(self.sound))
+            if self.sound_length == 0:
+                self.sound_length = 1
+
             pygame.mixer.Sound.play(self.sound)
         else:
             pygame.mixer.stop()
@@ -173,7 +176,7 @@ class Game:
             bad_answer_pos_y = self.screen.get_height() - self.bad_answer_image.get_height()
 
             # Réponse
-            self.current_answer = self.font.render(self.questions[self.current_ID].answer, True, (0, 255, 0)) #(255, 170, 0)
+            self.current_answer = self.font.render(self.questions[self.current_ID].answer.replace('"', ''), True, (0, 255, 0)) #(255, 170, 0)
             self.current_answer_rect = pygame.Rect((self.screen.get_width() - self.current_answer.get_width()) / 2,
                                                    self.screen.get_height() / 1.6,
                                                    350,
@@ -265,9 +268,6 @@ class Game:
                     self.image_question = pygame.image.load("../Assets/stop_sound.png")
 
                     # Barre de progression
-                    if self.sound_length == 0:
-                        self.sound_length = 1
-
                     loading_bar_width = int(timer_for_sound / self.sound_length * 1000)
 
                     if loading_bar_width == 0:
