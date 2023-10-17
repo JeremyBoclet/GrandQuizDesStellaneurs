@@ -69,6 +69,11 @@ while running:
         current_round = 4
     elif screen_round.is_finale_active:
         # Finale
+        if not selection_player_screen.has_Reorganized:
+            selection_player_screen.reorganize_player_finale()
+            selection_player_screen = Selection_Player_Screen(screen)
+            selection_player_screen.has_Reorganized = True
+
         screen_round.update_finale(game.current_player, time_in_sec)
         current_round = 5
     elif screen_round.is_ranking_active:
@@ -183,6 +188,8 @@ while running:
                             if button.rect.collidepoint(event.pos):
                                 if button.category_id == 0:
                                     selection_player_screen.is_selecting_player = True
+                                    selection_player_screen.save_points()
+
                     for button in screen_round.group_buttons_return_round:
                         if button.rect.collidepoint(event.pos):
                             if button.category_id == -10:

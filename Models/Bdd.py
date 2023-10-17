@@ -75,3 +75,27 @@ class Bdd:
         # Finally call save_data() from pyods to store the ods file
         save_data(r"..\Players.ods", d)
         # save_ods_from_excel('/Users/gkm/Downloads/Financial Sample.xlsx', '/tmp/sample-financial.ods')
+
+
+    def reorganize_player_for_finale(self):
+        df = pd.read_excel(r"..\Players.ods",
+                           "Players")
+
+        df = df.sort_values(by=["Player_Points"], ascending = False)
+
+        # Change everything to string since we're just writing
+        df = df.astype(str)
+        # Initiliaze data to be written as an empty list, as pyods needs a list to write
+        whole_data_list = []
+        # Initiliaze the empty dict() for the data
+        d = OrderedDict()
+        whole_data_list.append(["PlayerName", "Main_Category", "Player_Points"])
+        # loop through data frame and update the data list
+        for index, row in df.iterrows():
+            whole_data_list.append(list(row.values))
+
+        # Populate dict() with updated data list
+        d.update({"Players": whole_data_list})
+        # Finally call save_data() from pyods to store the ods file
+        save_data(r"..\Players.ods", d)
+        # save_ods_from_excel('/Users/gkm/Downloads/Financial Sample.xlsx', '/tmp/sample-financial.ods')

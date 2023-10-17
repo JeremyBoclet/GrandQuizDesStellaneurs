@@ -13,6 +13,7 @@ class Selection_Player_Screen(pygame.sprite.Sprite):
         self.add_players()
 
         self.font = pygame.font.SysFont("Verdana", 30)
+        self.has_Reorganized = False
 
     def update(self, screen):
         self.group_buttons.draw(screen)
@@ -50,3 +51,6 @@ class Selection_Player_Screen(pygame.sprite.Sprite):
 
     def get_all_players(self):
         return self.group_buttons
+
+    def reorganize_player_finale(self):
+        self.bdd.reorganize_player_for_finale()

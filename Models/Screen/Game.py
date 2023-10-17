@@ -32,7 +32,7 @@ class Game:
 
         self.current_ID = 0
         self.good_answer_text = ""
-        self.current_player = Players("Denis", 1)
+        self.current_player = Players("Player", 1)
         self.button_width = 400
         self.button_height = 130
 
