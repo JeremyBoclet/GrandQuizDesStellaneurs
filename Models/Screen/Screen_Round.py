@@ -205,7 +205,7 @@ class Round:
         self.group_buttons_round2.add(Button("History", 1000, 360, 550, 110))
         self.group_buttons_round2.add(Button("Nintendo", 1000, 470, 550, 110))
         self.group_buttons_round2.add(Button("Formula1", 1000, 580, 550, 110))
-        self.group_buttons_round2.add(Button("Series", 1000, 690, 550, 110))
+        self.group_buttons_round2.add(Button("Sport", 1000, 690, 550, 110))
         self.group_buttons_round2.add(Button("CodeRoute", 1000, 800, 550, 110))
         self.group_buttons_round2.add(Button("Gastronomy", 1000, 910, 550, 110))
 
