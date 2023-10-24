@@ -197,7 +197,7 @@ class Round:
         self.group_buttons_round2.add(Button("Mystery", 350, 360, 550, 110))
         self.group_buttons_round2.add(Button("RomanEmpire", 350, 470, 550, 110))
         self.group_buttons_round2.add(Button("Lego", 350, 580, 550, 110))
-        self.group_buttons_round2.add(Button("Animals", 350, 690, 550, 110))
+        self.group_buttons_round2.add(Button("Automobile", 350, 690, 550, 110))
         self.group_buttons_round2.add(Button("France", 350, 800, 550, 110))
         self.group_buttons_round2.add(Button("Maths", 350, 910, 550, 110))
 

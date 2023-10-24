@@ -1,5 +1,5 @@
 import pygame, sys, threading
-
+import os
 from Models.Bdd import Bdd
 from Models.Buttons.Button import Button
 from Models.Buttons.Player.Players import Players
@@ -229,13 +229,20 @@ class Game:
                 self.is_sound_question = False
 
                 # La question est une image
-                self.image_question = pygame.image.load(
-                    "../Assets/Annexe/" + self.questions[self.current_ID].external_name)
 
                 if self.is_zoomed:
+                    image_path = "../Assets/Annexe/zoom/" + self.questions[self.current_ID].external_name
+
+                    if not os.path.exists(image_path):
+                        image_path = "../Assets/Annexe/" + self.questions[self.current_ID].external_name
+
+                    self.image_question = pygame.image.load(image_path)
                     width = self.screen.get_width()
                     height = self.screen.get_height()
                 else:
+                    self.image_question = pygame.image.load(
+                        "../Assets/Annexe/" + self.questions[self.current_ID].external_name)
+
                     width = 300
                     height = 300
 

@@ -15,5 +15,6 @@ class Selection_Round:
         self.group_buttons.add(Rounds(5, screen))  # Finale
         self.group_buttons.add(Rounds(6, screen))  # Classement
         self.group_buttons.add(Rounds("Quit", screen)) # Quitter
+
     def update(self):
         self.group_buttons.draw(self.screen)
