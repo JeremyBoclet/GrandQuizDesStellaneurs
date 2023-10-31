@@ -176,7 +176,7 @@ class Game:
             bad_answer_pos_y = self.screen.get_height() - self.bad_answer_image.get_height()
 
             # Réponse
-            self.current_answer = self.font.render(self.questions[self.current_ID].answer.replace('"', ''), True, (0, 255, 0)) #(255, 170, 0)
+            self.current_answer = self.font.render(self.questions[self.current_ID].answer.replace('"', ''), True, (255, 255, 0)) #(255, 170, 0)
             self.current_answer_rect = pygame.Rect((self.screen.get_width() - self.current_answer.get_width()) / 2,
                                                    self.screen.get_height() / 1.6,
                                                    350,
