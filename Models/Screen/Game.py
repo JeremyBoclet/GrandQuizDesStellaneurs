@@ -2,6 +2,7 @@ import pygame, sys, threading
 import os
 from Models.Bdd import Bdd
 from Models.Buttons.Button import Button
+from Models.Buttons.Player.Player_button import Player_button
 from Models.Buttons.Player.Players import Players
 from Models.Buttons.Player.PlayersRanking import PlayersRanking
 from Models.Questions import Questions
@@ -71,6 +72,8 @@ class Game:
         self.loading_bar_rect = self.loading_bar.get_rect()
         self.sound_length = 0
         self.sound = ""
+        self.current_player_image = pygame.sprite.Group()
+        self.current_player_name = ""
 
     def get_all_players_points(self):
         # df = self.bdd.request_query("SELECT PlayerName, PlayerPoint FROM GrandQuiz.dbo.Players ORDER BY PlayerPoint DESC")
@@ -103,8 +106,6 @@ class Game:
                                  row["ExternalName"])
 
             self.questions.append(question)
-
-        print(self.questions.count)
 
     def get_question_round3(self, category_id):
         self.questions = []
@@ -152,6 +153,16 @@ class Game:
             pygame.mixer.stop()
 
     def update(self, time_in_sec, use_timer, always_show_answer, timer_for_sound):
+
+        if self.current_player_name != self.current_player.name:
+            print(self.current_player.name)
+            self.current_player_image = pygame.image.load("../Assets/Player/{}.png".format(self.current_player.name)).convert_alpha()
+            self.current_player_image = pygame.transform.scale(self.current_player_image, (400, 100))
+            self.current_player_name = self.current_player.name
+
+        self.screen.blit(self.current_player_image,
+                         (1500, 5))
+
         if self.current_ID == len(self.questions) or (time_in_sec <= 0 and use_timer):
             self.is_playing = False
             self.current_ID = 0
