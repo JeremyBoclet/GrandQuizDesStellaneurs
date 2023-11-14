@@ -62,9 +62,9 @@ class Game:
         self.loading_bg = pygame.transform.scale(self.loading_bg, (1010, 50)).convert_alpha()
 
         self.loading_bg_rect = pygame.Rect((self.screen.get_width() - self.loading_bg.get_width()) / 2 - 5,
-                                                   self.screen.get_height() / 1.6,
-                                                   1005,
-                                                   50)
+                                           self.screen.get_height() / 1.6,
+                                           1005,
+                                           50)
 
         self.loading_bar = pygame.image.load("../Assets/Loading_Bar.png")
         self.loading_bar = pygame.transform.scale(self.loading_bar, (10, 50)).convert_alpha()
@@ -79,7 +79,7 @@ class Game:
         # df = self.bdd.request_query("SELECT PlayerName, PlayerPoint FROM GrandQuiz.dbo.Players ORDER BY PlayerPoint DESC")
         df = self.bdd.get_players()
         df.reset_index()
-        df = df.sort_values("Player_Points",ascending=False)
+        df = df.sort_values("Player_Points", ascending=False)
         self.players.clear()
         for index, row in df.iterrows():
             players = PlayersRanking(row["PlayerName"], row["Player_Points"])
@@ -155,8 +155,8 @@ class Game:
     def update(self, time_in_sec, use_timer, always_show_answer, timer_for_sound):
 
         if self.current_player_name != self.current_player.name:
-            print(self.current_player.name)
-            self.current_player_image = pygame.image.load("../Assets/Player/{}.png".format(self.current_player.name)).convert_alpha()
+            self.current_player_image = pygame.image.load(
+                "../Assets/Player/{}.png".format(self.current_player.name)).convert_alpha()
             self.current_player_image = pygame.transform.scale(self.current_player_image, (400, 100))
             self.current_player_name = self.current_player.name
 
@@ -187,7 +187,8 @@ class Game:
             bad_answer_pos_y = self.screen.get_height() - self.bad_answer_image.get_height()
 
             # Réponse
-            self.current_answer = self.font.render(self.questions[self.current_ID].answer.replace('"', ''), True, (255, 255, 0)) #(255, 170, 0)
+            self.current_answer = self.font.render(self.questions[self.current_ID].answer.replace('"', ''), True,
+                                                   (255, 255, 0))  # (255, 170, 0)
             self.current_answer_rect = pygame.Rect((self.screen.get_width() - self.current_answer.get_width()) / 2,
                                                    self.screen.get_height() / 1.6,
                                                    350,
@@ -240,7 +241,6 @@ class Game:
                 self.is_sound_question = False
 
                 # La question est une image
-
                 if self.is_zoomed:
                     image_path = "../Assets/Annexe/zoom/" + self.questions[self.current_ID].external_name
 
@@ -257,6 +257,10 @@ class Game:
                     width = 300
                     height = 300
 
+                #if not os.path.exists("../Assets/Annexe/zoom/" + self.questions[self.current_ID].external_name):
+                #    width = self.screen.get_width()
+                #    height = self.screen.get_height()
+
                 self.image_question = pygame.transform.scale(self.image_question,
                                                              (width, height)).convert_alpha()
 
@@ -266,6 +270,13 @@ class Game:
                 else:
                     pos_x = ((self.screen.get_width() / 2) - self.image_question.get_width() / 2)
                     pos_y = self.screen.get_height() / 2 - self.image_question.get_height() + 110
+
+                #if not os.path.exists("../Assets/Annexe/zoom/" + self.questions[self.current_ID].external_name):
+                #    pos_x = 1
+                #    pos_y = 1
+
+                self.image_question = pygame.transform.scale(self.image_question,
+                                                             (width, height)).convert_alpha()
 
                 self.screen.blit(self.image_question,
                                  (pos_x, pos_y))
@@ -323,6 +334,3 @@ class Game:
 
             if use_timer:
                 self.timer.render(time_in_sec)
-
-
-

@@ -17,7 +17,7 @@ screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 background = pygame.transform.scale(pygame.image.load("../assets/background.jpg").convert_alpha(),
                                     (screen.get_width(), screen.get_height()))
 # Temps d'affichage des tuiles finales en seconde
-round_timer = 5
+round_timer = 5000
 
 # écran
 game = Game(screen)
@@ -105,6 +105,8 @@ while running:
                     if game.is_image_question:
                         if game.image_question_rect.collidepoint(event.pos):
                             game.zoom()
+                        else:
+                            game.is_zoomed = False
                     elif game.is_sound_question:
                         if game.image_question_rect.collidepoint(event.pos):
                             timer_for_sound = 0

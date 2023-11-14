@@ -184,8 +184,8 @@ class Round:
                 self.group_buttons_finale.remove(button)
 
     def add_round1_button(self):
-        self.group_buttons_round1.add(Button("Button_template2", 350, 200, 600, 150))
-        self.group_buttons_round1.add(Button("Button_template2", 350, 350, 600, 150))
+        self.group_buttons_round1.add(Button("Martin", 350, 200, 600, 150))
+        self.group_buttons_round1.add(Button("PTF", 350, 350, 600, 150))
         self.group_buttons_round1.add(Button("Button_template2", 350, 500, 600, 150))
         self.group_buttons_round1.add(Button("Button_template2", 350, 650, 600, 150))
         self.group_buttons_round1.add(Button("Button_template2", 350, 800, 600, 150))
@@ -196,7 +196,7 @@ class Round:
         self.group_buttons_round2.add(Button("Gaming", 350, 250, 550, 110))
         self.group_buttons_round2.add(Button("Stellan", 350, 360, 550, 110))
         self.group_buttons_round2.add(Button("RomanEmpire", 350, 470, 550, 110))
-        self.group_buttons_round2.add(Button("Button_template2", 350, 580, 550, 110))
+        self.group_buttons_round2.add(Button("LoL", 350, 580, 550, 110))
         self.group_buttons_round2.add(Button("Automobile", 350, 690, 550, 110))
         self.group_buttons_round2.add(Button("Mystery", 350, 800, 550, 110))
         self.group_buttons_round2.add(Button("TranslatedMusique", 350, 910, 550, 110))
@@ -210,8 +210,8 @@ class Round:
         self.group_buttons_round2.add(Button("Gastronomy", 1000, 910, 550, 110))
 
     def add_round3_button(self):
-        self.group_buttons_round3.add(Button("Button_template2", 350, 200, 600, 150))
-        self.group_buttons_round3.add(Button("Button_template2", 350, 350, 600, 150))
+        self.group_buttons_round3.add(Button("Martin", 350, 200, 600, 150))
+        self.group_buttons_round3.add(Button("PTF", 350, 350, 600, 150))
         self.group_buttons_round3.add(Button("Button_template2", 350, 500, 600, 150))
         self.group_buttons_round3.add(Button("Button_template2", 350, 650, 600, 150))
         self.group_buttons_round3.add(Button("Button_template2", 350, 800, 600, 150))
@@ -231,9 +231,9 @@ class Round:
         self.group_buttons_round4.add(Button("Hymne", 1000, 360, 550, 110))
         self.group_buttons_round4.add(Button("Audio_Film", 1000, 470, 550, 110))
         self.group_buttons_round4.add(Button("Emission", 1000, 580, 550, 110))
-        self.group_buttons_round4.add(Button("Button_template2", 1000, 690, 550, 110))
-        self.group_buttons_round4.add(Button("Button_template2", 1000, 800, 550, 110))
-        self.group_buttons_round4.add(Button("Button_template2", 1000, 910, 550, 110))
+        self.group_buttons_round4.add(Button("Musique1980", 1000, 690, 550, 110))
+        self.group_buttons_round4.add(Button("Musique2000", 1000, 800, 550, 110))
+        self.group_buttons_round4.add(Button("Rap", 1000, 910, 550, 110))
         #self.group_buttons_round2.add(Button("Maths", "14", 350, 910, 550, 110))
 
     def add_finale_button(self):
