@@ -195,7 +195,7 @@ class Round:
     def add_round2_button(self):
         self.group_buttons_round2.add(Button("Gaming", 350, 250, 550, 110))
         self.group_buttons_round2.add(Button("Stellan", 350, 360, 550, 110))
-        self.group_buttons_round2.add(Button("RomanEmpire", 350, 470, 550, 110))
+        self.group_buttons_round2.add(Button("Religion", 350, 470, 550, 110))
         self.group_buttons_round2.add(Button("LoL", 350, 580, 550, 110))
         self.group_buttons_round2.add(Button("Automobile", 350, 690, 550, 110))
         self.group_buttons_round2.add(Button("Mystery", 350, 800, 550, 110))
@@ -210,7 +210,7 @@ class Round:
         self.group_buttons_round2.add(Button("Gastronomy", 1000, 910, 550, 110))
 
     def add_round3_button(self):
-        self.group_buttons_round3.add(Button("Martin", 350, 200, 600, 150))
+        self.group_buttons_round3.add(Button("RE_Martin", 350, 200, 600, 150))
         self.group_buttons_round3.add(Button("PTF", 350, 350, 600, 150))
         self.group_buttons_round3.add(Button("Button_template2", 350, 500, 600, 150))
         self.group_buttons_round3.add(Button("Button_template2", 350, 650, 600, 150))
@@ -257,7 +257,7 @@ class Round:
                                             'x': 0,
                                             'y': 0})
 
-        # 2 questions CG, car 8x6 = 48 et on veut 50 questions
+        # 2 questions CG, car 8x6 = 48 et on veut 50 questions (8 = joueurs (+CG) / 7 = nombre de questions par joueur)
         for i in range(0, 2):
             question_id += 1
             button_id += 1

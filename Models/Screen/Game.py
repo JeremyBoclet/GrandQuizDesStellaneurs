@@ -76,7 +76,6 @@ class Game:
         self.current_player_name = ""
 
     def get_all_players_points(self):
-        # df = self.bdd.request_query("SELECT PlayerName, PlayerPoint FROM GrandQuiz.dbo.Players ORDER BY PlayerPoint DESC")
         df = self.bdd.get_players()
         df.reset_index()
         df = df.sort_values("Player_Points", ascending=False)
@@ -107,16 +106,6 @@ class Game:
 
             self.questions.append(question)
 
-    def get_question_round3(self, category_id):
-        self.questions = []
-        df = self.bdd.get_question_round3(category_id)
-        df.reset_index()
-
-        for index, row in df.iterrows():
-            question = Questions(row["Question"], row["Answer"], row["Category_ID"],
-                                 row["TypeQuestion"], row["PathExternalQuestion"], row["ExternalName"])
-            self.questions.append(question)
-
     def get_final_question(self, question_id):
         self.questions = []
         df = self.bdd.read_excel("Finale")
@@ -127,9 +116,6 @@ class Game:
                                      row["TypeQuestion"], row["ExternalName"])
                 self.questions.append(question)
                 break
-
-    def get_question_excel(self):
-        df = self.bdd.read_excel("Question")
 
     def zoom(self):
         self.is_zoomed = not self.is_zoomed
@@ -257,10 +243,6 @@ class Game:
                     width = 300
                     height = 300
 
-                #if not os.path.exists("../Assets/Annexe/zoom/" + self.questions[self.current_ID].external_name):
-                #    width = self.screen.get_width()
-                #    height = self.screen.get_height()
-
                 self.image_question = pygame.transform.scale(self.image_question,
                                                              (width, height)).convert_alpha()
 
@@ -270,10 +252,6 @@ class Game:
                 else:
                     pos_x = ((self.screen.get_width() / 2) - self.image_question.get_width() / 2)
                     pos_y = self.screen.get_height() / 2 - self.image_question.get_height() + 110
-
-                #if not os.path.exists("../Assets/Annexe/zoom/" + self.questions[self.current_ID].external_name):
-                #    pos_x = 1
-                #    pos_y = 1
 
                 self.image_question = pygame.transform.scale(self.image_question,
                                                              (width, height)).convert_alpha()
@@ -326,7 +304,6 @@ class Game:
 
                 self.screen.blit(self.image_question,
                                  (pos_x, pos_y))
-
 
             else:
                 self.is_image_question = False

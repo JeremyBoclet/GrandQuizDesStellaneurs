@@ -206,7 +206,6 @@ while running:
                                     game.get_question(button.name)
                                     last_question_id = button.name
                                     button.had_been_chosen = True
-                                    # game.get_question_excel()
                                     game.is_playing = True
 
                     # Round 2 (Récupération des questions par rapport à la catégorie sélectionnée)
@@ -227,7 +226,6 @@ while running:
                                 if button.rect.collidepoint(event.pos):
                                     time_in_sec = round_timer
                                     game.get_question(button.name)
-                                    print(button.name)
                                     game.is_playing = True
                                     button.had_been_chosen = True
                                     last_question_id = button.name
