@@ -241,7 +241,7 @@ class Round:
         question_id = 0
         category_id = 1
 
-        colors = ["Red", "Dark_Blue", "Black", "Purple", "Orange", "Green", "Light_Blue", "White"]
+        colors = ["Shit_Green", "Red", "Black", "Purple", "Orange", "Dark_Blue", "Light_Blue", "White"]
 
         for color in colors:
             # Boucle changement de theme
