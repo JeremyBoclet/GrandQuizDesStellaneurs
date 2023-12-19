@@ -211,7 +211,7 @@ class Round:
 
     def add_round3_button(self):
         self.group_buttons_round3.add(Button("RE_Martin", 350, 200, 600, 150))
-        self.group_buttons_round3.add(Button("Re_Ben", 350, 350, 600, 150))
+        self.group_buttons_round3.add(Button("RE_Ben", 350, 350, 600, 150))
         self.group_buttons_round3.add(Button("RE_PTF", 350, 500, 600, 150))
         self.group_buttons_round3.add(Button("Button_template2", 350, 650, 600, 150))
         self.group_buttons_round3.add(Button("Button_template2", 350, 800, 600, 150))
@@ -241,6 +241,7 @@ class Round:
         question_id = 0
         category_id = 1
 
+        # Doit suivre l'ordre dans la feuille "Finale"
         colors = ["Shit_Green", "Red", "Black", "Purple", "Orange", "Dark_Blue", "Light_Blue", "White"]
 
         for color in colors:
