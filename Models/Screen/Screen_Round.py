@@ -224,7 +224,7 @@ class Round:
         self.group_buttons_round4.add(Button("Audio_Jeux", 350, 470, 550, 110))
         self.group_buttons_round4.add(Button("Audio_Serie", 350, 580, 550, 110))
         self.group_buttons_round4.add(Button("Pub", 350, 690, 550, 110))
-        self.group_buttons_round4.add(Button("Button_template2", 350, 800, 550, 110))
+        self.group_buttons_round4.add(Button("Disney", 350, 800, 550, 110))
         self.group_buttons_round4.add(Button("Button_template2", 350, 910, 550, 110))
 
         self.group_buttons_round4.add(Button("Dessin_Anime", 1000, 250, 550, 110))
