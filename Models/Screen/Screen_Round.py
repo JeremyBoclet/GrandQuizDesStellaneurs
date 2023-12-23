@@ -193,20 +193,29 @@ class Round:
         self.group_buttons_round1.add(Button("Button_template2", 1000, 350, 600, 150))
 
     def add_round2_button(self):
-        self.group_buttons_round2.add(Button("Gaming", 350, 250, 550, 110))
-        self.group_buttons_round2.add(Button("Stellan", 350, 360, 550, 110))
-        self.group_buttons_round2.add(Button("Religion", 350, 470, 550, 110))
-        self.group_buttons_round2.add(Button("LoL", 350, 580, 550, 110))
-        self.group_buttons_round2.add(Button("Automobile", 350, 690, 550, 110))
-        self.group_buttons_round2.add(Button("Mystery", 350, 800, 550, 110))
-        self.group_buttons_round2.add(Button("TranslatedMusique", 350, 910, 550, 110))
+        self.group_buttons_round2.add(Button("Gaming", 40, 250, 550, 110))
+        self.group_buttons_round2.add(Button("Stellan", 40, 360, 550, 110))
+        self.group_buttons_round2.add(Button("Religion", 40, 470, 550, 110))
+        self.group_buttons_round2.add(Button("LoL", 40, 580, 550, 110))
+        self.group_buttons_round2.add(Button("Automobile", 40, 690, 550, 110))
+        self.group_buttons_round2.add(Button("Mystery", 40, 800, 550, 110))
 
-        self.group_buttons_round2.add(Button("Geo", 1000, 250, 550, 110))
-        self.group_buttons_round2.add(Button("History", 1000, 360, 550, 110))
-        self.group_buttons_round2.add(Button("Animals", 1000, 470, 550, 110))
-        self.group_buttons_round2.add(Button("Formula1", 1000, 580, 550, 110))
-        self.group_buttons_round2.add(Button("Sport", 1000, 690, 550, 110))
-        self.group_buttons_round2.add(Button("CodeRoute", 1000, 800, 550, 110))
+        self.group_buttons_round2.add(Button("Geo", 670, 250, 550, 110))
+        self.group_buttons_round2.add(Button("History", 670, 360, 550, 110))
+        self.group_buttons_round2.add(Button("Animals", 670, 470, 550, 110))
+        self.group_buttons_round2.add(Button("Formula1", 670, 580, 550, 110))
+        self.group_buttons_round2.add(Button("Sport", 670, 690, 550, 110))
+        self.group_buttons_round2.add(Button("CodeRoute", 670, 800, 550, 110))
+
+        self.group_buttons_round2.add(Button("Button_template2", 1300, 250, 550, 110))
+        self.group_buttons_round2.add(Button("Button_template2", 1300, 360, 550, 110))
+        self.group_buttons_round2.add(Button("Button_template2", 1300, 470, 550, 110))
+        self.group_buttons_round2.add(Button("Button_template2", 1300, 580, 550, 110))
+        self.group_buttons_round2.add(Button("Button_template2", 1300, 690, 550, 110))
+        self.group_buttons_round2.add(Button("Button_template2", 1300, 800, 550, 110))
+
+
+        self.group_buttons_round2.add(Button("TranslatedMusique", 350, 910, 550, 110))
         self.group_buttons_round2.add(Button("Gastronomy", 1000, 910, 550, 110))
 
     def add_round3_button(self):
@@ -219,22 +228,29 @@ class Round:
         self.group_buttons_round3.add(Button("Button_template2", 1000, 350, 600, 150))
 
     def add_round4_button(self):
-        self.group_buttons_round4.add(Button("LoL_Ban", 350, 250, 550, 110))
-        self.group_buttons_round4.add(Button("LoL_Pick", 350, 360, 550, 110))
-        self.group_buttons_round4.add(Button("Audio_Jeux", 350, 470, 550, 110))
-        self.group_buttons_round4.add(Button("Audio_Serie", 350, 580, 550, 110))
-        self.group_buttons_round4.add(Button("Pub", 350, 690, 550, 110))
-        self.group_buttons_round4.add(Button("Disney", 350, 800, 550, 110))
-        self.group_buttons_round4.add(Button("Button_template2", 350, 910, 550, 110))
+        self.group_buttons_round4.add(Button("LoL_Ban", 40, 250, 550, 110))
+        self.group_buttons_round4.add(Button("LoL_Pick", 40, 360, 550, 110))
+        self.group_buttons_round4.add(Button("Audio_Jeux", 40, 470, 550, 110))
+        self.group_buttons_round4.add(Button("Audio_Serie", 40, 580, 550, 110))
+        self.group_buttons_round4.add(Button("Pub", 40, 690, 550, 110))
+        self.group_buttons_round4.add(Button("Disney", 40, 800, 550, 110))
 
-        self.group_buttons_round4.add(Button("Dessin_Anime", 1000, 250, 550, 110))
-        self.group_buttons_round4.add(Button("Hymne", 1000, 360, 550, 110))
-        self.group_buttons_round4.add(Button("Audio_Film", 1000, 470, 550, 110))
-        self.group_buttons_round4.add(Button("Emission", 1000, 580, 550, 110))
-        self.group_buttons_round4.add(Button("Musique1980", 1000, 690, 550, 110))
-        self.group_buttons_round4.add(Button("Musique2000", 1000, 800, 550, 110))
+        self.group_buttons_round4.add(Button("Dessin_Anime", 670, 250, 550, 110))
+        self.group_buttons_round4.add(Button("Hymne", 670, 360, 550, 110))
+        self.group_buttons_round4.add(Button("Audio_Film", 670, 470, 550, 110))
+        self.group_buttons_round4.add(Button("Emission", 670, 580, 550, 110))
+        self.group_buttons_round4.add(Button("Musique1980", 670, 690, 550, 110))
+        self.group_buttons_round4.add(Button("Musique2000", 670, 800, 550, 110))
+
+        self.group_buttons_round4.add(Button("Button_template2", 1300, 250, 550, 110))
+        self.group_buttons_round4.add(Button("Button_template2", 1300, 360, 550, 110))
+        self.group_buttons_round4.add(Button("Button_template2", 1300, 470, 550, 110))
+        self.group_buttons_round4.add(Button("Button_template2", 1300, 580, 550, 110))
+        self.group_buttons_round4.add(Button("Button_template2", 1300, 690, 550, 110))
+        self.group_buttons_round4.add(Button("Button_template2", 1300, 800, 550, 110))
+
         self.group_buttons_round4.add(Button("Rap", 1000, 910, 550, 110))
-        #self.group_buttons_round2.add(Button("Maths", "14", 350, 910, 550, 110))
+        self.group_buttons_round4.add(Button("Button_template2", 350, 910, 550, 110))
 
     def add_finale_button(self):
         button_id = 0
