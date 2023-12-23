@@ -35,7 +35,7 @@ class Selection_Player_Screen(pygame.sprite.Sprite):
 
     def add_players(self):
         x = self.screen.get_width() / 2 - 610
-        y = 50
+        y = 200
         df = self.bdd.get_players()
         # df = self.bdd.request_query("SELECT PlayerName, Main_Category FROM GrandQuiz.dbo.Players")
         df.reset_index()
@@ -43,9 +43,9 @@ class Selection_Player_Screen(pygame.sprite.Sprite):
         for index, row in df.iterrows():
             self.group_buttons.add(Player_button(row["PlayerName"], x, y, row["Main_Category"]))
             y += 150
-            if y >= 801:
+            if y >= 901:
                 x = self.screen.get_width() / 2 + 10
-                y = 50
+                y = 200
 
     def get_all_players(self):
         return self.group_buttons
