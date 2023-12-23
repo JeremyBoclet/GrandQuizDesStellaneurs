@@ -189,8 +189,12 @@ class Round:
         self.group_buttons_round1.add(Button("PTF", 350, 500, 600, 150))
         self.group_buttons_round1.add(Button("Button_template2", 350, 650, 600, 150))
         self.group_buttons_round1.add(Button("Button_template2", 350, 800, 600, 150))
+
         self.group_buttons_round1.add(Button("Button_template2", 1000, 200, 600, 150))
         self.group_buttons_round1.add(Button("Button_template2", 1000, 350, 600, 150))
+        self.group_buttons_round1.add(Button("Button_template2", 1000, 500, 600, 150))
+        self.group_buttons_round1.add(Button("Button_template2", 1000, 650, 600, 150))
+        self.group_buttons_round1.add(Button("Button_template2", 1000, 800, 600, 150))
 
     def add_round2_button(self):
         self.group_buttons_round2.add(Button("Gaming", 40, 250, 550, 110))
@@ -224,8 +228,12 @@ class Round:
         self.group_buttons_round3.add(Button("RE_PTF", 350, 500, 600, 150))
         self.group_buttons_round3.add(Button("Button_template2", 350, 650, 600, 150))
         self.group_buttons_round3.add(Button("Button_template2", 350, 800, 600, 150))
+
         self.group_buttons_round3.add(Button("Button_template2", 1000, 200, 600, 150))
         self.group_buttons_round3.add(Button("Button_template2", 1000, 350, 600, 150))
+        self.group_buttons_round3.add(Button("Button_template2", 1000, 500, 600, 150))
+        self.group_buttons_round3.add(Button("Button_template2", 1000, 650, 600, 150))
+        self.group_buttons_round3.add(Button("Button_template2", 1000, 800, 600, 150))
 
     def add_round4_button(self):
         self.group_buttons_round4.add(Button("LoL_Ban", 40, 250, 550, 110))
@@ -330,6 +338,6 @@ class Round:
         self.group_buttons_ranking.add(Button("ForthOrMore", 1410, 500, 450, 100))
 
         self.group_buttons_ranking.add(Button("ForthOrMore", 30, 600, 450, 100))
-        # self.group_buttons_round5.add(Button("ForthOrMore", 0, 390, 600, 350, 100))
-        # self.group_buttons_round4.add(Button("ForthOrMore", 0, 750, 600, 350, 100))
-        # self.group_buttons_round4.add(Button("ForthOrMore", 0, 1110, 600, 350, 100))
+        self.group_buttons_ranking.add(Button("ForthOrMore", 490, 600, 450, 100))
+        self.group_buttons_ranking.add(Button("ForthOrMore", 950, 600, 450, 100))
+        # self.group_buttons_ranking.add(Button("ForthOrMore", 1410, 600, 450, 100))
