@@ -187,8 +187,8 @@ class Round:
         self.group_buttons_round1.add(Button("Martin", 350, 200, 600, 150))
         self.group_buttons_round1.add(Button("Ben", 350, 350, 600, 150))
         self.group_buttons_round1.add(Button("PTF", 350, 500, 600, 150))
-        self.group_buttons_round1.add(Button("Button_template2", 350, 650, 600, 150))
-        self.group_buttons_round1.add(Button("Button_template2", 350, 800, 600, 150))
+        self.group_buttons_round1.add(Button("Zejoe", 350, 650, 600, 150))
+        self.group_buttons_round1.add(Button("Mathis", 350, 800, 600, 150))
 
         self.group_buttons_round1.add(Button("Button_template2", 1000, 200, 600, 150))
         self.group_buttons_round1.add(Button("Button_template2", 1000, 350, 600, 150))
@@ -226,8 +226,8 @@ class Round:
         self.group_buttons_round3.add(Button("RE_Martin", 350, 200, 600, 150))
         self.group_buttons_round3.add(Button("RE_Ben", 350, 350, 600, 150))
         self.group_buttons_round3.add(Button("RE_PTF", 350, 500, 600, 150))
-        self.group_buttons_round3.add(Button("Button_template2", 350, 650, 600, 150))
-        self.group_buttons_round3.add(Button("Button_template2", 350, 800, 600, 150))
+        self.group_buttons_round3.add(Button("RE_Zejoe", 350, 650, 600, 150))
+        self.group_buttons_round3.add(Button("RE_Mathis", 350, 800, 600, 150))
 
         self.group_buttons_round3.add(Button("Button_template2", 1000, 200, 600, 150))
         self.group_buttons_round3.add(Button("Button_template2", 1000, 350, 600, 150))
@@ -266,7 +266,7 @@ class Round:
         category_id = 1
 
         # Doit suivre l'ordre dans la feuille "Finale"
-        colors = ["Shit_Green", "Red", "Black", "Purple", "Orange", "Dark_Blue", "Light_Blue", "White"]
+        colors = ["Shit_Green", "Red", "Black", "Purple", "Orange", "Dark_Blue", "Light_Blue", "White", "Green", "Brown"]
 
         for color in colors:
             # Boucle changement de theme
@@ -283,17 +283,17 @@ class Round:
                                             'y': 0})
 
         # 2 questions CG, car 8x6 = 48 et on veut 50 questions (8 = joueurs (+CG) / 7 = nombre de questions par joueur)
-        for i in range(0, 2):
-            question_id += 1
-            button_id += 1
-            self.final_category.append({'id': button_id,
-                                        'color': "White",
-                                        'id_question': question_id,
-                                        'id_category': 0,
-                                        'x': 0,
-                                        'y': 0})
+        # for i in range(0, 2):
+        #     question_id += 1
+        #     button_id += 1
+        #     self.final_category.append({'id': button_id,
+        #                                 'color': "White",
+        #                                 'id_question': question_id,
+        #                                 'id_category': 0,
+        #                                 'x': 0,
+        #                                 'y': 0})
 
-        r = list(range(1, 51))
+        r = list(range(1, 61))
         random.shuffle(r)
         count = 0
         x = -1
@@ -301,13 +301,13 @@ class Round:
         for i in r:
             count += 1
             x += 1
-            if x == 10:
+            if x == 12:
                 x = 0
                 y += 1
 
             for final_cat in self.final_category:
                 if final_cat['id'] == i:
-                    final_cat['x'] = 200 + x * 150
+                    final_cat['x'] = 70 + x * 150
                     final_cat['y'] = 215 + y * 170
                     final_cat['count'] = count
                     self.group_buttons_finale.add(Final_Button(final_cat["color"],
