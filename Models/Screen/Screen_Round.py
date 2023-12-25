@@ -9,6 +9,7 @@ from Models.Buttons.Player.Current_Player import Current_Player
 from Models.Buttons.Player.Players import Players
 from Models.Screen.Timer import Timer
 
+default_button = "Button_template2"
 
 class Round:
     def __init__(self, screen):
@@ -190,11 +191,11 @@ class Round:
         self.group_buttons_round1.add(Button("Zejoe", 350, 650, 600, 150))
         self.group_buttons_round1.add(Button("Mathis", 350, 800, 600, 150))
 
-        self.group_buttons_round1.add(Button("Button_template2", 1000, 200, 600, 150))
-        self.group_buttons_round1.add(Button("Button_template2", 1000, 350, 600, 150))
-        self.group_buttons_round1.add(Button("Button_template2", 1000, 500, 600, 150))
-        self.group_buttons_round1.add(Button("Button_template2", 1000, 650, 600, 150))
-        self.group_buttons_round1.add(Button("Button_template2", 1000, 800, 600, 150))
+        self.group_buttons_round1.add(Button("Jeanjarjar", 1000, 200, 600, 150))
+        self.group_buttons_round1.add(Button("Drakmur", 1000, 350, 600, 150))
+        self.group_buttons_round1.add(Button(default_button, 1000, 500, 600, 150))
+        self.group_buttons_round1.add(Button(default_button, 1000, 650, 600, 150))
+        self.group_buttons_round1.add(Button(default_button, 1000, 800, 600, 150))
 
     def add_round2_button(self):
         self.group_buttons_round2.add(Button("Gaming", 40, 250, 550, 110))
@@ -211,12 +212,12 @@ class Round:
         self.group_buttons_round2.add(Button("Sport", 670, 690, 550, 110))
         self.group_buttons_round2.add(Button("CodeRoute", 670, 800, 550, 110))
 
-        self.group_buttons_round2.add(Button("Button_template2", 1300, 250, 550, 110))
-        self.group_buttons_round2.add(Button("Button_template2", 1300, 360, 550, 110))
-        self.group_buttons_round2.add(Button("Button_template2", 1300, 470, 550, 110))
-        self.group_buttons_round2.add(Button("Button_template2", 1300, 580, 550, 110))
-        self.group_buttons_round2.add(Button("Button_template2", 1300, 690, 550, 110))
-        self.group_buttons_round2.add(Button("Button_template2", 1300, 800, 550, 110))
+        self.group_buttons_round2.add(Button(default_button, 1300, 250, 550, 110))
+        self.group_buttons_round2.add(Button(default_button, 1300, 360, 550, 110))
+        self.group_buttons_round2.add(Button(default_button, 1300, 470, 550, 110))
+        self.group_buttons_round2.add(Button(default_button, 1300, 580, 550, 110))
+        self.group_buttons_round2.add(Button(default_button, 1300, 690, 550, 110))
+        self.group_buttons_round2.add(Button(default_button, 1300, 800, 550, 110))
 
 
         self.group_buttons_round2.add(Button("TranslatedMusique", 350, 910, 550, 110))
@@ -229,11 +230,11 @@ class Round:
         self.group_buttons_round3.add(Button("RE_Zejoe", 350, 650, 600, 150))
         self.group_buttons_round3.add(Button("RE_Mathis", 350, 800, 600, 150))
 
-        self.group_buttons_round3.add(Button("Button_template2", 1000, 200, 600, 150))
-        self.group_buttons_round3.add(Button("Button_template2", 1000, 350, 600, 150))
-        self.group_buttons_round3.add(Button("Button_template2", 1000, 500, 600, 150))
-        self.group_buttons_round3.add(Button("Button_template2", 1000, 650, 600, 150))
-        self.group_buttons_round3.add(Button("Button_template2", 1000, 800, 600, 150))
+        self.group_buttons_round3.add(Button("RE_Jeanjarjar", 1000, 200, 600, 150))
+        self.group_buttons_round3.add(Button("RE_Drakmur", 1000, 350, 600, 150))
+        self.group_buttons_round3.add(Button(default_button, 1000, 500, 600, 150))
+        self.group_buttons_round3.add(Button(default_button, 1000, 650, 600, 150))
+        self.group_buttons_round3.add(Button(default_button, 1000, 800, 600, 150))
 
     def add_round4_button(self):
         self.group_buttons_round4.add(Button("LoL_Ban", 40, 250, 550, 110))
