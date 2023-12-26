@@ -267,7 +267,7 @@ class Round:
         category_id = 1
 
         # Doit suivre l'ordre dans la feuille "Finale"
-        colors = ["Shit_Green", "Red", "Black", "Purple", "Orange", "Dark_Blue", "Light_Blue", "White", "Green", "Brown"]
+        colors = ["Shit_Green", "Red", "Black", "Purple", "Brown", "Dark_Blue", "Light_Blue", "Green", "Orange", "White"]
 
         for color in colors:
             # Boucle changement de theme
