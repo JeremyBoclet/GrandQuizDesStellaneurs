@@ -193,7 +193,7 @@ class Round:
 
         self.group_buttons_round1.add(Button("Jeanjarjar", 1000, 200, 600, 150))
         self.group_buttons_round1.add(Button("Drakmur", 1000, 350, 600, 150))
-        self.group_buttons_round1.add(Button(default_button, 1000, 500, 600, 150))
+        self.group_buttons_round1.add(Button("Plags", 1000, 500, 600, 150))
         self.group_buttons_round1.add(Button(default_button, 1000, 650, 600, 150))
         self.group_buttons_round1.add(Button(default_button, 1000, 800, 600, 150))
 
@@ -232,7 +232,7 @@ class Round:
 
         self.group_buttons_round3.add(Button("RE_Jeanjarjar", 1000, 200, 600, 150))
         self.group_buttons_round3.add(Button("RE_Drakmur", 1000, 350, 600, 150))
-        self.group_buttons_round3.add(Button(default_button, 1000, 500, 600, 150))
+        self.group_buttons_round3.add(Button("RE_Plags", 1000, 500, 600, 150))
         self.group_buttons_round3.add(Button(default_button, 1000, 650, 600, 150))
         self.group_buttons_round3.add(Button(default_button, 1000, 800, 600, 150))
 
