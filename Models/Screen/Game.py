@@ -25,8 +25,8 @@ class Game:
         self.current_question_category = 0
         self.current_answer_rect = pygame.Rect(0, 0, 0, 0)
         self.group_button = pygame.sprite.Group()
-        self.group_button.add(Button("Hide_Answer", (self.screen.get_width() / 2 - 750),
-                                     self.screen.get_height() / 1.45, 1500, 150))
+        self.group_button.add(Button("Hide_Answer", (self.screen.get_width() / 2 - 960),
+                                     self.screen.get_height() / 1.45, 1900, 150))
         self.view_cat_group = pygame.sprite.Group()
 
         self.show_answer = False
