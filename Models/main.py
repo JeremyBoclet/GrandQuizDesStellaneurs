@@ -17,7 +17,7 @@ screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 background = pygame.transform.scale(pygame.image.load("../assets/background.jpg").convert_alpha(),
                                     (screen.get_width(), screen.get_height()))
 # Temps d'affichage des tuiles finales en seconde
-round_timer = 5000
+round_timer = 40000
 
 # écran
 game = Game(screen)

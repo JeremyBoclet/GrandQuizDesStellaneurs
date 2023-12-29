@@ -212,11 +212,11 @@ class Round:
         self.group_buttons_round2.add(Button("Sport", 670, 690, 550, 110))
         self.group_buttons_round2.add(Button("CodeRoute", 670, 800, 550, 110))
 
-        self.group_buttons_round2.add(Button(default_button, 1300, 250, 550, 110))
+        self.group_buttons_round2.add(Button("Pixar", 1300, 250, 550, 110))
         self.group_buttons_round2.add(Button(default_button, 1300, 360, 550, 110))
         self.group_buttons_round2.add(Button(default_button, 1300, 470, 550, 110))
         self.group_buttons_round2.add(Button(default_button, 1300, 580, 550, 110))
-        self.group_buttons_round2.add(Button(default_button, 1300, 690, 550, 110))
+        self.group_buttons_round2.add(Button("Dreamworks", 1300, 690, 550, 110))
         self.group_buttons_round2.add(Button(default_button, 1300, 800, 550, 110))
 
 
@@ -251,7 +251,7 @@ class Round:
         self.group_buttons_round4.add(Button("Musique1980", 670, 690, 550, 110))
         self.group_buttons_round4.add(Button("Musique2000", 670, 800, 550, 110))
 
-        self.group_buttons_round4.add(Button("Button_template2", 1300, 250, 550, 110))
+        self.group_buttons_round4.add(Button("Anime", 1300, 250, 550, 110))
         self.group_buttons_round4.add(Button("Button_template2", 1300, 360, 550, 110))
         self.group_buttons_round4.add(Button("Button_template2", 1300, 470, 550, 110))
         self.group_buttons_round4.add(Button("Button_template2", 1300, 580, 550, 110))
