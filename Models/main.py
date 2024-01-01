@@ -4,6 +4,7 @@ from Models.Screen.Selection_Player_Screen import Selection_Player_Screen
 from Models.Screen.Game import Game
 from Models.Screen.Selection_Round import Selection_Round
 from Models.Screen.Screen_Round import Round
+from Models.Buttons.Player.Players import Players
 
 pygame.init()
 
@@ -51,28 +52,39 @@ while running:
         selection_player_screen.update(screen)
     elif selection_round.is_selecting_round:
         # Selection de la manche
+        if not selection_player_screen.has_Reorganized:
+            selection_player_screen.reorganize_player_finale()
+            selection_player_screen = Selection_Player_Screen(screen)
+            game.current_player = Players("Player", 1)
+            selection_player_screen.has_Reorganized = True
+
         selection_round.update()
     elif screen_round.is_round1_active:
         # Round 1
+        selection_player_screen.has_Reorganized = False
         screen_round.update_round1(game.current_player)
         current_round = 1
     elif screen_round.is_round2_active:
         # Round 2
+        selection_player_screen.has_Reorganized = False
         screen_round.update_round2(game.current_player)
         current_round = 2
     elif screen_round.is_round3_active:
         # Round 3
+        selection_player_screen.has_Reorganized = False
         screen_round.update_round3(game.current_player)
         current_round = 3
     elif screen_round.is_round4_active:
+        selection_player_screen.has_Reorganized = False
         screen_round.update_round4(game.current_player)
         current_round = 4
     elif screen_round.is_finale_active:
         # Finale
-        if not selection_player_screen.has_Reorganized:
-            selection_player_screen.reorganize_player_finale()
-            selection_player_screen = Selection_Player_Screen(screen)
-            selection_player_screen.has_Reorganized = True
+        selection_player_screen.has_Reorganized = False
+       # if not selection_player_screen.has_Reorganized:
+       #     selection_player_screen.reorganize_player_finale()
+       #     selection_player_screen = Selection_Player_Screen(screen)
+       #     selection_player_screen.has_Reorganized = True
 
         screen_round.update_finale(game.current_player, time_in_sec)
         current_round = 5
