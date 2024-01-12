@@ -272,7 +272,7 @@ class Round:
         for color in colors:
             # Boucle changement de theme
             category_id += 1
-            for i in range(0, 6):
+            for i in range(0, 5):
                 # Boucle des questions
                 question_id += 1
                 button_id += 1
@@ -294,7 +294,8 @@ class Round:
         #                                 'x': 0,
         #                                 'y': 0})
 
-        r = list(range(1, 61))
+        #Pour 60 question : range 61 -
+        r = list(range(1, 51))
         random.shuffle(r)
         count = 0
         x = -1
@@ -302,13 +303,13 @@ class Round:
         for i in r:
             count += 1
             x += 1
-            if x == 12:
+            if x == 10:
                 x = 0
                 y += 1
 
             for final_cat in self.final_category:
                 if final_cat['id'] == i:
-                    final_cat['x'] = 70 + x * 150
+                    final_cat['x'] = 170 + x * 150
                     final_cat['y'] = 215 + y * 170
                     final_cat['count'] = count
                     self.group_buttons_finale.add(Final_Button(final_cat["color"],
