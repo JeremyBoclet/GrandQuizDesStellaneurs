@@ -219,7 +219,6 @@ class Round:
         self.group_buttons_round2.add(Button("Dreamworks", 1300, 690, 550, 110))
         self.group_buttons_round2.add(Button("Marques", 1300, 800, 550, 110))
 
-
         self.group_buttons_round2.add(Button("TranslatedMusique", 350, 910, 550, 110))
         self.group_buttons_round2.add(Button("Gastronomy", 1000, 910, 550, 110))
 
@@ -251,14 +250,14 @@ class Round:
         self.group_buttons_round4.add(Button("Pub", 670, 800, 550, 110))
 
         self.group_buttons_round4.add(Button("Hymne", 1300, 250, 550, 110))
-        self.group_buttons_round4.add(Button(default_button, 1300, 360, 550, 110))
+        self.group_buttons_round4.add(Button("Replique", 1300, 360, 550, 110))
         self.group_buttons_round4.add(Button("Animals", 1300, 470, 550, 110))
         self.group_buttons_round4.add(Button("Musique2000", 1300, 580, 550, 110))
         self.group_buttons_round4.add(Button("Musique1980", 1300, 690, 550, 110))
         self.group_buttons_round4.add(Button("Rap", 1300, 800, 550, 110))
 
-        self.group_buttons_round4.add(Button(default_button, 1000, 910, 550, 110))
-        self.group_buttons_round4.add(Button(default_button, 350, 910, 550, 110))
+        self.group_buttons_round4.add(Button("Instrument", 1000, 910, 550, 110))
+        self.group_buttons_round4.add(Button("Aleatoire", 350, 910, 550, 110))
 
     def add_finale_button(self):
         button_id = 0
