@@ -207,7 +207,7 @@ class Round:
 
         self.group_buttons_round2.add(Button("Geo", 670, 250, 550, 110))
         self.group_buttons_round2.add(Button("History", 670, 360, 550, 110))
-        self.group_buttons_round2.add(Button(default_button, 670, 470, 550, 110))
+        self.group_buttons_round2.add(Button("Drapeau", 670, 470, 550, 110))
         self.group_buttons_round2.add(Button("Formula1", 670, 580, 550, 110))
         self.group_buttons_round2.add(Button("Sport", 670, 690, 550, 110))
         self.group_buttons_round2.add(Button("CodeRoute", 670, 800, 550, 110))
@@ -215,7 +215,7 @@ class Round:
         self.group_buttons_round2.add(Button("Pixar", 1300, 250, 550, 110))
         self.group_buttons_round2.add(Button("StarWars", 1300, 360, 550, 110))
         self.group_buttons_round2.add(Button("Expressions", 1300, 470, 550, 110))
-        self.group_buttons_round2.add(Button("Twitch", 1300, 580, 550, 110))
+        self.group_buttons_round2.add(Button("Cinema", 1300, 580, 550, 110))
         self.group_buttons_round2.add(Button("Dreamworks", 1300, 690, 550, 110))
         self.group_buttons_round2.add(Button("Marques", 1300, 800, 550, 110))
 
