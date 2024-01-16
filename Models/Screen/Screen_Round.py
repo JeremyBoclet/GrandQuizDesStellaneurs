@@ -242,24 +242,23 @@ class Round:
         self.group_buttons_round4.add(Button("Audio_Death", 40, 470, 550, 110))
         self.group_buttons_round4.add(Button("Audio_League", 40, 580, 550, 110))
         self.group_buttons_round4.add(Button("Audio_Jeux", 40, 690, 550, 110))
-        self.group_buttons_round4.add(Button("Disney", 40, 800, 550, 110))
-
+        self.group_buttons_round4.add(Button("Anime", 40, 800, 550, 110))
         self.group_buttons_round4.add(Button("Dessin_Anime", 670, 250, 550, 110))
         self.group_buttons_round4.add(Button("Audio_Serie", 670, 360, 550, 110))
         self.group_buttons_round4.add(Button("Audio_Film", 670, 470, 550, 110))
         self.group_buttons_round4.add(Button("Emission", 670, 580, 550, 110))
-        self.group_buttons_round4.add(Button("Musique1980", 670, 690, 550, 110))
+        self.group_buttons_round4.add(Button("Disney", 670, 690, 550, 110))
         self.group_buttons_round4.add(Button("Pub", 670, 800, 550, 110))
 
         self.group_buttons_round4.add(Button("Hymne", 1300, 250, 550, 110))
-        self.group_buttons_round4.add(Button("Musique2000", 1300, 360, 550, 110))
+        self.group_buttons_round4.add(Button(default_button, 1300, 360, 550, 110))
         self.group_buttons_round4.add(Button("Animals", 1300, 470, 550, 110))
-        self.group_buttons_round4.add(Button(default_button, 1300, 580, 550, 110))
-        self.group_buttons_round4.add(Button(default_button, 1300, 690, 550, 110))
-        self.group_buttons_round4.add(Button(default_button, 1300, 800, 550, 110))
+        self.group_buttons_round4.add(Button("Musique2000", 1300, 580, 550, 110))
+        self.group_buttons_round4.add(Button("Musique1980", 1300, 690, 550, 110))
+        self.group_buttons_round4.add(Button("Rap", 1300, 800, 550, 110))
 
-        self.group_buttons_round4.add(Button("Rap", 1000, 910, 550, 110))
-        self.group_buttons_round4.add(Button("Anime", 350, 910, 550, 110))
+        self.group_buttons_round4.add(Button(default_button, 1000, 910, 550, 110))
+        self.group_buttons_round4.add(Button(default_button, 350, 910, 550, 110))
 
     def add_finale_button(self):
         button_id = 0
