@@ -307,7 +307,7 @@ class Round:
 
             for final_cat in self.final_category:
                 if final_cat['id'] == i:
-                    final_cat['x'] = 170 + x * 150
+                    final_cat['x'] = 222 + x * 150
                     final_cat['y'] = 215 + y * 170
                     final_cat['count'] = count
                     self.group_buttons_finale.add(Final_Button(final_cat["color"],

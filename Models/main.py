@@ -18,7 +18,7 @@ screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 background = pygame.transform.scale(pygame.image.load("../assets/background.jpg").convert_alpha(),
                                     (screen.get_width(), screen.get_height()))
 # Temps d'affichage des tuiles finales en seconde
-round_timer = 40000
+round_timer = 30
 
 # écran
 game = Game(screen)
@@ -208,6 +208,7 @@ while running:
                         if button.rect.collidepoint(event.pos):
                             if button.category_id == -10:
                                 selection_round.is_selecting_round = True
+                                selection_player_screen.save_points()
 
                     # ROUND 1 (Récupération des questions par rapport à la catégorie sélectionnée)
                     if screen_round.is_round1_active:
