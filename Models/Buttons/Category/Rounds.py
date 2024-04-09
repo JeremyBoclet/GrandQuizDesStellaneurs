@@ -30,6 +30,9 @@ class Rounds(pygame.sprite.Sprite):
             case 5 | 6:
                 spacing = ((round_number - 1) * 90) + self.margin
                 self.rect.y = spacing + ((round_number - 3) * 100)
+            case 7:
+                self.rect.x = 10
+                self.rect.y =self.screen.get_height() - 200
             case "Quit":
                 self.rect.x = 10
                 self.rect.y = self.screen.get_height() - 60

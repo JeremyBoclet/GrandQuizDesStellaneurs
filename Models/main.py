@@ -1,7 +1,9 @@
 import pygame
 
+from Models.EnumDifficulty import convert_difficulty_to_number
 from Models.Screen.Selection_Player_Screen import Selection_Player_Screen
 from Models.Screen.Game import Game
+from Models.Screen.PasswordScreen import PasswordScreen
 from Models.Screen.Selection_Round import Selection_Round
 from Models.Screen.Screen_Round import Round
 from Models.Buttons.Player.Players import Players
@@ -22,6 +24,7 @@ round_timer = 30
 
 # écran
 game = Game(screen)
+PasswordScreen = PasswordScreen(screen)
 screen_round = Round(screen)
 selection_player_screen = Selection_Player_Screen(screen)
 selection_round = Selection_Round(screen)
@@ -47,6 +50,9 @@ while running:
     if game.is_playing:
         # Question
         game.update(time_in_sec, current_round == 0, show_answer, timer_for_sound)
+    elif PasswordScreen.is_playing:
+        PasswordScreen.current_player = game.current_player
+        PasswordScreen.update()
     elif selection_player_screen.is_selecting_player:
         # Sélection du joueur
         selection_player_screen.update(screen)
@@ -92,6 +98,11 @@ while running:
         # Classement
         screen_round.update_Ranking(game.get_all_players_points())
         current_round = 6
+    elif screen_round.is_round7_active:
+        # Mot de passe
+        selection_player_screen.has_Reorganized = False
+        screen_round.update_round7(game.current_player)
+        current_round = 7
 
     # Met à jour l'écran
     pygame.display.flip()
@@ -174,6 +185,17 @@ while running:
                         for button in screen_round.group_buttons_finale:
                             if button.question_id == last_question_id:
                                 button.had_been_chosen = False
+                elif PasswordScreen.is_playing:
+                    if PasswordScreen.cancel_rect.collidepoint(event.pos):
+                        # Annuler
+                        PasswordScreen.is_playing = False
+                    if PasswordScreen.good_answer_rect.collidepoint(event.pos):
+                        PasswordScreen.set_answer("valid")
+                        PasswordScreen.set_password()
+                    elif PasswordScreen.bad_answer_rect.collidepoint(event.pos):
+                        PasswordScreen.set_answer("error")
+                        PasswordScreen.set_password()
+
                 elif selection_player_screen.is_selecting_player:
                     # Sélection du joueur
                     for button in selection_player_screen.group_buttons:
@@ -190,6 +212,7 @@ while running:
                             screen_round.is_round4_active = (button.round_id == 4)
                             screen_round.is_finale_active = (button.round_id == 5)
                             screen_round.is_ranking_active = (button.round_id == 6)
+                            screen_round.is_round7_active = (button.round_id == 7)
                             running = (button.round_id != "Quit")
                             selection_player_screen.save_points()
 
@@ -264,6 +287,16 @@ while running:
                                     game.is_playing = True
                                     button.had_been_chosen = True
                                     last_question_id = button.question_id
-
+                    # Round Mot de Passe
+                    if screen_round.is_round7_active:
+                        if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
+                            for button in screen_round.group_buttons_round7:
+                                if button.rect.collidepoint(event.pos):
+                                    PasswordScreen.set_max_attempt(convert_difficulty_to_number(button.name))
+                                    PasswordScreen.password_pins.answered_password.clear()
+                                    PasswordScreen.password_pins.set_pins()
+                                    PasswordScreen.set_password()
+                                    game.is_playing = False
+                                    PasswordScreen.is_playing = True
 
 pygame.quit()

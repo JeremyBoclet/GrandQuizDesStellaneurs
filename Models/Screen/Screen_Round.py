@@ -11,6 +11,7 @@ from Models.Screen.Timer import Timer
 
 default_button = "Button_template2"
 
+
 class Round:
     def __init__(self, screen):
         self.is_round1_active = False
@@ -19,6 +20,7 @@ class Round:
         self.is_round4_active = False
         self.is_finale_active = False
         self.is_ranking_active = False
+        self.is_round7_active = False
 
         self.screen = screen
 
@@ -45,6 +47,10 @@ class Round:
         # Round 4
         self.group_buttons_round4 = pygame.sprite.Group()
         self.add_round4_button()
+
+        # Round Mot de passe
+        self.group_buttons_round7 = pygame.sprite.Group()
+        self.add_round7_button()
 
         # Round Finale
         self.group_buttons_finale = pygame.sprite.Group()
@@ -76,7 +82,11 @@ class Round:
     def update_round4(self, current_player):
         self.already_answered()
         self.group_buttons_round4.draw(self.screen)
-        self.select_player(current_player,4)
+        self.select_player(current_player, 4)
+
+    def update_round7(self, current_player):
+        self.group_buttons_round7.draw(self.screen)
+        self.select_player(current_player, 7)
 
     def update_finale(self, current_player, time_in_sec):
         if time_in_sec == 0 and not self.hide_final:
@@ -184,6 +194,10 @@ class Round:
             if button.had_been_chosen:
                 self.group_buttons_finale.remove(button)
 
+        for button in self.group_buttons_round7:
+            if button.had_been_chosen:
+                self.group_buttons_round7.remove(button)
+
     def add_round1_button(self):
         self.group_buttons_round1.add(Button("Martin", 350, 200, 600, 150))
         self.group_buttons_round1.add(Button("Ben", 350, 350, 600, 150))
@@ -259,13 +273,22 @@ class Round:
         self.group_buttons_round4.add(Button("Instrument", 1000, 910, 550, 110))
         self.group_buttons_round4.add(Button("Aleatoire", 350, 910, 550, 110))
 
+    def add_round7_button(self):
+        self.group_buttons_round7.add(
+            Button("Easy", self.screen.get_width() / 2 - 275, self.screen.get_height() / 2 - 200, 550, 110))
+        self.group_buttons_round7.add(
+            Button("Medium", self.screen.get_width() / 2 - 275, self.screen.get_height() / 2 - 55, 550, 110))
+        self.group_buttons_round7.add(
+            Button("Hard", self.screen.get_width() / 2 - 275, self.screen.get_height() / 2 + 90, 550, 110))
+
     def add_finale_button(self):
         button_id = 0
         question_id = 0
         category_id = 1
 
         # Doit suivre l'ordre dans la feuille "Finale"
-        colors = ["Shit_Green", "Red", "Black", "Purple", "Brown", "Dark_Blue", "Light_Blue", "Green", "Orange", "White"]
+        colors = ["Shit_Green", "Red", "Black", "Purple", "Brown", "Dark_Blue", "Light_Blue", "Green", "Orange",
+                  "White"]
 
         for color in colors:
             # Boucle changement de theme
@@ -292,7 +315,7 @@ class Round:
         #                                 'x': 0,
         #                                 'y': 0})
 
-        #Pour 60 question : range 61 -
+        # Pour 60 question : range 61 -
         r = list(range(1, 51))
         random.shuffle(r)
         count = 0
