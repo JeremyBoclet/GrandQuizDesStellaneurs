@@ -9,6 +9,7 @@ from Models.PasswordPins import PasswordPins
 
 class PasswordScreen:
     def __init__(self, screen):
+        self.good_answer_text = None
         self.cancel_image = pygame.image.load("../Assets/Cancel.png")
         self.cancel_image = pygame.transform.scale(self.cancel_image,
                                                    (200, 65)).convert_alpha()
@@ -20,6 +21,9 @@ class PasswordScreen:
         self.button_width = 400
         self.button_height = 130
 
+        self.category_image = pygame.image.load("../Assets/Round7.png")
+        self.category_image = pygame.transform.scale(self.category_image,
+                                                        (600, 150)).convert_alpha()
         self.good_answer_image = pygame.image.load("../Assets/Good_Answer.png")
         self.good_answer_image = pygame.transform.scale(self.good_answer_image,
                                                         (self.button_width, self.button_height)).convert_alpha()
@@ -101,7 +105,7 @@ class PasswordScreen:
         elif self.password_pins.max_attempt - self.password_pins.answered_password.count('error') < 5:
             # Il ne reste pas assez de question pour faire 5 bonnes réponses
             self.is_playing = False
-            print("Pas assez d'essai")
+            print("Plus assez d'essai")
         elif len(self.password_pins.answered_password) == self.password_pins.max_attempt:
             # nombre d'essai atteint (Defaite)
             self.is_playing = False
@@ -117,8 +121,10 @@ class PasswordScreen:
                              (20, self.screen.get_height() - self.cancel_image.get_height()))
             self.cancel_rect = pygame.Rect(20, self.screen.get_height() - self.cancel_image.get_height(), 200, 65)
 
-            # Bonne réponse
+            # Category
+            self.screen.blit(self.category_image,(self.screen.get_width() / 2 - 310, 50))
 
+            # Bonne réponse
             self.screen.blit(self.good_answer_image,
                              (self.good_answer_pos_x,
                               self.good_answer_pos_y))
@@ -127,8 +133,6 @@ class PasswordScreen:
                                                 self.good_answer_pos_y, self.button_width, self.button_height)
 
             # Mauvaise Réponse
-
-
             self.screen.blit(self.bad_answer_image,
                              (self.bad_answer_pos_x,
                               self.bad_answer_pos_y))
@@ -136,13 +140,20 @@ class PasswordScreen:
             self.bad_answer_rect = pygame.Rect(self.bad_answer_pos_x,
                                                self.bad_answer_pos_y, self.button_width, self.button_height)
 
+            # Nombre de bonnes réponses
+            self.good_answer_text = self.font.render("Points : {}".format(self.current_player.total_point)
+                                                     , True,
+                                                     (255, 255, 255))
+            self.screen.blit(self.good_answer_text,
+                             ((self.screen.get_width() - self.good_answer_text.get_width()) / 2,
+                              self.screen.get_height() - 60))
 
             # Background barre grise
             self.screen.blit(self.password_pins.background_image,
-                             (self.screen.get_width() / 2 - self.password_pins.background_width / 2, 700))
+                             (self.screen.get_width() / 2 - self.password_pins.background_width / 2, 500))
 
             # Pins
             for index, pins in enumerate(self.password_pins.all_pins):
-                self.screen.blit(pins.pin, (self.pin_default_pos + (250*index), 698))
+                self.screen.blit(pins.pin, (self.pin_default_pos + (250*index), 498))
 
 
