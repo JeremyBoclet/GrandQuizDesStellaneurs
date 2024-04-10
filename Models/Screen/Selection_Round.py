@@ -14,7 +14,8 @@ class Selection_Round:
         self.group_buttons.add(Rounds(4, screen))
         self.group_buttons.add(Rounds(5, screen))  # Finale
         self.group_buttons.add(Rounds(6, screen))  # Classement
-        self.group_buttons.add(Rounds(7, screen))  # Classement
+        self.group_buttons.add(Rounds(7, screen))  # Password
+        self.group_buttons.add(Rounds(8, screen))  # Money Drop
         self.group_buttons.add(Rounds("Quit", screen)) # Quitter
 
     def update(self):

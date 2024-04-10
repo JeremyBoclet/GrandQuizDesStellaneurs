@@ -1,6 +1,7 @@
 import pygame
 
 from Models.EnumDifficulty import convert_difficulty_to_number
+from Models.Screen.DropScreen import DropScreen
 from Models.Screen.Selection_Player_Screen import Selection_Player_Screen
 from Models.Screen.Game import Game
 from Models.Screen.PasswordScreen import PasswordScreen
@@ -25,6 +26,8 @@ round_timer = 30
 # écran
 game = Game(screen)
 PasswordScreen = PasswordScreen(screen)
+MoneyDropScreen = DropScreen(screen)
+
 screen_round = Round(screen)
 selection_player_screen = Selection_Player_Screen(screen)
 selection_round = Selection_Round(screen)
@@ -53,6 +56,8 @@ while running:
     elif PasswordScreen.is_playing:
         PasswordScreen.current_player = game.current_player
         PasswordScreen.update()
+    elif MoneyDropScreen.is_playing:
+        MoneyDropScreen.update()
     elif selection_player_screen.is_selecting_player:
         # Sélection du joueur
         selection_player_screen.update(screen)
@@ -103,6 +108,11 @@ while running:
         selection_player_screen.has_Reorganized = False
         screen_round.update_round7(game.current_player)
         current_round = 7
+    elif screen_round.is_round_drop_active:
+        # Money Drop
+        selection_player_screen.has_Reorganized = False
+        screen_round.update_round_drop(game.current_player)
+        current_round = 8
 
     # Met à jour l'écran
     pygame.display.flip()
@@ -116,6 +126,7 @@ while running:
             if event.type == GET_TIME:
                 time_in_sec -= 1
                 timer_for_sound += 1
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # Click de souris
                 if game.is_playing:
@@ -195,6 +206,15 @@ while running:
                     elif PasswordScreen.bad_answer_rect.collidepoint(event.pos):
                         PasswordScreen.set_answer("error")
                         PasswordScreen.set_password()
+                elif MoneyDropScreen.is_playing:
+                    MoneyDropScreen.input_box1.handle_event(event)
+                    MoneyDropScreen.input_box2.handle_event(event)
+                    MoneyDropScreen.input_box3.handle_event(event)
+                    MoneyDropScreen.input_box4.handle_event(event)
+
+                    if MoneyDropScreen.cancel_rect.collidepoint(event.pos):
+                        # Annuler
+                        MoneyDropScreen.is_playing = False
 
                 elif selection_player_screen.is_selecting_player:
                     # Sélection du joueur
@@ -213,6 +233,8 @@ while running:
                             screen_round.is_finale_active = (button.round_id == 5)
                             screen_round.is_ranking_active = (button.round_id == 6)
                             screen_round.is_round7_active = (button.round_id == 7)
+                            screen_round.is_round_drop_active = (button.round_id == 8)
+
                             running = (button.round_id != "Quit")
                             selection_player_screen.save_points()
 
@@ -243,6 +265,8 @@ while running:
                                     last_question_id = button.name
                                     button.had_been_chosen = True
                                     game.is_playing = True
+                                    PasswordScreen.is_playing = False
+                                    MoneyDropScreen.is_playing = False
 
                     # Round 2 (Récupération des questions par rapport à la catégorie sélectionnée)
                     if screen_round.is_round2_active:
@@ -252,6 +276,8 @@ while running:
                                     time_in_sec = round_timer
                                     game.get_question(button.name)
                                     game.is_playing = True
+                                    PasswordScreen.is_playing = False
+                                    MoneyDropScreen.is_playing = False
                                     button.had_been_chosen = True
                                     last_question_id = button.name
 
@@ -263,6 +289,8 @@ while running:
                                     time_in_sec = round_timer
                                     game.get_question(button.name)
                                     game.is_playing = True
+                                    PasswordScreen.is_playing = False
+                                    MoneyDropScreen.is_playing = False
                                     button.had_been_chosen = True
                                     last_question_id = button.name
 
@@ -274,6 +302,8 @@ while running:
                                     time_in_sec = round_timer
                                     game.get_question(button.name)
                                     game.is_playing = True
+                                    PasswordScreen.is_playing = False
+                                    MoneyDropScreen.is_playing = False
                                     button.had_been_chosen = True
                                     last_question_id = button.name
 
@@ -285,6 +315,8 @@ while running:
                                     time_in_sec = round_timer
                                     game.get_final_question(button.question_id)
                                     game.is_playing = True
+                                    PasswordScreen.is_playing = False
+                                    MoneyDropScreen.is_playing = False
                                     button.had_been_chosen = True
                                     last_question_id = button.question_id
                     # Round Mot de Passe
@@ -298,5 +330,21 @@ while running:
                                     PasswordScreen.set_password()
                                     game.is_playing = False
                                     PasswordScreen.is_playing = True
+                                    MoneyDropScreen.is_playing = False
+                    # Round Money Drop
+                    if screen_round.is_round_drop_active:
+                        if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
+                            for button in screen_round.group_buttons_round_drop:
+                                if button.rect.collidepoint(event.pos):
+                                    game.is_playing = False
+                                    PasswordScreen.is_playing = False
+                                    MoneyDropScreen.is_playing = True
+
+            elif event.type == pygame.KEYDOWN:
+                if MoneyDropScreen.is_playing:
+                    MoneyDropScreen.input_box1.handle_event(event)
+                    MoneyDropScreen.input_box2.handle_event(event)
+                    MoneyDropScreen.input_box3.handle_event(event)
+                    MoneyDropScreen.input_box4.handle_event(event)
 
 pygame.quit()
