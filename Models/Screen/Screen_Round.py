@@ -22,6 +22,7 @@ class Round:
         self.is_ranking_active = False
         self.is_round7_active = False
         self.is_round_drop_active = False
+        self.is_round_wordle_active = False
 
         self.screen = screen
 
@@ -56,6 +57,10 @@ class Round:
         # Round Drop
         self.group_buttons_round_drop = pygame.sprite.Group()
         self.add_round_drop_button()
+
+        # Round Wordle
+        self.group_buttons_round_wordle = pygame.sprite.Group()
+        self.add_round_wordle_button()
 
         # Round Finale
         self.group_buttons_finale = pygame.sprite.Group()
@@ -96,6 +101,10 @@ class Round:
     def update_round_drop(self, current_player):
         self.group_buttons_round_drop.draw(self.screen)
         self.select_player(current_player, 8)
+
+    def update_round_wordle(self, current_player):
+        self.group_buttons_round_wordle.draw(self.screen)
+        self.select_player(current_player, 9)
 
     def update_finale(self, current_player, time_in_sec):
         if time_in_sec == 0 and not self.hide_final:
@@ -292,6 +301,14 @@ class Round:
 
     def add_round_drop_button(self):
         self.group_buttons_round_drop.add(Button("Password", self.screen.get_width() / 2 - 275, self.screen.get_height() / 2 - 200, 550, 110))
+
+    def add_round_wordle_button(self):
+        self.group_buttons_round_wordle.add(
+            Button("Easy", self.screen.get_width() / 2 - 275, self.screen.get_height() / 2 - 200, 550, 110))
+        self.group_buttons_round_wordle.add(
+            Button("Medium", self.screen.get_width() / 2 - 275, self.screen.get_height() / 2 - 55, 550, 110))
+        self.group_buttons_round_wordle.add(
+            Button("Hard", self.screen.get_width() / 2 - 275, self.screen.get_height() / 2 + 90, 550, 110))
 
     def add_finale_button(self):
         button_id = 0

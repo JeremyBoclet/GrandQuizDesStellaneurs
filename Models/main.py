@@ -1,10 +1,12 @@
 import pygame
 
-from Models.EnumDifficulty import convert_difficulty_to_number
+from Models.EnumDifficulty import convert_difficulty_to_number_password
+from Models.EnumDifficulty import convert_difficulty_to_number_wordle
 from Models.Screen.DropScreen import DropScreen
 from Models.Screen.Selection_Player_Screen import Selection_Player_Screen
 from Models.Screen.Game import Game
 from Models.Screen.PasswordScreen import PasswordScreen
+from Models.Screen.WordleScreen import WordleScreen
 from Models.Screen.Selection_Round import Selection_Round
 from Models.Screen.Screen_Round import Round
 from Models.Buttons.Player.Players import Players
@@ -27,7 +29,7 @@ round_timer = 30
 game = Game(screen)
 PasswordScreen = PasswordScreen(screen)
 MoneyDropScreen = DropScreen(screen)
-
+WordleScreen = WordleScreen(screen)
 screen_round = Round(screen)
 selection_player_screen = Selection_Player_Screen(screen)
 selection_round = Selection_Round(screen)
@@ -58,6 +60,9 @@ while running:
         PasswordScreen.update()
     elif MoneyDropScreen.is_playing:
         MoneyDropScreen.update()
+    elif WordleScreen.is_playing:
+        WordleScreen.current_player = game.current_player
+        WordleScreen.update()
     elif selection_player_screen.is_selecting_player:
         # Sélection du joueur
         selection_player_screen.update(screen)
@@ -92,10 +97,10 @@ while running:
     elif screen_round.is_finale_active:
         # Finale
         selection_player_screen.has_Reorganized = False
-       # if not selection_player_screen.has_Reorganized:
-       #     selection_player_screen.reorganize_player_finale()
-       #     selection_player_screen = Selection_Player_Screen(screen)
-       #     selection_player_screen.has_Reorganized = True
+        # if not selection_player_screen.has_Reorganized:
+        #     selection_player_screen.reorganize_player_finale()
+        #     selection_player_screen = Selection_Player_Screen(screen)
+        #     selection_player_screen.has_Reorganized = True
 
         screen_round.update_finale(game.current_player, time_in_sec)
         current_round = 5
@@ -113,6 +118,11 @@ while running:
         selection_player_screen.has_Reorganized = False
         screen_round.update_round_drop(game.current_player)
         current_round = 8
+    elif screen_round.is_round_wordle_active:
+        # Wordle
+        selection_player_screen.has_Reorganized = False
+        screen_round.update_round_wordle(game.current_player)
+        current_round = 9
 
     # Met à jour l'écran
     pygame.display.flip()
@@ -215,6 +225,12 @@ while running:
                     if MoneyDropScreen.cancel_rect.collidepoint(event.pos):
                         # Annuler
                         MoneyDropScreen.is_playing = False
+                elif WordleScreen.is_playing:
+                    if WordleScreen.cancel_rect.collidepoint(event.pos):
+                        # Annuler
+                        WordleScreen.is_playing = False
+
+                    WordleScreen.input_box.handle_event(event)
 
                 elif selection_player_screen.is_selecting_player:
                     # Sélection du joueur
@@ -234,6 +250,7 @@ while running:
                             screen_round.is_ranking_active = (button.round_id == 6)
                             screen_round.is_round7_active = (button.round_id == 7)
                             screen_round.is_round_drop_active = (button.round_id == 8)
+                            screen_round.is_round_wordle_active = (button.round_id == 9)
 
                             running = (button.round_id != "Quit")
                             selection_player_screen.save_points()
@@ -266,6 +283,7 @@ while running:
                                     button.had_been_chosen = True
                                     game.is_playing = True
                                     PasswordScreen.is_playing = False
+                                    WordleScreen.is_playing = False
                                     MoneyDropScreen.is_playing = False
 
                     # Round 2 (Récupération des questions par rapport à la catégorie sélectionnée)
@@ -278,6 +296,7 @@ while running:
                                     game.is_playing = True
                                     PasswordScreen.is_playing = False
                                     MoneyDropScreen.is_playing = False
+                                    WordleScreen.is_playing = False
                                     button.had_been_chosen = True
                                     last_question_id = button.name
 
@@ -291,6 +310,7 @@ while running:
                                     game.is_playing = True
                                     PasswordScreen.is_playing = False
                                     MoneyDropScreen.is_playing = False
+                                    WordleScreen.is_playing = False
                                     button.had_been_chosen = True
                                     last_question_id = button.name
 
@@ -304,6 +324,7 @@ while running:
                                     game.is_playing = True
                                     PasswordScreen.is_playing = False
                                     MoneyDropScreen.is_playing = False
+                                    WordleScreen.is_playing = False
                                     button.had_been_chosen = True
                                     last_question_id = button.name
 
@@ -317,6 +338,7 @@ while running:
                                     game.is_playing = True
                                     PasswordScreen.is_playing = False
                                     MoneyDropScreen.is_playing = False
+                                    WordleScreen.is_playing = False
                                     button.had_been_chosen = True
                                     last_question_id = button.question_id
                     # Round Mot de Passe
@@ -324,13 +346,14 @@ while running:
                         if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
                             for button in screen_round.group_buttons_round7:
                                 if button.rect.collidepoint(event.pos):
-                                    PasswordScreen.set_max_attempt(convert_difficulty_to_number(button.name))
+                                    PasswordScreen.set_max_attempt(convert_difficulty_to_number_password(button.name))
                                     PasswordScreen.password_pins.answered_password.clear()
                                     PasswordScreen.password_pins.set_pins()
                                     PasswordScreen.set_password()
                                     game.is_playing = False
                                     PasswordScreen.is_playing = True
                                     MoneyDropScreen.is_playing = False
+                                    WordleScreen.is_playing = False
                     # Round Money Drop
                     if screen_round.is_round_drop_active:
                         if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
@@ -338,7 +361,18 @@ while running:
                                 if button.rect.collidepoint(event.pos):
                                     game.is_playing = False
                                     PasswordScreen.is_playing = False
+                                    WordleScreen.is_playing = False
                                     MoneyDropScreen.is_playing = True
+                    # Round Wordle
+                    if screen_round.is_round_wordle_active:
+                        if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
+                            for button in screen_round.group_buttons_round_wordle:
+                                if button.rect.collidepoint(event.pos):
+                                    WordleScreen.set_max_attempt(convert_difficulty_to_number_wordle(button.name))
+                                    game.is_playing = False
+                                    PasswordScreen.is_playing = False
+                                    MoneyDropScreen.is_playing = False
+                                    WordleScreen.is_playing = True
 
             elif event.type == pygame.KEYDOWN:
                 if MoneyDropScreen.is_playing:
@@ -346,5 +380,7 @@ while running:
                     MoneyDropScreen.input_box2.handle_event(event)
                     MoneyDropScreen.input_box3.handle_event(event)
                     MoneyDropScreen.input_box4.handle_event(event)
+                if WordleScreen.is_playing:
+                    WordleScreen.input_box.handle_event(event)
 
 pygame.quit()

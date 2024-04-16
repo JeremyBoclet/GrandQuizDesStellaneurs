@@ -36,6 +36,10 @@ class Rounds(pygame.sprite.Sprite):
             case 8:
                 self.rect.x = 10
                 self.rect.y = self.screen.get_height() - 500
+            case 9:
+                self.rect.x = 10
+                self.rect.y = self.screen.get_height() - 800
+
             case "Quit":
                 self.rect.x = 10
                 self.rect.y = self.screen.get_height() - 60

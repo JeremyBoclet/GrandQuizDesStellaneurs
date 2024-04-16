@@ -23,6 +23,6 @@ class PasswordPins:
         for i in range(len(self.answered_password), self.max_attempt):
             self.all_pins.add(PinsAnswer(""))
 
-    def add_answer(self,answer):
+    def add_answer(self, answer):
         self.answered_password.append(answer)
 

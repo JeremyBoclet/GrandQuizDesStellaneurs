@@ -8,10 +8,10 @@ class DropScreen:
         self.is_playing = False
         self.screen = screen
 
-        self.input_box1 = InputBox(100, 100, 140, 32, True)
-        self.input_box2 = InputBox(100, 300, 140, 32, True)
-        self.input_box3 = InputBox(400, 100, 140, 32, True)
-        self.input_box4 = InputBox(400, 300, 140, 32, True)
+        self.input_box1 = InputBox(100, 100, 140, 32, True, 32)
+        self.input_box2 = InputBox(100, 300, 140, 32, True, 32)
+        self.input_box3 = InputBox(400, 100, 140, 32, True, 32)
+        self.input_box4 = InputBox(400, 300, 140, 32, True, 32)
 
         self.cancel_image = pygame.image.load("../Assets/Cancel.png")
         self.cancel_image = pygame.transform.scale(self.cancel_image,

@@ -2,11 +2,11 @@ import pygame
 
 
 class InputBox:
-    def __init__(self, x, y, w, h, number_only, text=''):
+    def __init__(self, x, y, w, h, number_only, size, text=''):
         self.number_Only = number_only
         self.COLOR_INACTIVE = pygame.Color('lightskyblue3')
         self.COLOR_ACTIVE = pygame.Color('dodgerblue2')
-        self.FONT = pygame.font.SysFont("Futura-bold", 32)
+        self.FONT = pygame.font.SysFont("Futura-bold", size)
 
         self.rect = pygame.Rect(x, y, w, h)
         self.color = self.COLOR_INACTIVE
@@ -29,8 +29,11 @@ class InputBox:
                 if event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
                 else:
-                    if self.intTryParse(event.unicode) is not None:
+                    if self.number_Only and self.intTryParse(event.unicode) is not None:
                         self.text += event.unicode
+                    elif not self.number_Only:
+                        self.text += event.unicode
+
                 # Re-render the text.
                 self.txt_surface = self.FONT.render(self.text, True, self.color)
 
@@ -50,3 +53,6 @@ class InputBox:
             return int(value), True
         except ValueError:
             return None
+
+    def change_position(self,x,y,w,h):
+        self.rect = pygame.Rect(x, y, w, h)
