@@ -46,14 +46,13 @@ class WordleScreen:
         self.current_player_image = pygame.sprite.Group()
         self.current_player_name = ""
 
-        self.letter_default_pos = self.screen.get_width()/2 -(5*120/ 2)
+        self.letter_default_pos = self.screen.get_width() / 2 - (5 * 120 / 2)
 
         self.wordle_letters = WordleLetters(5)
 
-        self.input_box = InputBox(50,50,50,50,False, 50, need_focus=False)
-        self.answered=[]
-
-        self.current_answer=""
+        self.input_box = InputBox(50, 50, 50, 50, False, 50, need_focus=False)
+        self.answered = []
+        self.current_answer = ""
 
         self.all_answer_easy = []
         self.all_answer_medium = []
@@ -73,19 +72,34 @@ class WordleScreen:
                     self.all_answer_hard.append(row["Wordle"])
 
         self.all_answers = {
-               5: self.all_answer_easy,
-               6: self.all_answer_medium,
-               7: self.all_answer_hard}
+            5: self.all_answer_easy,
+            6: self.all_answer_medium,
+            7: self.all_answer_hard}
 
     def set_max_attempt(self, max_attempt):
         self.wordle_letters = WordleLetters(max_attempt)
-        self.letter_default_pos = (self.screen.get_width() / 2 - (max_attempt*120) / 2)
+        self.letter_default_pos = (self.screen.get_width() / 2 - (max_attempt * 120) / 2)
 
     def add_answer(self):
         if len(self.input_box.text) == self.wordle_letters.letter_length:
+            self.valid_input()
             self.answered.append(self.input_box.text)
             self.input_box.text = ""
 
+    def valid_input(self):
+        # Affichage des couleurs en fonction de la place de la lettre
+        print("validation {0}".format(self.current_answer))
+        index=0
+        index_wrong=0
+        for element in self.input_box.text:
+            index_wrong = 0
+            if element == self.current_answer[index]:
+                print("{0} : bonne place".format(element))
+            for letter in self.current_answer:
+                if letter.upper() == element.upper():
+                    print("{0} mauvaise place".format(element))
+                index_wrong += 1
+            index += 1
     def limit_text(self):
         self.input_box.text = self.input_box.text[:self.wordle_letters.letter_length]
 
@@ -121,12 +135,12 @@ class WordleScreen:
         # Lettre
         for i in range(0, 6):
             for index, lettres in enumerate(self.wordle_letters.all_letters):
-                self.screen.blit(lettres.pin, (self.letter_default_pos + (120*index), 220 + (i*140)))
+                self.screen.blit(lettres.pin, (self.letter_default_pos + (120 * index), 220 + (i * 140)))
 
         index = 0
         for element in self.input_box.text:
             letter = self.font.render(element.upper(), True, (240, 255, 255))
-            self.screen.blit(letter, (self.letter_default_pos + (120*index) + 30, 255 + (140*len(self.answered))))
+            self.screen.blit(letter, (self.letter_default_pos + (120 * index) + 30, 255 + (140 * len(self.answered))))
             index += 1
         row = 0
         for answer in self.answered:
@@ -136,7 +150,6 @@ class WordleScreen:
                 self.screen.blit(letter,
                                  (self.letter_default_pos + (120 * index) + 30, 255 + (140 * row)))
                 index += 1
-            row+=1
+            row += 1
 
-        #self.input_box.draw(self.screen)
-
+        # self.input_box.draw(self.screen)
