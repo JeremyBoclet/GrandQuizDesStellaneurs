@@ -2,7 +2,8 @@ import pygame
 
 
 class InputBox:
-    def __init__(self, x, y, w, h, number_only, size, text=''):
+    def __init__(self, x, y, w, h, number_only, size, text='', need_focus=True):
+        self.need_focus = need_focus
         self.number_Only = number_only
         self.COLOR_INACTIVE = pygame.Color('lightskyblue3')
         self.COLOR_ACTIVE = pygame.Color('dodgerblue2')
@@ -25,9 +26,11 @@ class InputBox:
             # Change the current color of the input box.
             self.color = self.COLOR_ACTIVE if self.active else self.COLOR_INACTIVE
         if event.type == pygame.KEYDOWN:
-            if self.active:
+            if self.active or not self.need_focus:
                 if event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
+                elif event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN:
+                    print("enter")
                 else:
                     if self.number_Only and self.intTryParse(event.unicode) is not None:
                         self.text += event.unicode

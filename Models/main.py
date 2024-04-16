@@ -369,6 +369,9 @@ while running:
                             for button in screen_round.group_buttons_round_wordle:
                                 if button.rect.collidepoint(event.pos):
                                     WordleScreen.set_max_attempt(convert_difficulty_to_number_wordle(button.name))
+                                    WordleScreen.answered.clear()
+                                    WordleScreen.input_box.text = ""
+                                    WordleScreen.set_answer()
                                     game.is_playing = False
                                     PasswordScreen.is_playing = False
                                     MoneyDropScreen.is_playing = False
@@ -381,6 +384,9 @@ while running:
                     MoneyDropScreen.input_box3.handle_event(event)
                     MoneyDropScreen.input_box4.handle_event(event)
                 if WordleScreen.is_playing:
+                    if event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN:
+                        WordleScreen.add_answer()
                     WordleScreen.input_box.handle_event(event)
+                    WordleScreen.limit_text()
 
 pygame.quit()

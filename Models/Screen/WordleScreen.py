@@ -1,5 +1,8 @@
+import random
+
 import pygame
 
+from Models.Bdd import Bdd
 from Models.Buttons.Player.Players import Players
 from Models.InputBox import InputBox
 from Models.WordleLetters import WordleLetters
@@ -47,14 +50,55 @@ class WordleScreen:
 
         self.wordle_letters = WordleLetters(5)
 
-        self.label_input = ""
-
-        self.input_box = InputBox(50,50,50,50,False,50)
+        self.input_box = InputBox(50,50,50,50,False, 50, need_focus=False)
         self.answered=[]
+
+        self.current_answer=""
+
+        self.all_answer_easy = []
+        self.all_answer_medium = []
+        self.all_answer_hard = []
+
+        self.bdd = Bdd()
+
+        df = self.bdd.read_excel("Wordle")
+        df.reset_index()
+        for index, row in df.iterrows():
+            match len(row["Wordle"]):
+                case 5:
+                    self.all_answer_easy.append(row["Wordle"])
+                case 6:
+                    self.all_answer_medium.append(row["Wordle"])
+                case 7:
+                    self.all_answer_hard.append(row["Wordle"])
+
+        self.all_answers = {
+               5: self.all_answer_easy,
+               6: self.all_answer_medium,
+               7: self.all_answer_hard}
 
     def set_max_attempt(self, max_attempt):
         self.wordle_letters = WordleLetters(max_attempt)
         self.letter_default_pos = (self.screen.get_width() / 2 - (max_attempt*120) / 2)
+
+    def add_answer(self):
+        if len(self.input_box.text) == self.wordle_letters.letter_length:
+            self.answered.append(self.input_box.text)
+            self.input_box.text = ""
+
+    def limit_text(self):
+        self.input_box.text = self.input_box.text[:self.wordle_letters.letter_length]
+
+    def set_answer(self):
+        current_length = self.wordle_letters.letter_length
+        current_answer = self.all_answers.get(current_length, [])
+
+        if current_answer:
+            r = list(range(1, len(current_answer)))
+            random.shuffle(r)
+
+            self.current_answer = current_answer[r[0]]
+            self.all_answers.get(current_length, []).pop(r[0])
 
     def update(self):
         if self.current_player_name != self.current_player.name:
@@ -81,8 +125,18 @@ class WordleScreen:
 
         index = 0
         for element in self.input_box.text:
-            letter = self.font.render(element, True, (240, 255, 255))
-            self.screen.blit(letter, (self.letter_default_pos + (120*index) + 30, 255))
+            letter = self.font.render(element.upper(), True, (240, 255, 255))
+            self.screen.blit(letter, (self.letter_default_pos + (120*index) + 30, 255 + (140*len(self.answered))))
             index += 1
-            
-        self.input_box.draw(self.screen)
+        row = 0
+        for answer in self.answered:
+            index = 0
+            for element in answer:
+                letter = self.font.render(element.upper(), True, (240, 255, 255))
+                self.screen.blit(letter,
+                                 (self.letter_default_pos + (120 * index) + 30, 255 + (140 * row)))
+                index += 1
+            row+=1
+
+        #self.input_box.draw(self.screen)
+
