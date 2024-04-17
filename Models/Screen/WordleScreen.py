@@ -83,23 +83,41 @@ class WordleScreen:
     def add_answer(self):
         if len(self.input_box.text) == self.wordle_letters.letter_length:
             self.valid_input()
+            self.wordle_letters.set_answer()
             self.answered.append(self.input_box.text)
             self.input_box.text = ""
+            self.wordle_letters.set_letters()
 
     def valid_input(self):
         # Affichage des couleurs en fonction de la place de la lettre
         print("validation {0}".format(self.current_answer))
-        index=0
-        index_wrong=0
-        for element in self.input_box.text:
-            index_wrong = 0
-            if element == self.current_answer[index]:
-                print("{0} : bonne place".format(element))
-            for letter in self.current_answer:
-                if letter.upper() == element.upper():
-                    print("{0} mauvaise place".format(element))
-                index_wrong += 1
-            index += 1
+        letters_found = []
+
+        letter_good_pos = {index for index, (ct, ch) in
+                           enumerate(zip(self.input_box.text.upper(), self.current_answer.upper()))
+                           if ct.upper() == ch.upper()}
+
+        remaining = [char for index, char in enumerate(self.current_answer.upper())
+                     if index not in letter_good_pos
+                     ]
+        letter_bad_pos = set()
+        for index, c in enumerate(self.input_box.text.upper()):
+            if index in letter_good_pos:
+                continue
+            try:
+                remaining.remove(c)
+                letter_bad_pos.add(index)
+            except ValueError:
+                pass
+
+        for i in range(self.wordle_letters.letter_length):
+            if i in letter_good_pos:
+                self.wordle_letters.add_answer("valid")
+            elif i in letter_bad_pos:
+                self.wordle_letters.add_answer("wrong")
+            else:
+                self.wordle_letters.add_answer("")
+
     def limit_text(self):
         self.input_box.text = self.input_box.text[:self.wordle_letters.letter_length]
 
@@ -124,9 +142,31 @@ class WordleScreen:
         self.screen.blit(self.current_player_image,
                          (1500, 5))
 
+        if self.wordle_letters.last_valid.count('valid') == self.wordle_letters.letter_length:
+            # Victoire
+            # self.is_playing = False
+
+            max_pts = 0
+            match self.wordle_letters.letter_length:
+                case 7:
+                    print("difficile")
+                    max_pts = 15
+                case 6:
+                    print("moyen")
+                    max_pts = 12
+                case _:
+                    print("facile")
+                    max_pts = 7
+
+            self.current_player.add_point(max_pts - len(self.answered))
+        elif len(self.answered) == 6:
+            # nombre d'essai atteint (Defaite)
+            # self.is_playing = False
+            print("defaite")
+
         # Bouton annuler
         self.screen.blit(self.cancel_image,
-                         (20, self.screen.get_height() - self.cancel_image.get_height()))
+                        (20, self.screen.get_height() - self.cancel_image.get_height()))
         self.cancel_rect = pygame.Rect(20, self.screen.get_height() - self.cancel_image.get_height(), 200, 65)
 
         # Category
@@ -137,12 +177,20 @@ class WordleScreen:
             for index, lettres in enumerate(self.wordle_letters.all_letters):
                 self.screen.blit(lettres.pin, (self.letter_default_pos + (120 * index), 220 + (i * 140)))
 
+        for i in range(0, len(self.answered)):
+            for index, lettres in enumerate(self.wordle_letters.all_answer[i]):
+                self.screen.blit(lettres.pin, (self.letter_default_pos + (120 * index), 220 + (i * 140)))
+
+        # affichage de la réponse en cours
         index = 0
         for element in self.input_box.text:
             letter = self.font.render(element.upper(), True, (240, 255, 255))
-            self.screen.blit(letter, (self.letter_default_pos + (120 * index) + 30, 255 + (140 * len(self.answered))))
+            self.screen.blit(letter,
+                             (self.letter_default_pos + (120 * index) + 30, 255 + (140 * len(self.answered))))
             index += 1
         row = 0
+
+        # affichage des anciennes réponses
         for answer in self.answered:
             index = 0
             for element in answer:
