@@ -18,9 +18,9 @@ class WordleScreen:
         self.button_width = 400
         self.button_height = 130
 
-        self.cancel_image = pygame.image.load("../Assets/Cancel.png")
+        self.cancel_image = pygame.image.load("../Assets/Return.png")
         self.cancel_image = pygame.transform.scale(self.cancel_image,
-                                                   (200, 65)).convert_alpha()
+                                                   (self.button_width , self.button_height)).convert_alpha()
         self.cancel_rect = self.cancel_image.get_rect()
 
         self.category_image = pygame.image.load("../Assets/Round9.png")
@@ -53,6 +53,12 @@ class WordleScreen:
         self.input_box = InputBox(50, 50, 50, 50, False, 50, need_focus=False)
         self.answered = []
         self.current_answer = ""
+
+        self.is_game_over = False
+        self.defeat = False
+        self.point_earned = 0
+
+        self.list_already_answered = []
 
         self.all_answer_easy = []
         self.all_answer_medium = []
@@ -142,32 +148,46 @@ class WordleScreen:
         self.screen.blit(self.current_player_image,
                          (1500, 5))
 
-        if self.wordle_letters.last_valid.count('valid') == self.wordle_letters.letter_length:
-            # Victoire
-            # self.is_playing = False
+        # Nombre de bonnes réponses
+        good_answer_text = self.font.render("Points : {}".format(self.current_player.total_point)
+                                            , True,
+                                            (255, 255, 255))
 
-            max_pts = 0
-            match self.wordle_letters.letter_length:
-                case 7:
-                    print("difficile")
-                    max_pts = 15
-                case 6:
-                    print("moyen")
-                    max_pts = 12
-                case _:
-                    print("facile")
-                    max_pts = 7
+        self.screen.blit(good_answer_text,
+                         (1580,110))
 
-            self.current_player.add_point(max_pts - len(self.answered))
-        elif len(self.answered) == 6:
-            # nombre d'essai atteint (Defaite)
-            # self.is_playing = False
-            print("defaite")
+        if not self.is_game_over:
+            if self.wordle_letters.last_valid.count('valid') == self.wordle_letters.letter_length:
+                # Victoire
+                # self.is_playing = False
+                self.defeat = False
+                self.is_game_over = True
+                max_pts = 0
+                match self.wordle_letters.letter_length:
+                    case 7:
+                        print("difficile")
+                        max_pts = 15
+                    case 6:
+                        print("moyen")
+                        max_pts = 12
+                    case _:
+                        print("facile")
+                        max_pts = 7
+
+                self.point_earned = max_pts - len(self.answered)
+                self.current_player.add_point(self.point_earned)
+            elif len(self.answered) == 6:
+                # nombre d'essai atteint (Defaite)
+                # self.is_playing = False
+                self.point_earned = 0
+                self.defeat = True
+                self.is_game_over = True
+                print("defaite")
 
         # Bouton annuler
         self.screen.blit(self.cancel_image,
-                        (20, self.screen.get_height() - self.cancel_image.get_height()))
-        self.cancel_rect = pygame.Rect(20, self.screen.get_height() - self.cancel_image.get_height(), 200, 65)
+                         (20, self.screen.get_height() - self.cancel_image.get_height()))
+        self.cancel_rect = pygame.Rect(20, self.screen.get_height() - self.cancel_image.get_height(), self.button_width, self.button_height)
 
         # Category
         self.screen.blit(self.category_image, (self.screen.get_width() / 2 - 310, 50))
@@ -200,4 +220,14 @@ class WordleScreen:
                 index += 1
             row += 1
 
-        # self.input_box.draw(self.screen)
+        if self.defeat:
+            # On affiche le mot à deviner en cas d'echec
+            word_to_find = self.font.render("{}".format(self.current_answer), True,
+                                                (255, 255, 255))
+
+            self.screen.blit(word_to_find,  ((self.screen.get_width() - word_to_find.get_width()) / 2, 150))
+
+        if self.point_earned > 0:
+            points_won = self.font.render("+{} points".format(self.point_earned), True,
+                                                (255, 255, 255))
+            self.screen.blit(points_won, (1580, 200))

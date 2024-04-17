@@ -229,7 +229,9 @@ while running:
                     if WordleScreen.cancel_rect.collidepoint(event.pos):
                         # Annuler
                         WordleScreen.is_playing = False
-
+                        WordleScreen.is_game_over = False
+                        WordleScreen.defeat = False
+                        WordleScreen.point_earned=0
                     WordleScreen.input_box.handle_event(event)
 
                 elif selection_player_screen.is_selecting_player:
@@ -383,7 +385,7 @@ while running:
                     MoneyDropScreen.input_box2.handle_event(event)
                     MoneyDropScreen.input_box3.handle_event(event)
                     MoneyDropScreen.input_box4.handle_event(event)
-                if WordleScreen.is_playing:
+                if WordleScreen.is_playing and not WordleScreen.is_game_over:
                     if event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN:
                         WordleScreen.add_answer()
                     WordleScreen.input_box.handle_event(event)
