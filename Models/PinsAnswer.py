@@ -13,6 +13,8 @@ class PinsAnswer(pygame.sprite.Sprite):
                 self.pin = pygame.image.load("../Assets/PwValid.png")
             case "error":
                 self.pin = pygame.image.load("../Assets/PwError.png")
+            case "end":
+                self.pin = pygame.image.load("../Assets/PwEnd.png")
             case _:
                 self.pin = pygame.image.load("../Assets/PwPending.png")
 

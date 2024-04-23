@@ -207,15 +207,17 @@ while running:
                             if button.question_id == last_question_id:
                                 button.had_been_chosen = False
                 elif PasswordScreen.is_playing:
-                    if PasswordScreen.cancel_rect.collidepoint(event.pos):
+                    if PasswordScreen.cancel_rect.collidepoint(event.pos) or (PasswordScreen.game_over and PasswordScreen.return_rect.collidepoint(event.pos)):
                         # Annuler
                         PasswordScreen.is_playing = False
-                    if PasswordScreen.good_answer_rect.collidepoint(event.pos):
-                        PasswordScreen.set_answer("valid")
-                        PasswordScreen.set_password()
-                    elif PasswordScreen.bad_answer_rect.collidepoint(event.pos):
-                        PasswordScreen.set_answer("error")
-                        PasswordScreen.set_password()
+                        PasswordScreen.game_over = False
+                    if not PasswordScreen.game_over:
+                        if PasswordScreen.good_answer_rect.collidepoint(event.pos):
+                            PasswordScreen.set_answer("valid")
+                            PasswordScreen.set_password()
+                        elif PasswordScreen.bad_answer_rect.collidepoint(event.pos):
+                            PasswordScreen.set_answer("error")
+                            PasswordScreen.set_password()
                 elif MoneyDropScreen.is_playing:
                     MoneyDropScreen.input_box1.handle_event(event)
                     MoneyDropScreen.input_box2.handle_event(event)

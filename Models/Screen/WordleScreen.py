@@ -122,7 +122,7 @@ class WordleScreen:
             elif i in letter_bad_pos:
                 self.wordle_letters.add_answer("wrong")
             else:
-                self.wordle_letters.add_answer("")
+                self.wordle_letters.add_answer("nok")
 
     def limit_text(self):
         self.input_box.text = self.input_box.text[:self.wordle_letters.letter_length]
@@ -166,10 +166,10 @@ class WordleScreen:
                 match self.wordle_letters.letter_length:
                     case 7:
                         print("difficile")
-                        max_pts = 15
+                        max_pts = 12
                     case 6:
                         print("moyen")
-                        max_pts = 12
+                        max_pts = 9
                     case _:
                         print("facile")
                         max_pts = 7
@@ -181,7 +181,7 @@ class WordleScreen:
                 # self.is_playing = False
                 self.point_earned = 0
                 self.defeat = True
-                self.is_game_over = True
+                self.is_game_overis_game_over = True
                 print("defaite")
 
         # Bouton annuler

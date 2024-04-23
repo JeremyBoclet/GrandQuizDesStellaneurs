@@ -11,6 +11,8 @@ class WordleAnswer(pygame.sprite.Sprite):
                 self.pin = pygame.image.load("../Assets/WordleLettreOK.png")
             case "wrong":
                 self.pin = pygame.image.load("../Assets/WordleLettreWrong.png")
+            case "nok":
+                self.pin = pygame.image.load("../Assets/WordleLettreNOK.png")
             case _:
                 self.pin = pygame.image.load("../Assets/WordleTemplate.png")
 
