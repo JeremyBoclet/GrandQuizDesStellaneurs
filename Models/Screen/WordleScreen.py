@@ -181,7 +181,7 @@ class WordleScreen:
                 # self.is_playing = False
                 self.point_earned = 0
                 self.defeat = True
-                self.is_game_overis_game_over = True
+                self.is_game_over = True
                 print("defaite")
 
         # Bouton annuler
@@ -231,3 +231,4 @@ class WordleScreen:
             points_won = self.font.render("+{} points".format(self.point_earned), True,
                                                 (255, 255, 255))
             self.screen.blit(points_won, (1580, 200))
+

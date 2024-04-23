@@ -8,9 +8,15 @@ class Players:
         self.total_point = 0
         self.get_players_point()
         self.main_category_id = main_category_id
+        self.maximum_md_point = 250000
+        self.remaining_md_point = self.maximum_md_point
 
     def add_point(self, point):
         self.total_point += point
+
+    def set_remaining_md_point(self,point):
+        self.maximum_md_point = point
+        self.remaining_md_point = point
 
     def get_players_point(self):
         df = self.bdd.get_players()

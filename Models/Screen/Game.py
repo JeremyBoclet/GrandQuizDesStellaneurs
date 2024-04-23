@@ -2,7 +2,6 @@ import pygame, sys, threading
 import os
 from Models.Bdd import Bdd
 from Models.Buttons.Button import Button
-from Models.Buttons.Player.Player_button import Player_button
 from Models.Buttons.Player.Players import Players
 from Models.Buttons.Player.PlayersRanking import PlayersRanking
 from Models.Questions import Questions

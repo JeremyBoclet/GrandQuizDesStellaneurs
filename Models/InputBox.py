@@ -1,12 +1,16 @@
 import pygame
 
+from Models import Business
+
 
 class InputBox:
     def __init__(self, x, y, w, h, number_only, size, text='', need_focus=True):
         self.need_focus = need_focus
         self.number_Only = number_only
-        self.COLOR_INACTIVE = pygame.Color('lightskyblue3')
-        self.COLOR_ACTIVE = pygame.Color('dodgerblue2')
+        self.COLOR_INACTIVE = pygame.Color('gray')
+        self.COLOR_ACTIVE = pygame.Color('gold')
+        self.VALID_COLOR = pygame.Color('green')
+        self.ERROR_COLOR = pygame.Color('red')
         self.FONT = pygame.font.SysFont("Futura-bold", size)
 
         self.rect = pygame.Rect(x, y, w, h)
@@ -32,7 +36,7 @@ class InputBox:
                 elif event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN:
                     print("enter")
                 else:
-                    if self.number_Only and self.intTryParse(event.unicode) is not None:
+                    if self.number_Only and Business.int_try_parse(event.unicode) is not None:
                         self.text += event.unicode
                     elif not self.number_Only:
                         self.text += event.unicode
@@ -41,21 +45,26 @@ class InputBox:
                 self.txt_surface = self.FONT.render(self.text, True, self.color)
 
     def update(self):
+        self.txt_surface = self.FONT.render(self.text, True, self.color)
         # Resize the box if the text is too long.
-        width = max(200, self.txt_surface.get_width()+10)
+        width = max(200, self.txt_surface.get_width() + 10)
         self.rect.w = width
 
     def draw(self, screen):
+        self.txt_surface = self.FONT.render(self.text, True, self.color)
         # Blit the text.
-        screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
+        screen.blit(self.txt_surface, (self.rect.x + 5, self.rect.y + 5))
         # Blit the rect.
-        pygame.draw.rect(screen, self.color, self.rect, 2)
+        pygame.draw.rect(screen, self.color, self.rect, 5)
 
-    def intTryParse(self, value):
-        try:
-            return int(value), True
-        except ValueError:
-            return None
-
-    def change_position(self,x,y,w,h):
+    def change_position(self, x, y, w, h):
         self.rect = pygame.Rect(x, y, w, h)
+
+    def change_color(self, color):
+        match color:
+            case "green":
+                self.color = self.VALID_COLOR
+            case "red":
+                self.color = self.ERROR_COLOR
+            case _:
+                self.color=self.COLOR_INACTIVE

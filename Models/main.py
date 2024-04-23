@@ -1,7 +1,7 @@
 import pygame
 
-from Models.EnumDifficulty import convert_difficulty_to_number_password
-from Models.EnumDifficulty import convert_difficulty_to_number_wordle
+from Models.Business import convert_difficulty_to_number_password
+from Models.Business import convert_difficulty_to_number_wordle
 from Models.Screen.DropScreen import DropScreen
 from Models.Screen.Selection_Player_Screen import Selection_Player_Screen
 from Models.Screen.Game import Game
@@ -59,6 +59,7 @@ while running:
         PasswordScreen.current_player = game.current_player
         PasswordScreen.update()
     elif MoneyDropScreen.is_playing:
+        MoneyDropScreen.current_player = game.current_player
         MoneyDropScreen.update()
     elif WordleScreen.is_playing:
         WordleScreen.current_player = game.current_player
@@ -207,6 +208,7 @@ while running:
                             if button.question_id == last_question_id:
                                 button.had_been_chosen = False
                 elif PasswordScreen.is_playing:
+                    # PASSWORD *******************************************
                     if PasswordScreen.cancel_rect.collidepoint(event.pos) or (PasswordScreen.game_over and PasswordScreen.return_rect.collidepoint(event.pos)):
                         # Annuler
                         PasswordScreen.is_playing = False
@@ -219,15 +221,27 @@ while running:
                             PasswordScreen.set_answer("error")
                             PasswordScreen.set_password()
                 elif MoneyDropScreen.is_playing:
-                    MoneyDropScreen.input_box1.handle_event(event)
-                    MoneyDropScreen.input_box2.handle_event(event)
-                    MoneyDropScreen.input_box3.handle_event(event)
-                    MoneyDropScreen.input_box4.handle_event(event)
+                    # MONEY DROP *******************************************
 
+                    if MoneyDropScreen.wait_for_next_step:
+                        if MoneyDropScreen.Next_rect.collidepoint(event.pos):
+                            MoneyDropScreen.valid_input()
+                        print("en attente de la prochaine étape")
+                    else:
+                        MoneyDropScreen.input_box_a.handle_event(event)
+                        MoneyDropScreen.input_box_b.handle_event(event)
+                        MoneyDropScreen.input_box_c.handle_event(event)
+                        MoneyDropScreen.input_box_d.handle_event(event)
+
+                        if MoneyDropScreen.error_text == "" and MoneyDropScreen.valid_rect.collidepoint(event.pos):
+                            # Valider
+                            MoneyDropScreen.valid_input()
                     if MoneyDropScreen.cancel_rect.collidepoint(event.pos):
                         # Annuler
                         MoneyDropScreen.is_playing = False
+
                 elif WordleScreen.is_playing:
+                    # WORDLE *******************************************
                     if WordleScreen.cancel_rect.collidepoint(event.pos):
                         # Annuler
                         WordleScreen.is_playing = False
@@ -363,6 +377,7 @@ while running:
                         if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
                             for button in screen_round.group_buttons_round_drop:
                                 if button.rect.collidepoint(event.pos):
+                                    MoneyDropScreen.set_question()
                                     game.is_playing = False
                                     PasswordScreen.is_playing = False
                                     WordleScreen.is_playing = False
@@ -382,11 +397,11 @@ while running:
                                     WordleScreen.is_playing = True
 
             elif event.type == pygame.KEYDOWN:
-                if MoneyDropScreen.is_playing:
-                    MoneyDropScreen.input_box1.handle_event(event)
-                    MoneyDropScreen.input_box2.handle_event(event)
-                    MoneyDropScreen.input_box3.handle_event(event)
-                    MoneyDropScreen.input_box4.handle_event(event)
+                if MoneyDropScreen.is_playing and not MoneyDropScreen.wait_for_next_step:
+                    MoneyDropScreen.input_box_a.handle_event(event)
+                    MoneyDropScreen.input_box_b.handle_event(event)
+                    MoneyDropScreen.input_box_c.handle_event(event)
+                    MoneyDropScreen.input_box_d.handle_event(event)
                 if WordleScreen.is_playing and not WordleScreen.is_game_over:
                     if event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN:
                         WordleScreen.add_answer()
