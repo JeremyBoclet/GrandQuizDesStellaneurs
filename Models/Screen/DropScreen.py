@@ -17,6 +17,9 @@ class DropScreen:
         self.current_player_image = pygame.sprite.Group()
         self.current_player_name = ""
 
+        self.button_width = 400
+        self.button_height = 130
+
         self.font = pygame.font.SysFont("Futura-bold", 80)
 
         self.category_image = pygame.image.load("../Assets/Round8.png")
@@ -28,19 +31,30 @@ class DropScreen:
                                                   (600, 150)).convert_alpha()
         self.valid_rect = self.valid_image.get_rect()
 
+        self.loose_image = pygame.image.load("../Assets/Loose.png")
+        self.loose_image = pygame.transform.scale(self.loose_image,
+                                                  (800, 350)).convert_alpha()
+
+        self.return_image = pygame.image.load("../Assets/Return.png")
+        self.return_image = pygame.transform.scale(self.return_image,
+                                                   (self.button_width, self.button_height)).convert_alpha()
+        self.return_rect = self.return_image.get_rect()
+
         self.Next_image = pygame.image.load("../Assets/NextQuestion.png")
         self.Next_image = pygame.transform.scale(self.Next_image,
                                                  (600, 150)).convert_alpha()
         self.Next_rect = self.Next_image.get_rect()
 
-        self.input_box_a = InputBox(600, 550, 200, 60, True, 70)
-        self.input_box_b = InputBox(1200, 550, 200, 60, True, 70)
-        self.input_box_c = InputBox(600, 760, 200, 60, True, 70)
-        self.input_box_d = InputBox(1200, 760, 200, 60, True, 70)
+        self.input_box_a = InputBox(500, 510, 200, 60, True, 70)
+        self.input_box_b = InputBox(1100, 510, 200, 60, True, 70)
+        self.input_box_c = InputBox(500, 720, 200, 60, True, 70)
+        self.input_box_d = InputBox(1100, 720, 200, 60, True, 70)
+
         self.cancel_image = pygame.image.load("../Assets/Cancel.png")
         self.cancel_image = pygame.transform.scale(self.cancel_image,
                                                    (200, 65)).convert_alpha()
         self.cancel_rect = self.cancel_image.get_rect()
+
         self.current_question = ""
         self.answer_a = None
         self.answer_b = None
@@ -49,8 +63,12 @@ class DropScreen:
         self.right_answer = None
 
         self.wait_for_next_step = False
-
+        self.defeat = False
         self.error_text = ""
+
+        self.current_number_question = 0
+        self.MAX_QUESTION = 1
+        self.is_finale = False
 
         self.question = ""
         self.bdd = Bdd()
@@ -68,6 +86,9 @@ class DropScreen:
 
             self.all_questions.append(question)
 
+        self.finale_answer = []
+        self.final_input = []
+
     def raz_zone(self):
         self.input_box_a.text = "0"
         self.input_box_b.text = "0"
@@ -80,6 +101,9 @@ class DropScreen:
         self.input_box_d.change_color("")
 
     def set_question(self):
+        self.current_number_question += 1
+        self.is_finale = self.current_number_question == self.MAX_QUESTION
+
         r = list(range(0, len(self.all_questions)))
         random.shuffle(r)
 
@@ -103,32 +127,89 @@ class DropScreen:
             self.error_text = Business.get_error_message(-1)
         self.current_question = self.font.render(self.question.question, True, (240, 255, 255))
 
+        if self.is_finale:
+            self.set_final_answers()
+
     def check_input(self):
         error_code = 0
 
+
         # check de 3 choix max
-        if ((self.input_box_a.text != "" and int(self.input_box_a.text) != 0)
+        if ((self.input_box_a.text != "" and int(self.input_box_a.text) != 0) and not self.is_finale
                 and (self.input_box_b.text != "" and int(self.input_box_b.text) != 0)
                 and (self.input_box_c.text != "" and int(self.input_box_c.text) != 0)
                 and (self.input_box_d.text != "" and int(self.input_box_d.text) != 0)):
             error_code = 1
+        else:
+            # Check du montant saisie < montant restant
+            input_amount = ((int(self.input_box_a.text) if self.input_box_a.text != "" else 0)
+                            + (int(self.input_box_b.text) if self.input_box_b.text != "" else 0)
+                            + (int(self.input_box_c.text) if self.input_box_c.text != "" else 0)
+                            + (int(self.input_box_d.text) if self.input_box_d.text != "" else 0))
 
-        # Check du montant saisie < montant restant
-        input_amount = ((int(self.input_box_a.text) if self.input_box_a.text != "" else 0)
-                        + (int(self.input_box_b.text) if self.input_box_b.text != "" else 0)
-                        + (int(self.input_box_c.text) if self.input_box_c.text != "" else 0)
-                        + (int(self.input_box_d.text) if self.input_box_d.text != "" else 0))
+            if input_amount > self.current_player.remaining_md_point:
+                error_code = 2
+            elif input_amount != self.current_player.remaining_md_point:
+                # check que le montant restant = montant max
+                error_code = 3
 
-        print( self.current_player.remaining_md_point)
+        if self.is_finale:
+            count_input = 0
+            for i in self.final_input:
+                if i.text != "" and int(i.text) != 0:
+                    count_input += 1
 
-        if input_amount > self.current_player.remaining_md_point:
-            error_code = 2
+            print(count_input)
 
-        # check que le montant restant = montant max
-        if input_amount != self.current_player.remaining_md_point:
-            error_code = 3
+            if count_input > 1:
+                error_code = 4
+
 
         self.error_text = Business.get_error_message(error_code)
+
+    def set_final_answers(self):
+        answer_list = [self.input_box_a, self.input_box_b, self.input_box_c, self.input_box_d]
+        self.final_input.clear()
+        self.finale_answer.clear()
+
+        self.final_input.append(self.right_answer)
+
+        good_answer_index = 0
+        # Affichage de la bonne reponse
+        for index, answer in enumerate(answer_list):
+            if self.right_answer == answer:
+                good_answer_index = index
+                match index:
+                    case 0:
+                        self.finale_answer.append([self.answer_a, (500, 450)])
+                    case 1:
+                        self.finale_answer.append([self.answer_b, (1100, 450)])
+                    case 2:
+                        self.finale_answer.append([self.answer_c, (500, 650)])
+                    case 3:
+                        self.finale_answer.append([self.answer_d, (1100, 650)])
+
+
+        # Affichage d'une mauvaise réponse de manière aléatoire
+        r = list(range(0, len(answer_list)))
+        random.shuffle(r)
+
+        index_to_show = r[0] if good_answer_index != r[0] else r[1]
+        for index, answer in enumerate(answer_list):
+            if index == index_to_show:
+                match index:
+                    case 0:
+                        self.finale_answer.append([self.answer_a, (500, 450)])
+                        self.final_input.append(self.input_box_a)
+                    case 1:
+                        self.finale_answer.append([self.answer_b, (1100, 450)])
+                        self.final_input.append(self.input_box_b)
+                    case 2:
+                        self.finale_answer.append([self.answer_c, (500, 650)])
+                        self.final_input.append(self.input_box_c)
+                    case 3:
+                        self.finale_answer.append([self.answer_d, (1100, 650)])
+                        self.final_input.append(self.input_box_d)
 
     def valid_input(self):
         if not self.wait_for_next_step:
@@ -142,6 +223,9 @@ class DropScreen:
                 "green") if self.input_box_c == self.right_answer else self.input_box_c.change_color("red")
             self.input_box_d.change_color(
                 "green") if self.input_box_d == self.right_answer else self.input_box_d.change_color("red")
+
+            self.defeat = self.right_answer.text == "0" or self.right_answer.text == ""
+
         else:
             # Question suivante
             self.wait_for_next_step = False
@@ -150,10 +234,26 @@ class DropScreen:
             if remaining_point is None:
                 remaining_point = 0
 
-            self.current_player.set_remaining_md_point(remaining_point)
+            self.current_player.set_md_point(remaining_point)
 
             self.set_question()
             self.raz_zone()
+
+    def blit_answer(self):
+        if self.is_finale:
+            for i in self.finale_answer:
+                self.screen.blit(i[0], i[1])
+
+            for i in self.final_input:
+                i.draw(self.screen)
+        else:
+            # Réponses
+            self.screen.blit(self.answer_a, (500, 450))
+            self.screen.blit(self.answer_b, (1100, 450))
+            self.screen.blit(self.answer_c, (500, 650))
+            self.screen.blit(self.answer_d, (1100, 650))
+
+            # Saisie des réponses
             self.input_box_a.draw(self.screen)
             self.input_box_b.draw(self.screen)
             self.input_box_c.draw(self.screen)
@@ -202,17 +302,7 @@ class DropScreen:
                                                 (0, 255, 0) if remaining_money >= 0 else (255, 0, 0))
         self.screen.blit(remaining_money_font, (10, 140))
 
-        # Réponses
-        self.screen.blit(self.answer_a, (600, 490))
-        self.screen.blit(self.answer_b, (1200, 490))
-        self.screen.blit(self.answer_c, (600, 700))
-        self.screen.blit(self.answer_d, (1200, 700))
-
-        # Saisie des réponses
-        self.input_box_a.draw(self.screen)
-        self.input_box_b.draw(self.screen)
-        self.input_box_c.draw(self.screen)
-        self.input_box_d.draw(self.screen)
+        self.blit_answer()
 
         # Message d'erreur
         if self.error_text != "":
@@ -221,12 +311,24 @@ class DropScreen:
                                           self.screen.get_height() - self.valid_image.get_height() - 75))
         else:
             if self.wait_for_next_step:
-                # Next step
-                self.screen.blit(self.Next_image, (
-                    self.screen.get_width() / 2 - 310, self.screen.get_height() - self.Next_image.get_height()))
+                if self.defeat:
+                    self.screen.blit(self.loose_image, (self.screen.get_width() / 2 - self.loose_image.get_width() / 2,
+                                                        self.screen.get_height() - self.loose_image.get_height()))
 
-                self.Next_rect = pygame.Rect(self.screen.get_width() / 2 - 310,
-                                             self.screen.get_height() - self.Next_image.get_height(), 600, 150)
+                    self.screen.blit(self.return_image,
+                                     (20, self.screen.get_height() - self.return_image.get_height()))
+
+                    self.return_rect = pygame.Rect(20,
+                                                   self.screen.get_height() - self.return_image.get_height(),
+                                                   self.button_width,
+                                                   self.button_height)
+                else:
+                    # Next step
+                    self.screen.blit(self.Next_image, (
+                        self.screen.get_width() / 2 - 310, self.screen.get_height() - self.Next_image.get_height()))
+
+                    self.Next_rect = pygame.Rect(self.screen.get_width() / 2 - 310,
+                                                 self.screen.get_height() - self.Next_image.get_height(), 600, 150)
             else:
                 # Valider
                 self.screen.blit(self.valid_image, (
@@ -240,3 +342,11 @@ class DropScreen:
         self.input_box_b.text = self.input_box_b.text[:len(str(self.current_player.maximum_md_point))]
         self.input_box_c.text = self.input_box_c.text[:len(str(self.current_player.maximum_md_point))]
         self.input_box_d.text = self.input_box_d.text[:len(str(self.current_player.maximum_md_point))]
+
+    def reset_game(self):
+        self.raz_zone()
+        self.current_number_question = 0
+        self.current_player.set_md_point(250000)
+        self.set_question()
+        self.defeat = False
+        self.wait_for_next_step = False

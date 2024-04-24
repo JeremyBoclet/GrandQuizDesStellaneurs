@@ -32,7 +32,7 @@ class PasswordScreen:
         self.return_image = pygame.image.load("../Assets/Return.png")
         self.return_image = pygame.transform.scale(self.return_image,
                                                    (self.button_width, self.button_height)).convert_alpha()
-        self.return_rect = self.cancel_image.get_rect()
+        self.return_rect = self.return_image.get_rect()
 
         self.category_image = pygame.image.load("../Assets/Round7.png")
         self.category_image = pygame.transform.scale(self.category_image,

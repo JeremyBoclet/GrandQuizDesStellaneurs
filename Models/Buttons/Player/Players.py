@@ -14,7 +14,7 @@ class Players:
     def add_point(self, point):
         self.total_point += point
 
-    def set_remaining_md_point(self,point):
+    def set_md_point(self, point):
         self.maximum_md_point = point
         self.remaining_md_point = point
 

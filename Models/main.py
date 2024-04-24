@@ -236,7 +236,7 @@ while running:
                         if MoneyDropScreen.error_text == "" and MoneyDropScreen.valid_rect.collidepoint(event.pos):
                             # Valider
                             MoneyDropScreen.valid_input()
-                    if MoneyDropScreen.cancel_rect.collidepoint(event.pos):
+                    if MoneyDropScreen.cancel_rect.collidepoint(event.pos) or (MoneyDropScreen.defeat and MoneyDropScreen.return_rect.collidepoint(event.pos)):
                         # Annuler
                         MoneyDropScreen.is_playing = False
 
@@ -377,7 +377,7 @@ while running:
                         if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
                             for button in screen_round.group_buttons_round_drop:
                                 if button.rect.collidepoint(event.pos):
-                                    MoneyDropScreen.set_question()
+                                    MoneyDropScreen.reset_game()
                                     game.is_playing = False
                                     PasswordScreen.is_playing = False
                                     WordleScreen.is_playing = False
