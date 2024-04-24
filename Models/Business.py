@@ -28,6 +28,8 @@ def get_error_message(code_err):
             return "Montant supérieur au montant restant"
         case 3:
             return "Il reste de l'argent à miser"
+        case 4:
+            return "Un seul choix au maximum"
         case _:
             return ""
 
