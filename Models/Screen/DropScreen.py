@@ -67,7 +67,7 @@ class DropScreen:
         self.error_text = ""
 
         self.current_number_question = 0
-        self.MAX_QUESTION = 1
+        self.MAX_QUESTION = 4
         self.is_finale = False
 
         self.question = ""
