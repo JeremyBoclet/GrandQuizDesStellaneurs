@@ -300,7 +300,7 @@ class Round:
             Button("Hard", self.screen.get_width() / 2 - 275, self.screen.get_height() / 2 + 90, 550, 110))
 
     def add_round_drop_button(self):
-        self.group_buttons_round_drop.add(Button("Password", self.screen.get_width() / 2 - 275, self.screen.get_height() / 2 - 200, 550, 110))
+        self.group_buttons_round_drop.add(Button("Password", self.screen.get_width() / 2 - 275, self.screen.get_height() / 2 - 55, 550, 110))
 
     def add_round_wordle_button(self):
         self.group_buttons_round_wordle.add(

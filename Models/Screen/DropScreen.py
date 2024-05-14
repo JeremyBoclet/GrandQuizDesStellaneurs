@@ -1,3 +1,5 @@
+import math
+
 import pygame
 import random
 
@@ -11,6 +13,7 @@ from Models.MoneyDropQuestion import MoneyDropQuestion
 class DropScreen:
     def __init__(self, screen):
         self.is_playing = False
+        self.game_over = False
         self.screen = screen
 
         self.current_player = Players("Player", 1)
@@ -21,6 +24,13 @@ class DropScreen:
         self.button_height = 130
 
         self.font = pygame.font.SysFont("Futura-bold", 80)
+
+        self.win_image = pygame.image.load("../Assets/Win.png")
+        self.win_image = pygame.transform.scale(self.win_image,
+                                                (1000, 500)).convert_alpha()
+
+        self.point_earned = 0
+        self.point_earned_text = ""
 
         self.category_image = pygame.image.load("../Assets/Round8.png")
         self.category_image = pygame.transform.scale(self.category_image,
@@ -34,6 +44,10 @@ class DropScreen:
         self.loose_image = pygame.image.load("../Assets/Loose.png")
         self.loose_image = pygame.transform.scale(self.loose_image,
                                                   (800, 350)).convert_alpha()
+
+        self.win_image = pygame.image.load("../Assets/Win.png")
+        self.win_image = pygame.transform.scale(self.win_image,
+                                                (800, 350)).convert_alpha()
 
         self.return_image = pygame.image.load("../Assets/Return.png")
         self.return_image = pygame.transform.scale(self.return_image,
@@ -55,7 +69,9 @@ class DropScreen:
                                                    (200, 65)).convert_alpha()
         self.cancel_rect = self.cancel_image.get_rect()
 
-        self.current_question = ""
+        self.current_question_l1 = ""
+        self.current_question_l2 = ""
+
         self.answer_a = None
         self.answer_b = None
         self.answer_c = None
@@ -67,7 +83,7 @@ class DropScreen:
         self.error_text = ""
 
         self.current_number_question = 0
-        self.MAX_QUESTION = 4
+        self.MAX_QUESTION = 8
         self.is_finale = False
 
         self.question = ""
@@ -101,6 +117,10 @@ class DropScreen:
         self.input_box_d.change_color("")
 
     def set_question(self):
+        if len(self.all_questions) == 0:
+            self.is_playing = False
+            return
+
         self.current_number_question += 1
         self.is_finale = self.current_number_question == self.MAX_QUESTION
 
@@ -125,14 +145,21 @@ class DropScreen:
             self.right_answer = self.input_box_d
         else:
             self.error_text = Business.get_error_message(-1)
-        self.current_question = self.font.render(self.question.question, True, (240, 255, 255))
+
+        # self.current_question = self.font.render(self.question.question, True, (240, 255, 255))
+
+        # Question
+        question_l1 = self.question.question.split('#')[0]
+        question_l2 = self.question.question[len(question_l1) + 1:200]
+
+        self.current_question_l1 = self.font.render(question_l1, True, (240, 255, 255))
+        self.current_question_l2 = self.font.render(question_l2, True, (240, 255, 255))
 
         if self.is_finale:
             self.set_final_answers()
 
     def check_input(self):
         error_code = 0
-
 
         # check de 3 choix max
         if ((self.input_box_a.text != "" and int(self.input_box_a.text) != 0) and not self.is_finale
@@ -159,11 +186,8 @@ class DropScreen:
                 if i.text != "" and int(i.text) != 0:
                     count_input += 1
 
-            print(count_input)
-
             if count_input > 1:
                 error_code = 4
-
 
         self.error_text = Business.get_error_message(error_code)
 
@@ -188,7 +212,6 @@ class DropScreen:
                         self.finale_answer.append([self.answer_c, (500, 650)])
                     case 3:
                         self.finale_answer.append([self.answer_d, (1100, 650)])
-
 
         # Affichage d'une mauvaise réponse de manière aléatoire
         r = list(range(0, len(answer_list)))
@@ -225,7 +248,6 @@ class DropScreen:
                 "green") if self.input_box_d == self.right_answer else self.input_box_d.change_color("red")
 
             self.defeat = self.right_answer.text == "0" or self.right_answer.text == ""
-
         else:
             # Question suivante
             self.wait_for_next_step = False
@@ -275,6 +297,14 @@ class DropScreen:
 
         self.screen.blit(self.current_player_image, (1500, 5))
 
+        # Nombre de bonnes réponses
+        good_answer_text = self.font.render("Points : {}".format(self.current_player.total_point)
+                                            , True,
+                                            (255, 255, 255))
+
+        self.screen.blit(good_answer_text,
+                         (1580,110))
+
         if not self.wait_for_next_step:
             self.check_input()
 
@@ -284,8 +314,14 @@ class DropScreen:
         self.cancel_rect = pygame.Rect(20, self.screen.get_height() - self.cancel_image.get_height(), 200, 65)
 
         self.screen.blit(self.category_image, (self.screen.get_width() / 2 - 310, 50))
-        self.screen.blit(self.current_question, ((self.screen.get_width() - self.current_question.get_width()) / 2,
-                                                 self.screen.get_height() / 4))
+
+        # question
+        self.screen.blit(self.current_question_l1,
+                         ((self.screen.get_width() - self.current_question_l1.get_width()) / 2,
+                          self.screen.get_height() / 4))
+        self.screen.blit(self.current_question_l2,
+                         ((self.screen.get_width() - self.current_question_l2.get_width()) / 2,
+                          self.screen.get_height() / 3))
 
         # Montant max et restant
         maximum_money = self.font.render('Maximum : ' + str(self.current_player.maximum_md_point) + '€', True,
@@ -314,14 +350,25 @@ class DropScreen:
                 if self.defeat:
                     self.screen.blit(self.loose_image, (self.screen.get_width() / 2 - self.loose_image.get_width() / 2,
                                                         self.screen.get_height() - self.loose_image.get_height()))
+                    self.show_return_button()
+                    self.game_over = True
+                elif self.current_number_question == self.MAX_QUESTION:
+                    self.screen.blit(self.win_image, (self.screen.get_width() / 2 - self.win_image.get_width() / 2,
+                                                      self.screen.get_height() - self.win_image.get_height()))
+                    self.show_return_button()
 
-                    self.screen.blit(self.return_image,
-                                     (20, self.screen.get_height() - self.return_image.get_height()))
+                    point = math.ceil(self.current_player.remaining_md_point / 1000)
+                    self.point_earned_text = self.font.render(
+                        "+ {} points".format(point), True,
+                        (255, 255, 255))
 
-                    self.return_rect = pygame.Rect(20,
-                                                   self.screen.get_height() - self.return_image.get_height(),
-                                                   self.button_width,
-                                                   self.button_height)
+                    self.screen.blit(self.point_earned_text,
+                                     (self.screen.get_width() / 2 - self.point_earned_text.get_width() / 2,
+                                      self.screen.get_height() - self.point_earned_text.get_height()))
+
+                    if not self.game_over:
+                        self.game_over = True
+                        self.current_player.add_point(point)
                 else:
                     # Next step
                     self.screen.blit(self.Next_image, (
@@ -329,10 +376,12 @@ class DropScreen:
 
                     self.Next_rect = pygame.Rect(self.screen.get_width() / 2 - 310,
                                                  self.screen.get_height() - self.Next_image.get_height(), 600, 150)
+
             else:
                 # Valider
-                self.screen.blit(self.valid_image, (
-                    self.screen.get_width() / 2 - 310, self.screen.get_height() - self.valid_image.get_height()))
+                self.screen.blit(self.valid_image,
+                                 (self.screen.get_width() / 2 - 310,
+                                  self.screen.get_height() - self.valid_image.get_height()))
 
                 self.valid_rect = pygame.Rect(self.screen.get_width() / 2 - 310,
                                               self.screen.get_height() - self.valid_image.get_height(), 600, 150)
@@ -350,3 +399,15 @@ class DropScreen:
         self.set_question()
         self.defeat = False
         self.wait_for_next_step = False
+
+    def show_return_button(self):
+        self.screen.blit(self.return_image,
+                         (20, self.screen.get_height() - self.return_image.get_height()))
+
+        self.return_rect = pygame.Rect(20,
+                                       self.screen.get_height() - self.return_image.get_height(),
+                                       self.button_width,
+                                       self.button_height)
+
+
+

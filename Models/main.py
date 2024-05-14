@@ -209,7 +209,8 @@ while running:
                                 button.had_been_chosen = False
                 elif PasswordScreen.is_playing:
                     # PASSWORD *******************************************
-                    if PasswordScreen.cancel_rect.collidepoint(event.pos) or (PasswordScreen.game_over and PasswordScreen.return_rect.collidepoint(event.pos)):
+                    if PasswordScreen.cancel_rect.collidepoint(event.pos) or (
+                            PasswordScreen.game_over and PasswordScreen.return_rect.collidepoint(event.pos)):
                         # Annuler
                         PasswordScreen.is_playing = False
                         PasswordScreen.game_over = False
@@ -222,11 +223,9 @@ while running:
                             PasswordScreen.set_password()
                 elif MoneyDropScreen.is_playing:
                     # MONEY DROP *******************************************
-
                     if MoneyDropScreen.wait_for_next_step:
-                        if MoneyDropScreen.Next_rect.collidepoint(event.pos):
+                        if MoneyDropScreen.Next_rect.collidepoint(event.pos) and not MoneyDropScreen.is_finale and not MoneyDropScreen.game_over:
                             MoneyDropScreen.valid_input()
-                        print("en attente de la prochaine étape")
                     else:
                         MoneyDropScreen.input_box_a.handle_event(event)
                         MoneyDropScreen.input_box_b.handle_event(event)
@@ -236,7 +235,7 @@ while running:
                         if MoneyDropScreen.error_text == "" and MoneyDropScreen.valid_rect.collidepoint(event.pos):
                             # Valider
                             MoneyDropScreen.valid_input()
-                    if MoneyDropScreen.cancel_rect.collidepoint(event.pos) or (MoneyDropScreen.defeat and MoneyDropScreen.return_rect.collidepoint(event.pos)):
+                    if MoneyDropScreen.cancel_rect.collidepoint(event.pos) or (MoneyDropScreen.return_rect.collidepoint(event.pos) and MoneyDropScreen.game_over):
                         # Annuler
                         MoneyDropScreen.is_playing = False
 
@@ -247,7 +246,7 @@ while running:
                         WordleScreen.is_playing = False
                         WordleScreen.is_game_over = False
                         WordleScreen.defeat = False
-                        WordleScreen.point_earned=0
+                        WordleScreen.point_earned = 0
                     WordleScreen.input_box.handle_event(event)
 
                 elif selection_player_screen.is_selecting_player:

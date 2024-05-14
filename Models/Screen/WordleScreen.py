@@ -225,7 +225,7 @@ class WordleScreen:
             word_to_find = self.font.render("{}".format(self.current_answer), True,
                                                 (255, 255, 255))
 
-            self.screen.blit(word_to_find,  ((self.screen.get_width() - word_to_find.get_width()) / 2, 150))
+            self.screen.blit(word_to_find, (1580, 200))
 
         if self.point_earned > 0:
             points_won = self.font.render("+{} points".format(self.point_earned), True,
