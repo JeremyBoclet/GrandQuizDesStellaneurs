@@ -39,19 +39,19 @@ class Round:
 
         # Round 1 (Question theme choisi)
         self.group_buttons_round1 = pygame.sprite.Group()
-        self.add_round1_button()
+        # self.add_round1_button()
 
         # Round 2 (Question theme generale)
         self.group_buttons_round2 = pygame.sprite.Group()
-        self.add_round2_button()
+        # self.add_round2_button()
 
         # Round 3
         self.group_buttons_round3 = pygame.sprite.Group()
-        self.add_round3_button()
+        # self.add_round3_button()
 
         # Round 4
         self.group_buttons_round4 = pygame.sprite.Group()
-        self.add_round4_button()
+        # self.add_round4_button()
 
         # Round Mot de passe
         self.group_buttons_round7 = pygame.sprite.Group()

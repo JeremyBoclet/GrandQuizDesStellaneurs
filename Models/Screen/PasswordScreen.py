@@ -23,11 +23,11 @@ class PasswordScreen:
 
         self.win_image = pygame.image.load("../Assets/Win.png")
         self.win_image = pygame.transform.scale(self.win_image,
-                                                (1000, 500)).convert_alpha()
+                                                (800, 350)).convert_alpha()
 
         self.loose_image = pygame.image.load("../Assets/Loose.png")
         self.loose_image = pygame.transform.scale(self.loose_image,
-                                                  (1000, 500)).convert_alpha()
+                                                  (800, 350)).convert_alpha()
 
         self.return_image = pygame.image.load("../Assets/Return.png")
         self.return_image = pygame.transform.scale(self.return_image,

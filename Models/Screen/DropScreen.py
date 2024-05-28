@@ -25,10 +25,6 @@ class DropScreen:
 
         self.font = pygame.font.SysFont("Futura-bold", 80)
 
-        self.win_image = pygame.image.load("../Assets/Win.png")
-        self.win_image = pygame.transform.scale(self.win_image,
-                                                (1000, 500)).convert_alpha()
-
         self.point_earned = 0
         self.point_earned_text = ""
 
@@ -59,10 +55,10 @@ class DropScreen:
                                                  (600, 150)).convert_alpha()
         self.Next_rect = self.Next_image.get_rect()
 
-        self.input_box_a = InputBox(500, 510, 200, 60, True, 70)
-        self.input_box_b = InputBox(1100, 510, 200, 60, True, 70)
-        self.input_box_c = InputBox(500, 720, 200, 60, True, 70)
-        self.input_box_d = InputBox(1100, 720, 200, 60, True, 70)
+        self.input_box_a = InputBox(450, 510, 200, 60, True, 70)
+        self.input_box_b = InputBox(1150, 510, 200, 60, True, 70)
+        self.input_box_c = InputBox(450, 720, 200, 60, True, 70)
+        self.input_box_d = InputBox(1150, 720, 200, 60, True, 70)
 
         self.cancel_image = pygame.image.load("../Assets/Cancel.png")
         self.cancel_image = pygame.transform.scale(self.cancel_image,
@@ -205,13 +201,13 @@ class DropScreen:
                 good_answer_index = index
                 match index:
                     case 0:
-                        self.finale_answer.append([self.answer_a, (500, 450)])
+                        self.finale_answer.append([self.answer_a, (450, 450)])
                     case 1:
-                        self.finale_answer.append([self.answer_b, (1100, 450)])
+                        self.finale_answer.append([self.answer_b, (1150, 450)])
                     case 2:
-                        self.finale_answer.append([self.answer_c, (500, 650)])
+                        self.finale_answer.append([self.answer_c, (450, 650)])
                     case 3:
-                        self.finale_answer.append([self.answer_d, (1100, 650)])
+                        self.finale_answer.append([self.answer_d, (1150, 650)])
 
         # Affichage d'une mauvaise réponse de manière aléatoire
         r = list(range(0, len(answer_list)))
@@ -222,16 +218,16 @@ class DropScreen:
             if index == index_to_show:
                 match index:
                     case 0:
-                        self.finale_answer.append([self.answer_a, (500, 450)])
+                        self.finale_answer.append([self.answer_a, (450, 450)])
                         self.final_input.append(self.input_box_a)
                     case 1:
-                        self.finale_answer.append([self.answer_b, (1100, 450)])
+                        self.finale_answer.append([self.answer_b, (1150, 450)])
                         self.final_input.append(self.input_box_b)
                     case 2:
-                        self.finale_answer.append([self.answer_c, (500, 650)])
+                        self.finale_answer.append([self.answer_c, (450, 650)])
                         self.final_input.append(self.input_box_c)
                     case 3:
-                        self.finale_answer.append([self.answer_d, (1100, 650)])
+                        self.finale_answer.append([self.answer_d, (1150, 650)])
                         self.final_input.append(self.input_box_d)
 
     def valid_input(self):
@@ -270,10 +266,10 @@ class DropScreen:
                 i.draw(self.screen)
         else:
             # Réponses
-            self.screen.blit(self.answer_a, (500, 450))
-            self.screen.blit(self.answer_b, (1100, 450))
-            self.screen.blit(self.answer_c, (500, 650))
-            self.screen.blit(self.answer_d, (1100, 650))
+            self.screen.blit(self.answer_a, (450, 450))
+            self.screen.blit(self.answer_b, (1150, 450))
+            self.screen.blit(self.answer_c, (450, 650))
+            self.screen.blit(self.answer_d, (1150, 650))
 
             # Saisie des réponses
             self.input_box_a.draw(self.screen)
@@ -398,6 +394,8 @@ class DropScreen:
         self.current_player.set_md_point(250000)
         self.set_question()
         self.defeat = False
+        self.game_over = False
+        self.is_finale = False
         self.wait_for_next_step = False
 
     def show_return_button(self):
