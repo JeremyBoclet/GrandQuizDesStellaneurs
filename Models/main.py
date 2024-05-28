@@ -26,13 +26,14 @@ background = pygame.transform.scale(pygame.image.load("../assets/background.jpg"
 round_timer = 30
 
 # écran
+QUIZ = True
 game = Game(screen)
 PasswordScreen = PasswordScreen(screen)
 MoneyDropScreen = DropScreen(screen)
 WordleScreen = WordleScreen(screen)
-screen_round = Round(screen)
+screen_round = Round(screen, QUIZ)
 selection_player_screen = Selection_Player_Screen(screen)
-selection_round = Selection_Round(screen)
+selection_round = Selection_Round(screen, QUIZ)
 
 running = True
 
