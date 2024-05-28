@@ -2,6 +2,7 @@ import random
 
 import pygame
 
+from Models.Bdd import Bdd
 from Models.Buttons.Button import Button
 from Models.Buttons.Category.Return_Round import Return_Round
 from Models.Buttons.Final_Button import Final_Button
@@ -28,6 +29,8 @@ class Round:
 
         self.hide_final = False
         self.timer = Timer(self.screen)
+
+        self.Bdd = Bdd()
 
         self.group_buttons = pygame.sprite.Group()
 
@@ -217,79 +220,92 @@ class Round:
                 self.group_buttons_round7.remove(button)
 
     def add_round1_button(self):
-        self.group_buttons_round1.add(Button("Martin", 350, 200, 600, 150))
-        self.group_buttons_round1.add(Button("Ben", 350, 350, 600, 150))
-        self.group_buttons_round1.add(Button("PTF", 350, 500, 600, 150))
-        self.group_buttons_round1.add(Button("Zejoe", 350, 650, 600, 150))
-        self.group_buttons_round1.add(Button("Mathis", 350, 800, 600, 150))
+        df = self.Bdd.read_excel("Round1", False)
 
-        self.group_buttons_round1.add(Button("Jeanjarjar", 1000, 200, 600, 150))
-        self.group_buttons_round1.add(Button("Drakmur", 1000, 350, 600, 150))
-        self.group_buttons_round1.add(Button("Plags", 1000, 500, 600, 150))
-        self.group_buttons_round1.add(Button("GrosLombaire", 1000, 650, 600, 150))
-        self.group_buttons_round1.add(Button("Robin", 1000, 800, 600, 150))
+        scale_x = 600
+        scale_y = 150
+        pos_x = 350
+        pos_y = 200
+
+        count = 0
+
+        for index, row in df.iterrows():
+            self.group_buttons_round1.add(Button(row["Thème"], pos_x, pos_y, scale_x, scale_y))
+
+            count += 1
+            pos_y += scale_y
+
+            if count == 5:
+                pos_x = 1000
+                pos_y = 200
+
+
 
     def add_round2_button(self):
-        self.group_buttons_round2.add(Button("Gaming", 40, 250, 550, 110))
-        self.group_buttons_round2.add(Button("Stellan", 40, 360, 550, 110))
-        self.group_buttons_round2.add(Button("Religion", 40, 470, 550, 110))
-        self.group_buttons_round2.add(Button("LoL", 40, 580, 550, 110))
-        self.group_buttons_round2.add(Button("Automobile", 40, 690, 550, 110))
-        self.group_buttons_round2.add(Button("Mystery", 40, 800, 550, 110))
+        df = self.Bdd.read_excel("Round2",False)
 
-        self.group_buttons_round2.add(Button("Geo", 670, 250, 550, 110))
-        self.group_buttons_round2.add(Button("History", 670, 360, 550, 110))
-        self.group_buttons_round2.add(Button("Drapeau", 670, 470, 550, 110))
-        self.group_buttons_round2.add(Button("Formula1", 670, 580, 550, 110))
-        self.group_buttons_round2.add(Button("Sport", 670, 690, 550, 110))
-        self.group_buttons_round2.add(Button("CodeRoute", 670, 800, 550, 110))
+        scale_x = 550
+        scale_y = 110
+        pos_x = 40
+        pos_y = 250
 
-        self.group_buttons_round2.add(Button("Pixar", 1300, 250, 550, 110))
-        self.group_buttons_round2.add(Button("StarWars", 1300, 360, 550, 110))
-        self.group_buttons_round2.add(Button("Expressions", 1300, 470, 550, 110))
-        self.group_buttons_round2.add(Button("Cinema", 1300, 580, 550, 110))
-        self.group_buttons_round2.add(Button("Dreamworks", 1300, 690, 550, 110))
-        self.group_buttons_round2.add(Button("Marques", 1300, 800, 550, 110))
+        count = 0
 
-        self.group_buttons_round2.add(Button("TranslatedMusique", 350, 910, 550, 110))
-        self.group_buttons_round2.add(Button("Gastronomy", 1000, 910, 550, 110))
+        for index, row in df.iterrows():
+            self.group_buttons_round2.add(Button(row["Thème"], pos_x, pos_y, scale_x, scale_y))
+
+            count += 1
+            pos_y += scale_y
+
+            if count == 7:
+                pos_x = 670
+                pos_y = 250
+            elif count == 14:
+                pos_x = 1300
+                pos_y = 250
 
     def add_round3_button(self):
-        self.group_buttons_round3.add(Button("RE_Martin", 350, 200, 600, 150))
-        self.group_buttons_round3.add(Button("RE_Ben", 350, 350, 600, 150))
-        self.group_buttons_round3.add(Button("RE_PTF", 350, 500, 600, 150))
-        self.group_buttons_round3.add(Button("RE_Zejoe", 350, 650, 600, 150))
-        self.group_buttons_round3.add(Button("RE_Mathis", 350, 800, 600, 150))
+        df = self.Bdd.read_excel("Round3", False)
 
-        self.group_buttons_round3.add(Button("RE_Jeanjarjar", 1000, 200, 600, 150))
-        self.group_buttons_round3.add(Button("RE_Drakmur", 1000, 350, 600, 150))
-        self.group_buttons_round3.add(Button("RE_Plags", 1000, 500, 600, 150))
-        self.group_buttons_round3.add(Button("RE_GrosLombaire", 1000, 650, 600, 150))
-        self.group_buttons_round3.add(Button("RE_Robin", 1000, 800, 600, 150))
+        scale_x = 600
+        scale_y = 150
+        pos_x = 350
+        pos_y = 200
+
+        count = 0
+
+        for index, row in df.iterrows():
+            self.group_buttons_round3.add(Button(row["Thème"], pos_x, pos_y, scale_x, scale_y))
+
+            count += 1
+            pos_y += scale_y
+
+            if count == 5:
+                pos_x = 1000
+                pos_y = 200
 
     def add_round4_button(self):
-        self.group_buttons_round4.add(Button("LoL_Ban", 40, 250, 550, 110))
-        self.group_buttons_round4.add(Button("LoL_Pick", 40, 360, 550, 110))
-        self.group_buttons_round4.add(Button("Audio_Death", 40, 470, 550, 110))
-        self.group_buttons_round4.add(Button("Audio_League", 40, 580, 550, 110))
-        self.group_buttons_round4.add(Button("Audio_Jeux", 40, 690, 550, 110))
-        self.group_buttons_round4.add(Button("Anime", 40, 800, 550, 110))
-        self.group_buttons_round4.add(Button("Dessin_Anime", 670, 250, 550, 110))
-        self.group_buttons_round4.add(Button("Audio_Serie", 670, 360, 550, 110))
-        self.group_buttons_round4.add(Button("Audio_Film", 670, 470, 550, 110))
-        self.group_buttons_round4.add(Button("Emission", 670, 580, 550, 110))
-        self.group_buttons_round4.add(Button("Disney", 670, 690, 550, 110))
-        self.group_buttons_round4.add(Button("Pub", 670, 800, 550, 110))
+        df = self.Bdd.read_excel("Round4", False)
 
-        self.group_buttons_round4.add(Button("Hymne", 1300, 250, 550, 110))
-        self.group_buttons_round4.add(Button("Replique", 1300, 360, 550, 110))
-        self.group_buttons_round4.add(Button("Animals", 1300, 470, 550, 110))
-        self.group_buttons_round4.add(Button("Musique2000", 1300, 580, 550, 110))
-        self.group_buttons_round4.add(Button("Musique1980", 1300, 690, 550, 110))
-        self.group_buttons_round4.add(Button("Rap", 1300, 800, 550, 110))
+        scale_x = 550
+        scale_y = 110
+        pos_x = 40
+        pos_y = 250
 
-        self.group_buttons_round4.add(Button("Instrument", 1000, 910, 550, 110))
-        self.group_buttons_round4.add(Button("Aleatoire", 350, 910, 550, 110))
+        count = 0
+
+        for index, row in df.iterrows():
+            self.group_buttons_round4.add(Button(row["Thème"], pos_x, pos_y, scale_x, scale_y))
+
+            count += 1
+            pos_y += scale_y
+
+            if count == 7:
+                pos_x = 670
+                pos_y = 250
+            elif count == 14:
+                pos_x = 1300
+                pos_y = 250
 
     def add_round7_button(self):
         self.group_buttons_round7.add(

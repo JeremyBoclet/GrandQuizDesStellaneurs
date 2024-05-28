@@ -41,9 +41,10 @@ class Bdd:
         df = pd.read_sql(query, self.engine)
         return df
 
-    def read_excel(self, sheet_name):
+    def read_excel(self, sheet_name, randomize=True):
         df = pd.read_excel(r"..\Questions.ods", sheet_name)
-        df = df.sample(frac=1)
+        if randomize:
+            df = df.sample(frac=1)
         return df
 
     def get_players(self):
