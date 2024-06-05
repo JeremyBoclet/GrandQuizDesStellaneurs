@@ -33,13 +33,13 @@ class Rounds(pygame.sprite.Sprite):
             case 7:
                 self.rect.y = self.margin
             case 8:
-                spacing = 90 + self.margin
-                self.rect.y = spacing + 160
+                self.rect.y = 275
             case 9:
-                spacing = 180 + self.margin
-                self.rect.y = spacing + 320
-
+                self.rect.y = 465
+            case 10:
+                self.rect.y = 645
             case "Quit":
                 self.rect.x = 10
                 self.rect.y = self.screen.get_height() - 60
                 self.image = pygame.transform.scale(self.image, (200, 60)).convert_alpha()
+
