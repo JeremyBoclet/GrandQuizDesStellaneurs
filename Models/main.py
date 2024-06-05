@@ -27,7 +27,7 @@ background = pygame.transform.scale(pygame.image.load("../assets/background.jpg"
 round_timer = 30
 
 # écran
-QUIZ = True
+QUIZ = False
 game = Game(screen)
 PasswordScreen = PasswordScreen(screen)
 MoneyDropScreen = DropScreen(screen)
@@ -41,7 +41,7 @@ running = True
 
 # Event
 GET_TIME = pygame.USEREVENT + 1
-GET_TIME_ROUND = pygame.USEREVENT + 1
+GET_TIME_ROUND = pygame.USEREVENT + 2
 pygame.time.set_timer(GET_TIME, 1000)
 pygame.time.set_timer(GET_TIME_ROUND, 100)
 time_in_sec = round_timer
