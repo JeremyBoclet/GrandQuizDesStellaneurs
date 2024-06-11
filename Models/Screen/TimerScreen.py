@@ -30,7 +30,7 @@ class TimerScreen:
                                                      (300, 300)).convert_alpha()
         self.stop_button_rect = self.stop_button_image.get_rect()
         self.MAX_POINT = 10
-        self.LIMIT = 0.5
+        self.LIMIT = 0.3
         self.game_over = False
         self.points_won = 0
 

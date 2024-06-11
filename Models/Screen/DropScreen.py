@@ -85,7 +85,7 @@ class DropScreen:
         self.question = ""
         self.bdd = Bdd()
         self.all_questions = []
-        df = self.bdd.read_excel("MoneyDrop")
+        df = self.bdd.read_excel("MoneyDrop", file_name="Game.ods")
 
         df.reset_index()
         for index, row in df.iterrows():

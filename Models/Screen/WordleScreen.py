@@ -66,7 +66,7 @@ class WordleScreen:
 
         self.bdd = Bdd()
 
-        df = self.bdd.read_excel("Wordle")
+        df = self.bdd.read_excel("Wordle", file_name="Game.ods")
         df.reset_index()
         for index, row in df.iterrows():
             match len(row["Wordle"]):

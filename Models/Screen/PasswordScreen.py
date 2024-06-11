@@ -63,7 +63,7 @@ class PasswordScreen:
 
         self.bdd = Bdd()
 
-        df = self.bdd.read_excel("Password")
+        df = self.bdd.read_excel("Password",file_name="Game.ods")
         df.reset_index()
         for index, row in df.iterrows():
             self.passwords.append(row["Password"])
