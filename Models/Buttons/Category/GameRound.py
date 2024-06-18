@@ -19,17 +19,16 @@ class GameRounds(pygame.sprite.Sprite):
             case "password":
                 self.rect.x = self.screen.get_width() / 2 - 390
 
-            case "drop": # MoneyDrop
+            case "drop":
                 self.rect.x = self.screen.get_width() / 2 - 190
 
-            case "wordle": # Wordle
+            case "wordle":
                 self.rect.x = self.screen.get_width() / 2 + 10
 
-            case "timer": # Timer
+            case "timer":
                 self.rect.x = self.screen.get_width() / 2 + 210
 
             case "Quit":
                 self.rect.x = 10
                 self.rect.y = self.screen.get_height() - 60
                 self.image = pygame.transform.scale(self.image, (200, 60)).convert_alpha()
-
