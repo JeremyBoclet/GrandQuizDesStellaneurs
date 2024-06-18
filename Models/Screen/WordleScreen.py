@@ -10,8 +10,8 @@ from Models.WordleLetters import WordleLetters
 
 class WordleScreen:
     def __init__(self, screen):
-        self.is_playing = False
         self.screen = screen
+        self.game_mode_id = 1200
 
         self.font = pygame.font.SysFont("Futura-bold", 80)
 
@@ -159,7 +159,6 @@ class WordleScreen:
         if not self.is_game_over:
             if self.wordle_letters.last_valid.count('valid') == self.wordle_letters.letter_length:
                 # Victoire
-                # self.is_playing = False
                 self.defeat = False
                 self.is_game_over = True
                 max_pts = 0
@@ -178,7 +177,6 @@ class WordleScreen:
                 self.current_player.add_point(self.point_earned)
             elif len(self.answered) == 6:
                 # nombre d'essai atteint (Defaite)
-                # self.is_playing = False
                 self.point_earned = 0
                 self.defeat = True
                 self.is_game_over = True

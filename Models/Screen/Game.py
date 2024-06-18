@@ -10,6 +10,7 @@ from Models.Screen.Timer import Timer
 
 class Game:
     def __init__(self, screen):
+        self.game_mode_id = 100
         self.is_playing = False
         self.screen = screen
         self.bdd = Bdd()
@@ -149,9 +150,8 @@ class Game:
                          (1500, 5))
 
         if self.current_ID == len(self.questions) or (time_in_sec <= 0 and use_timer):
-            self.is_playing = False
             self.current_ID = 0
-
+            self.is_playing = False
         else:
             # Question
             question_l1 = self.questions[self.current_ID].question.split('#')[0]

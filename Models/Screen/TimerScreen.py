@@ -5,10 +5,9 @@ from Models.Buttons.Player.Players import Players
 
 class TimerScreen:
     def __init__(self, screen):
-        self.is_playing = False
         self.game_over = False
         self.screen = screen
-
+        self.game_mode_id = 1300
         self.cancel_image = pygame.image.load("../Assets/Cancel.png")
         self.cancel_image = pygame.transform.scale(self.cancel_image,
                                                    (200, 65)).convert_alpha()

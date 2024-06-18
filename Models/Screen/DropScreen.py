@@ -12,7 +12,7 @@ from Models.MoneyDropQuestion import MoneyDropQuestion
 
 class DropScreen:
     def __init__(self, screen):
-        self.is_playing = False
+        self.game_mode_id = 1100
         self.game_over = False
         self.screen = screen
 
@@ -79,7 +79,7 @@ class DropScreen:
         self.error_text = ""
 
         self.current_number_question = 0
-        self.MAX_QUESTION = 8
+        self.MAX_QUESTION = 2
         self.is_finale = False
 
         self.question = ""
@@ -114,7 +114,6 @@ class DropScreen:
 
     def set_question(self):
         if len(self.all_questions) == 0:
-            self.is_playing = False
             return
 
         self.current_number_question += 1

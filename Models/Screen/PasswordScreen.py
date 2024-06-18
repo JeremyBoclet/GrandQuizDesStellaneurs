@@ -57,7 +57,7 @@ class PasswordScreen:
 
         self.pin_default_pos = (self.screen.get_width() / 2 - self.password_pins.background_width / 2) + 25
 
-        self.is_playing = False
+        self.game_mode_ID = 1000
 
         self.passwords = []
 
@@ -110,7 +110,6 @@ class PasswordScreen:
         if not self.game_over:
             if self.password_pins.answered_password.count('valid') == 5:
                 # Victoire
-                # self.is_playing = False
                 self.game_over = True
                 self.defeat = False
                 self.set_end_pin()
@@ -128,7 +127,6 @@ class PasswordScreen:
 
             elif self.password_pins.max_attempt - self.password_pins.answered_password.count('error') < 5:
                 # Il ne reste pas assez de question pour faire 5 bonnes réponses
-                # self.is_playing = False
                 self.game_over = True
                 self.defeat = True
                 self.set_end_pin()
@@ -136,7 +134,6 @@ class PasswordScreen:
                 print("Plus assez d'essai")
             elif len(self.password_pins.answered_password) == self.password_pins.max_attempt:
                 # nombre d'essai atteint (Defaite)
-                # self.is_playing = False
                 self.game_over = True
                 self.defeat = True
                 self.set_end_pin()
