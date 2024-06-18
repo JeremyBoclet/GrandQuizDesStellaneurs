@@ -279,16 +279,17 @@ while running:
                 elif selection_round.is_selecting_round:
                     for button in selection_round.group_buttons:
                         if button.rect.collidepoint(event.pos):
+                            print(button.round_id)
                             screen_round.is_round1_active = (button.round_id == 1)
                             screen_round.is_round2_active = (button.round_id == 2)
                             screen_round.is_round3_active = (button.round_id == 3)
                             screen_round.is_round4_active = (button.round_id == 4)
                             screen_round.is_finale_active = (button.round_id == 5)
                             screen_round.is_ranking_active = (button.round_id == 6)
-                            screen_round.is_round7_active = (button.round_id == 7)
-                            screen_round.is_round_drop_active = (button.round_id == 8)
-                            screen_round.is_round_wordle_active = (button.round_id == 9)
-                            screen_round.is_round_timer_active = (button.round_id == 10)
+                            screen_round.is_round7_active = (button.round_id == "password")
+                            screen_round.is_round_drop_active = (button.round_id == "drop")
+                            screen_round.is_round_wordle_active = (button.round_id == "wordle")
+                            screen_round.is_round_timer_active = (button.round_id == "timer")
 
                             running = (button.round_id != "Quit")
                             selection_player_screen.save_points()

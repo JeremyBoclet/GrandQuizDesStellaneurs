@@ -30,13 +30,13 @@ class Rounds(pygame.sprite.Sprite):
             case 5 | 6:
                 spacing = ((round_number - 1) * 90) + self.margin
                 self.rect.y = spacing + ((round_number - 3) * 100)
-            case 7:
+            case 7: # Password
                 self.rect.y = self.margin
-            case 8:
+            case 8: # MoneyDrop
                 self.rect.y = 275
-            case 9:
+            case 9: # Wordle
                 self.rect.y = 465
-            case 10:
+            case 10: # Timer
                 self.rect.y = 645
             case "Quit":
                 self.rect.x = 10
