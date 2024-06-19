@@ -24,7 +24,6 @@ class ProjectGPlayer(pygame.sprite.Sprite):
 
         self.inventory = Inventory(self,screen)
 
-
     def movement(self):
         key_pressed = key.get_pressed()
         if key_pressed[K_LEFT]:

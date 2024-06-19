@@ -1,10 +1,11 @@
+from Models.ProjectG.Weapon.Saw import Saw
 from Models.ProjectG.Weapon.magic_staff import magic_staff
 
 
 class Inventory:
     def __init__(self, player, screen):
         self.player = player
-        self.weapons = [magic_staff()]
+        self.weapons = [Saw()]
         self.screen = screen
         self.enemy_targeted = None
 
