@@ -2,6 +2,7 @@ import pygame
 
 from Models.Business import convert_difficulty_to_number_password
 from Models.Business import convert_difficulty_to_number_wordle
+from Models.ProjectG.ProjectGGame import ProjectGGame
 from Models.Screen.DropScreen import DropScreen
 from Models.Screen.Selection_Player_Screen import Selection_Player_Screen
 from Models.Screen.Game import Game
@@ -36,7 +37,7 @@ TimerScreen = TimerScreen(screen)
 screen_round = Round(screen, QUIZ)
 selection_player_screen = Selection_Player_Screen(screen)
 selection_round = Selection_Round(screen, QUIZ)
-
+ProjectG = ProjectGGame(screen)
 running = True
 
 # Event
@@ -44,9 +45,14 @@ GET_TIME = pygame.USEREVENT + 1
 GET_TIME_ROUND = pygame.USEREVENT + 2
 pygame.time.set_timer(GET_TIME, 1000)
 pygame.time.set_timer(GET_TIME_ROUND, 100)
+
+GET_TIME_PROJECTG = pygame.USEREVENT + 3
+pygame.time.set_timer(GET_TIME_PROJECTG, 1000)
+
 time_in_sec = round_timer
 timer_for_sound = 0
 timer_for_round = 0
+timer_for_projectg = 0
 current_round = 1
 last_question_id = ""
 point = 0
@@ -54,8 +60,12 @@ classement_round = 6
 show_answer = False
 current_game_mode = 0
 
+current_game_mode = ProjectG.game_mode_id
+
 while running:
     screen.blit(background, (0, 0))
+
+
 
     if game.is_playing:
         # Question
@@ -72,6 +82,8 @@ while running:
     elif current_game_mode == TimerScreen.game_mode_id:
         TimerScreen.current_player = game.current_player
         TimerScreen.update(timer_for_round)
+    elif current_game_mode == ProjectG.game_mode_id:
+        ProjectG.update()
     elif selection_player_screen.is_selecting_player:
         # Sélection du joueur
         selection_player_screen.update(screen)
@@ -137,7 +149,11 @@ while running:
         selection_player_screen.has_Reorganized = False
         screen_round.update_round_timer(game.current_player)
         current_round = 10
-
+    elif screen_round.is_round_projectG_active:
+        # Project G ROUND
+        selection_player_screen.has_Reorganized = False
+        screen_round.update_round_projectg(game.current_player)
+        current_round = 11
     # Met à jour l'écran
     pygame.display.flip()
     pygame.display.update()
@@ -152,7 +168,8 @@ while running:
                 timer_for_sound += 1
             if event.type == GET_TIME_ROUND and not TimerScreen.stop_timer:
                 timer_for_round += 1
-
+            if event.type == GET_TIME_PROJECTG:
+                timer_for_projectg += 1
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # Click de souris
                 if game.is_playing:
@@ -254,7 +271,7 @@ while running:
                         # Annuler
                         current_game_mode = 0
 
-                elif current_game_mode == WordleScreen.game_mode_id :
+                elif current_game_mode == WordleScreen.game_mode_id:
                     # WORDLE *******************************************
                     if WordleScreen.cancel_rect.collidepoint(event.pos):
                         # Annuler
@@ -270,6 +287,10 @@ while running:
                         current_game_mode = 0
                     if TimerScreen.stop_button_rect.collidepoint(event.pos):
                         TimerScreen.stop_timer = True
+                elif current_game_mode == ProjectG.game_mode_id:
+                    if ProjectG.cancel_rect.collidepoint(event.pos):
+                        current_game_mode = 0
+                        running = False
                 elif selection_player_screen.is_selecting_player:
                     # Sélection du joueur
                     for button in selection_player_screen.group_buttons:
@@ -290,6 +311,7 @@ while running:
                             screen_round.is_round_drop_active = (button.round_id == "drop")
                             screen_round.is_round_wordle_active = (button.round_id == "wordle")
                             screen_round.is_round_timer_active = (button.round_id == "timer")
+                            screen_round.is_round_projectG_active = (button.round_id == "projectG")
 
                             running = (button.round_id != "Quit")
                             selection_player_screen.save_points()
@@ -403,6 +425,12 @@ while running:
                                     TimerScreen.stop_timer = False
                                     timer_for_round = 0
                                     TimerScreen.game_over = False
+                    # Project G
+                    if screen_round.is_round_projectG_active:
+                        if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
+                            for button in screen_round.group_buttons_round_projectg:
+                                if button.rect.collidepoint(event.pos):
+                                    current_game_mode = ProjectG.game_mode_id
 
             elif event.type == pygame.KEYDOWN:
                 if current_game_mode == MoneyDropScreen.game_mode_id and not MoneyDropScreen.wait_for_next_step:

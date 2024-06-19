@@ -25,6 +25,7 @@ class Round:
         self.is_round_drop_active = False
         self.is_round_wordle_active = False
         self.is_round_timer_active = False
+        self.is_round_projectG_active = False
 
         self.screen = screen
 
@@ -71,6 +72,10 @@ class Round:
         # Round Timer
         self.group_buttons_round_timer = pygame.sprite.Group()
         self.add_round_timer_button()
+
+        # Round project G
+        self.group_buttons_round_projectg = pygame.sprite.Group()
+        self.add_round_projectg_button()
 
         # Round Finale
         self.group_buttons_finale = pygame.sprite.Group()
@@ -119,6 +124,10 @@ class Round:
     def update_round_timer(self, current_player):
         self.group_buttons_round_timer.draw(self.screen)
         self.select_player(current_player, 10)
+
+    def update_round_projectg(self, current_player):
+        self.group_buttons_round_projectg.draw(self.screen)
+        self.select_player(current_player, 11)
 
     def update_finale(self, current_player, time_in_sec):
         if time_in_sec == 0 and not self.hide_final:
@@ -339,6 +348,9 @@ class Round:
 
     def add_round_timer_button(self):
         self.group_buttons_round_timer.add(Button("Play", self.screen.get_width() / 2 - 275, self.screen.get_height() / 2 - 55, 550, 110))
+
+    def add_round_projectg_button(self):
+        self.group_buttons_round_projectg.add(Button("Play", self.screen.get_width() / 2 - 275, self.screen.get_height() / 2 - 55, 550, 110))
 
     def add_finale_button(self):
         button_id = 0
