@@ -37,10 +37,11 @@ class ProjectGGame:
 
         # Chronomètre pour l'apparition des ennemis
         self.enemy_spawn_time = 0
-        self.enemy_spawn_interval = 0  # Apparition d'un ennemi toutes les 3 secondes
+        self.enemy_spawn_interval = 2 # Apparition d'un ennemi toutes les 3 secondes
 
         # Limite d'ennemis à l'écran
-        self.MAX_ENEMIES = 1
+        self.MAX_ENEMIES = 10
+        self.hit_enemies_set = set()
 
     def generate_random_position(self):
         """Génère une position aléatoire pour les ennemis sans chevauchement."""
@@ -78,21 +79,33 @@ class ProjectGGame:
                 self.all_enemies.add(new_blob)
                 self.enemy_spawn_time = time.time()
 
+        for enemy in self.all_enemies:
+            enemy.is_targeted = False
+
         self.player.inventory.set_enemy(self.get_closest_enemy())
+
+
+        for weapon in self.player.inventory.weapons:
+            collision = pygame.sprite.groupcollide(weapon.projectile, self.all_enemies, weapon.delete_on_hit, False)
+            for projectile, hit_enemies in collision.items():
+                if projectile.can_damage():
+                    self.hit_enemies_set.clear()
+                    for enemy in hit_enemies:
+                        enemy.take_damage(weapon.damage)
+                        self.hit_enemies_set.add(enemy)  # Ajouter l'ennemi touché à l'ensemble
+
+        # Obtenir la liste des ennemis non touchés
+        all_enemies_set = set(self.all_enemies)
+        non_hit_enemies = list(all_enemies_set - self.hit_enemies_set)
+
 
         self.all_sprites.update()
         self.all_sprites.draw(self.screen)
 
         self.all_enemies.update()
         self.all_enemies.draw(self.screen)
-
-        for weapon in self.player.inventory.weapons:
-            collision = pygame.sprite.groupcollide(weapon.projectile, self.all_enemies, weapon.delete_on_hit, False)
-            for projectile, hit_enemies in collision.items():
-                if projectile.can_damage():
-                    for enemy in hit_enemies:
-                        enemy.take_damage(weapon.damage)
-                        print("hit")
+        for ennemi in self.all_enemies:
+            ennemi.draw_health_bar(self.screen)
 
         # Bouton annuler
         self.screen.blit(self.cancel_image,

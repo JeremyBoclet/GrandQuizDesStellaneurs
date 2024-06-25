@@ -45,7 +45,7 @@ class Projectile(pygame.sprite.Sprite):
                 # Inverser la direction du projectile pour qu'il retourne vers le joueur
                 self.last_damage_time=0 #permet de reset les dégats pour le retour
                 self.is_returning = False
-                self.angle  += math.pi
+                self.angle += math.pi
                 self.dx = self.weapon.speed * math.cos(self.angle)
                 self.dy = self.weapon.speed * math.sin(self.angle)
                 self.total_distance = 0

@@ -12,7 +12,7 @@ class magic_staff(Weapon):
         self.image = pygame.transform.scale(pygame.image.load("../Assets/ProjectG/fireball.png").convert_alpha(),(60, 60))
         self.damage = 10
         self.rect = self.image.get_rect(center=(100,100))
-        self.cooldown = 650
+        self.cooldown = 1500
         self.projectile = pygame.sprite.Group()
 
     def fire(self, player, enemy):

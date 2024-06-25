@@ -20,7 +20,7 @@ class Saw(Weapon):
         self.rect = self.image.get_rect(center=(100, 100))
         self.projectile = pygame.sprite.Group()
         self.angle = 0
-        self.rotation_speed = 0.1
+        self.rotation_speed = 0.2
         self.original_image = self.image
 
     def fire(self, player, enemy):

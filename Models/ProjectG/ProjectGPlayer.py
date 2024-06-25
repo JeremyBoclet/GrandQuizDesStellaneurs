@@ -1,5 +1,6 @@
 from pygame import *
 
+import math
 import pygame
 
 from Models.ProjectG.Inventory import Inventory
@@ -26,16 +27,29 @@ class ProjectGPlayer(pygame.sprite.Sprite):
 
     def movement(self):
         key_pressed = key.get_pressed()
-        if key_pressed[K_LEFT]:
-            self.pos[0] -= self.speed
+        move_x = 0
+        move_y = 0
+        if key_pressed[pygame.K_LEFT]:
+            move_x = -1
             self.image = self.sprite_left
-        if key_pressed[K_RIGHT]:
-            self.pos[0] += self.speed
+        if key_pressed[pygame.K_RIGHT]:
+            move_x = 1
             self.image = self.sprite_right
-        if key_pressed[K_UP]:
-            self.pos[1] -= self.speed
-        if key_pressed[K_DOWN]:
-            self.pos[1] += self.speed
+        if key_pressed[pygame.K_UP]:
+            move_y = -1
+        if key_pressed[pygame.K_DOWN]:
+            move_y = 1
+
+            # Normalisation de la vitesse pour les mouvements diagonaux
+        if move_x != 0 and move_y != 0:
+            move_x *= self.speed / math.sqrt(2)
+            move_y *= self.speed / math.sqrt(2)
+        else:
+            move_x *= self.speed
+            move_y *= self.speed
+
+        self.pos[0] += move_x
+        self.pos[1] += move_y
 
         # check pour ne pas sortir de l'écran
         if self.pos[0] <= 0:
