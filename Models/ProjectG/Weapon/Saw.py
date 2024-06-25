@@ -15,8 +15,6 @@ class Saw(Weapon):
         self.max_range = 600
         self.cooldown = 1500
         self.delete_on_hit = False
-        self.last_damage_time = 0
-        self.damage_cooldown = 1
         self.rect = self.image.get_rect(center=(100, 100))
         self.projectile = pygame.sprite.Group()
         self.angle = 0

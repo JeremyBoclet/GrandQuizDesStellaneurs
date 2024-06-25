@@ -1,5 +1,5 @@
 import math
-import time
+import random
 
 import pygame
 
@@ -8,7 +8,8 @@ HEIGHT = 1080
 
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, target_x, target_y, weapon, player, can_return=False, delete_outside_screen=True):
+    def __init__(self, pos_x, pos_y, target_x, target_y, weapon, player, can_return=False, delete_outside_screen=True,
+                 can_bounce=False):
         super().__init__()
         self.weapon = weapon
         self.image = weapon.image
@@ -24,6 +25,9 @@ class Projectile(pygame.sprite.Sprite):
         self.hit_enemies = []  # Liste pour stocker les ennemis déjà touchés
         self.player = player
         self.is_currently_returning = False
+        self.can_bounce = can_bounce
+        self.bounce_count = 0
+        self.has_bounce = False
 
     def update_direction(self):
         # Calculer la direction vers le joueur
@@ -41,13 +45,36 @@ class Projectile(pygame.sprite.Sprite):
         self.hit_enemies.append(enemy)
 
     def update(self):
-        self.rect.x += self.dx
-        self.rect.y += self.dy
-
         # Vérifier si le projectile sort de l'écran
         if ((self.rect.right < 0 or self.rect.left > WIDTH or
-             self.rect.bottom < 0 or self.rect.top > HEIGHT)) and self.delete_outside_screen:
+             self.rect.bottom < 0 or self.rect.top > HEIGHT)) and self.delete_outside_screen and not self.can_bounce:
             self.kill()
+
+        if self.can_bounce:
+            self.has_bounce = False
+            print("bounce n" + str(self.bounce_count))
+            if self.rect.left <= 0 or self.rect.right >= WIDTH:
+                self.angle = math.pi - self.angle  # Inverser l'angle horizontal
+                self.dx = -self.dx  # Inverser la direction horizontale
+                self.bounce_count += 1
+                self.has_bounce = True
+            elif self.rect.top <= 0 or self.rect.bottom >= HEIGHT:
+                self.angle = -self.angle  # Inverser l'angle vertical
+                self.dy = -self.dy  # Inverser la direction verticale
+                self.bounce_count += 1
+                self.has_bounce = True
+
+            # Rebondir à un angle de 90 degrés
+            if self.bounce_count > self.weapon.max_bounce:
+                self.kill()  # Détruire le projectile s'il a rebondi trop souvent
+
+            if self.has_bounce:
+                self.hit_enemies = []
+                self.has_bounce = False
+
+            # Rebondir à un angle de 90 degrés
+            if self.bounce_count > self.weapon.max_bounce:
+                self.kill()
 
         # Si le projectile est en mode retour et atteint le joueur, le détruire
         if self.is_currently_returning and self.rect.colliderect(self.player.rect):
@@ -69,3 +96,6 @@ class Projectile(pygame.sprite.Sprite):
             self.angle_rotation += self.weapon.rotation_speed
             self.image = pygame.transform.rotate(self.weapon.original_image, math.degrees(self.angle_rotation))
             self.rect = self.image.get_rect(center=self.rect.center)
+
+        self.rect.x += self.dx
+        self.rect.y += self.dy
