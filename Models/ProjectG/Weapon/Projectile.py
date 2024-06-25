@@ -1,7 +1,6 @@
 import math
-import random
-
 import pygame
+
 
 WIDTH = 1920
 HEIGHT = 1080
@@ -40,6 +39,10 @@ class Projectile(pygame.sprite.Sprite):
         # Vérifier si l'ennemi a déjà été touché
         return enemy not in self.hit_enemies
 
+    def clear_enemy_hit(self, enemy):
+        if enemy in self.hit_enemies:
+            self.hit_enemies.remove(enemy)
+
     def mark_enemy_hit(self, enemy):
         # Ajouter l'ennemi à la liste des ennemis touchés
         self.hit_enemies.append(enemy)
@@ -52,7 +55,6 @@ class Projectile(pygame.sprite.Sprite):
 
         if self.can_bounce:
             self.has_bounce = False
-            print("bounce n" + str(self.bounce_count))
             if self.rect.left <= 0 or self.rect.right >= WIDTH:
                 self.angle = math.pi - self.angle  # Inverser l'angle horizontal
                 self.dx = -self.dx  # Inverser la direction horizontale
@@ -91,11 +93,14 @@ class Projectile(pygame.sprite.Sprite):
         if self.is_currently_returning:
             self.update_direction()
 
+        self.rotation()
+
+        self.rect.x += self.dx
+        self.rect.y += self.dy
+
+    def rotation(self):
         # Rotation de l'image du projectile
         if self.weapon.rotation_speed > 0:
             self.angle_rotation += self.weapon.rotation_speed
             self.image = pygame.transform.rotate(self.weapon.original_image, math.degrees(self.angle_rotation))
             self.rect = self.image.get_rect(center=self.rect.center)
-
-        self.rect.x += self.dx
-        self.rect.y += self.dy

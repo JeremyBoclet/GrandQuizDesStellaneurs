@@ -10,6 +10,7 @@ from Models.ProjectG.ProjectGPlayer import ProjectGPlayer
 WIDTH = 1920
 HEIGHT = 1080
 
+
 class ProjectGGame:
     def __init__(self, screen):
         self.game_mode_id = 1400
@@ -30,14 +31,14 @@ class ProjectGGame:
 
         self.all_enemies = pygame.sprite.Group()
 
-        blob = Blob(20,20,self.player)
+        blob = Blob(20, 20, self.player)
         self.all_enemies.add(blob)
 
         self.player.inventory.set_enemy(blob)
 
         # Chronomètre pour l'apparition des ennemis
         self.enemy_spawn_time = 0
-        self.enemy_spawn_interval = 2 # Apparition d'un ennemi toutes les 3 secondes
+        self.enemy_spawn_interval = 2  # Apparition d'un ennemi toutes les 3 secondes
 
         # Limite d'ennemis à l'écran
         self.MAX_ENEMIES = 10
@@ -87,19 +88,19 @@ class ProjectGGame:
         for weapon in self.player.inventory.weapons:
             collision = pygame.sprite.groupcollide(weapon.projectile, self.all_enemies, weapon.delete_on_hit, False)
             for projectile, hit_enemies in collision.items():
-                    # self.hit_enemies_set.clear()
-                    for enemy in hit_enemies:
-                        if projectile.can_damage(enemy):
-                            enemy.take_damage(weapon.damage)
-                            projectile.mark_enemy_hit(enemy)
-                            self.hit_enemies_set.add(enemy)  # Ajouter l'ennemi touché à l'ensemble
+                # self.hit_enemies_set.clear()
+                for enemy in hit_enemies:
+                    if projectile.can_damage(enemy):
+                        enemy.take_damage(weapon.damage)
+                        projectile.mark_enemy_hit(enemy)
+                        self.hit_enemies_set.add(enemy)  # Ajouter l'ennemi touché à l'ensemble
 
-        # Obtenir la liste des ennemis non touchés
         all_enemies_set = set(self.all_enemies)
+        # Obtenir la liste des ennemis non touchés
         non_hit_enemies = list(all_enemies_set - self.hit_enemies_set)
-
         for enemy in non_hit_enemies:
             enemy.is_targeted = False
+
 
         self.all_sprites.update()
         self.all_sprites.draw(self.screen)
