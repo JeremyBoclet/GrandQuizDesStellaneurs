@@ -79,30 +79,32 @@ class ProjectGGame:
                 self.all_enemies.add(new_blob)
                 self.enemy_spawn_time = time.time()
 
-        for enemy in self.all_enemies:
-            enemy.is_targeted = False
+        # for enemy in self.all_enemies:
+        #     enemy.is_targeted = False
 
         self.player.inventory.set_enemy(self.get_closest_enemy())
-
 
         for weapon in self.player.inventory.weapons:
             collision = pygame.sprite.groupcollide(weapon.projectile, self.all_enemies, weapon.delete_on_hit, False)
             for projectile, hit_enemies in collision.items():
-                if projectile.can_damage():
-                    self.hit_enemies_set.clear()
+                    # self.hit_enemies_set.clear()
                     for enemy in hit_enemies:
-                        enemy.take_damage(weapon.damage)
-                        self.hit_enemies_set.add(enemy)  # Ajouter l'ennemi touché à l'ensemble
+                        if projectile.can_damage(enemy):
+                            enemy.take_damage(weapon.damage)
+                            projectile.mark_enemy_hit(enemy)
+                            self.hit_enemies_set.add(enemy)  # Ajouter l'ennemi touché à l'ensemble
 
         # Obtenir la liste des ennemis non touchés
         all_enemies_set = set(self.all_enemies)
         non_hit_enemies = list(all_enemies_set - self.hit_enemies_set)
 
+        for enemy in non_hit_enemies:
+            enemy.is_targeted = False
 
         self.all_sprites.update()
         self.all_sprites.draw(self.screen)
 
-        self.all_enemies.update()
+        self.all_enemies.update(self.all_enemies)
         self.all_enemies.draw(self.screen)
         for ennemi in self.all_enemies:
             ennemi.draw_health_bar(self.screen)

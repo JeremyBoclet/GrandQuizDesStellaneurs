@@ -1,3 +1,4 @@
+import math
 import time
 
 import pygame.sprite
@@ -17,18 +18,21 @@ class Enemy(pygame.sprite.Sprite):
         self.flash_timer = 0
         self.flash_duration = 0.5  # Durée du clignotement en secondes
         self.is_targeted = False
+        self.player = None
 
     def take_damage(self, damage):
         self.is_targeted = True
-        if not self.is_flashing:
-            self.health -= damage
-            self.is_flashing = True  # Activer le clignotement
-            self.flash_timer = time.time()
+        self.health -= damage
+        self.is_flashing = True  # Activer le clignotement
+        self.flash_timer = time.time()
 
         if self.health <= 0:
             self.kill()
 
-    def update(self):
+    def update(self, ennemies):
+        # Éviter la superposition avec d'autres blobs
+        self.avoid_overlap(ennemies)
+
         # Gestion du clignotement
         if self.is_flashing:
             current_time = time.time()
@@ -58,3 +62,35 @@ class Enemy(pygame.sprite.Sprite):
         current_health_ratio = self.health / self.base_health
         current_health_width = bar_width * current_health_ratio
         pygame.draw.rect(surface, (255, 0, 0), (health_bar_x, health_bar_y, current_health_width, bar_height))
+
+    def avoid_overlap(self, enemies):
+        for ennemi in enemies:
+            if ennemi != self and self.rect.colliderect(ennemi.rect):
+                # Calculer la direction d'éloignement
+                dx = self.rect.centerx - ennemi.rect.centerx
+                dy = self.rect.centery - ennemi.rect.centery
+                distance = math.hypot(dx, dy)
+
+                if distance == 0:
+                    distance = 1  # Pour éviter la division par zéro
+                overlap = (self.rect.width / 2 + ennemi.rect.width / 2) - distance
+                if overlap > 0:
+                    move_x = overlap * (dx / distance)
+                    move_y = overlap * (dy / distance)
+                    self.rect.x += move_x
+                    self.rect.y += move_y
+
+    def movement(self):
+        # Calculer la direction vers le joueur
+        direction_x = self.player.rect.centerx - self.rect.centerx
+        direction_y = self.player.rect.centery - self.rect.centery
+        distance = math.hypot(direction_x, direction_y)
+
+        if distance != 0:
+            direction_x /= distance
+            direction_y /= distance
+
+        # Mettre à jour la position
+        self.rect.x += direction_x * self.speed
+        self.rect.y += direction_y * self.speed
+

@@ -5,7 +5,7 @@ from Models.ProjectG.Weapon.magic_staff import magic_staff
 class Inventory:
     def __init__(self, player, screen):
         self.player = player
-        self.weapons = [magic_staff()]
+        self.weapons = [magic_staff(),Saw()]
         self.screen = screen
         self.enemy_targeted = None
 
@@ -14,7 +14,7 @@ class Inventory:
 
     def set_enemy(self,enemy):
         self.enemy_targeted = enemy
-        enemy.is_targeted = True
+        # enemy.is_targeted = True
 
     def update(self):
         for item in self.weapons:

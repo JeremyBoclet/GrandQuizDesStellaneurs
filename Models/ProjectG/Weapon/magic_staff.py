@@ -22,7 +22,7 @@ class magic_staff(Weapon):
             # Cooldown des projectiles
             if now - self.last_fire >= self.cooldown:
                 self.last_fire = pygame.time.get_ticks()
-                self.projectile.add(Projectile(player.rect.centerx,  player.rect.centery, enemy.rect.centerx, enemy.rect.centery, self))
+                self.projectile.add(Projectile(player.rect.centerx,  player.rect.centery, enemy.rect.centerx, enemy.rect.centery, self, player))
 
     def update(self, player, enemy):
         self.fire(player, enemy)

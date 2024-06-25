@@ -32,7 +32,7 @@ class Saw(Weapon):
                 self.last_fire = pygame.time.get_ticks()
                 self.projectile.add(
                     Projectile(player.rect.centerx, player.rect.centery, enemy.rect.centerx, enemy.rect.centery,
-                               self,is_returning=True))
+                               self, player, can_return=True, delete_outside_screen=False))
 
     def update(self, player, enemy):
         self.fire(player, enemy)
