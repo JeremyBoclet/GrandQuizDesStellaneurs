@@ -75,4 +75,22 @@ class ProjectGPlayer(pygame.sprite.Sprite):
 
     def gain_experience(self, experience):
         self.experience += experience
-        print(self.experience)
+        if self.experience >= self.next_level_experience_needed:
+            self.level += 1
+            self.experience = self.next_level_experience_needed - self.experience
+            self.next_level_experience_needed *= 1.3
+
+    def draw_experience_bar(self, surface):
+        # Dimensions de la barre
+        bar_width = 1800
+        bar_height = 5
+        xp_bar_x = 50
+        xp_bar_y = 50
+
+        # Barre de fond (noir)
+        pygame.draw.rect(surface, (0, 0, 0), (xp_bar_x, xp_bar_y, bar_width, bar_height))
+
+        # Barre de vie actuelle (rouge)
+        current_xp_ratio = self.experience / self.next_level_experience_needed
+        current_xp_width = bar_width * current_xp_ratio
+        pygame.draw.rect(surface, (255, 0, 0), (xp_bar_x, xp_bar_y, current_xp_width, bar_height))

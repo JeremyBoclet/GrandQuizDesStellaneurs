@@ -122,6 +122,8 @@ class ProjectGGame:
         self.all_shards.update()
         self.all_shards.draw(self.screen)
 
+        self.player.draw_experience_bar(self.screen)
+
         # Bouton annuler
         self.screen.blit(self.cancel_image,
                          (20, self.screen.get_height() - self.cancel_image.get_height()))
