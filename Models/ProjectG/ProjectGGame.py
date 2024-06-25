@@ -34,6 +34,7 @@ class ProjectGGame:
         blob = Blob(20, 20, self.player)
         self.all_enemies.add(blob)
 
+        self.all_shards = pygame.sprite.Group()
         self.player.inventory.set_enemy(blob)
 
         # Chronomètre pour l'apparition des ennemis
@@ -85,6 +86,12 @@ class ProjectGGame:
 
         self.player.inventory.set_enemy(self.get_closest_enemy())
 
+        # Collision joueur / shard
+        shards = pygame.sprite.spritecollide(self.player, self.all_shards, True)
+        for shard in shards:
+            self.player.gain_experience(shard.experience_gain)
+
+        # Collision projectile / ennemies
         for weapon in self.player.inventory.weapons:
             collision = pygame.sprite.groupcollide(weapon.projectile, self.all_enemies, weapon.delete_on_hit, False)
             for projectile, hit_enemies in collision.items():
@@ -101,14 +108,19 @@ class ProjectGGame:
         for enemy in non_hit_enemies:
             enemy.is_targeted = False
 
-
         self.all_sprites.update()
         self.all_sprites.draw(self.screen)
 
         self.all_enemies.update(self.all_enemies)
         self.all_enemies.draw(self.screen)
-        for ennemi in self.all_enemies:
-            ennemi.draw_health_bar(self.screen)
+        for enemy in self.all_enemies:
+            enemy.draw_health_bar(self.screen)
+            if enemy.health <= 0:
+                self.all_shards.add(enemy.spawn_shard())
+                self.all_enemies.remove(enemy)
+
+        self.all_shards.update()
+        self.all_shards.draw(self.screen)
 
         # Bouton annuler
         self.screen.blit(self.cancel_image,

@@ -3,6 +3,8 @@ import time
 
 import pygame.sprite
 
+from Models.ProjectG.Loots.Shards import Shards
+
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
@@ -19,15 +21,16 @@ class Enemy(pygame.sprite.Sprite):
         self.flash_duration = 0.5  # Durée du clignotement en secondes
         self.is_targeted = False
         self.player = None
+        self.loot = None
 
     def take_damage(self, damage):
         self.is_targeted = True
         self.health -= damage
-        self.is_flashing = True  # Activer le clignotement
+        self.is_flashing = True
         self.flash_timer = time.time()
 
-        if self.health <= 0:
-            self.kill()
+        # if self.health <= 0:
+        #     self.loot = self.spawn_shard()
 
     def update(self, ennemies):
         # Éviter la superposition avec d'autres blobs
@@ -94,3 +97,5 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x += direction_x * self.speed
         self.rect.y += direction_y * self.speed
 
+    def spawn_shard(self):
+        return Shards(self.rect.centerx, self.rect.centery, "shard_1", 2)

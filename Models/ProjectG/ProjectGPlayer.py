@@ -25,6 +25,11 @@ class ProjectGPlayer(pygame.sprite.Sprite):
 
         self.inventory = Inventory(self,screen)
 
+        # Gestion de l'experience
+        self.experience = 0
+        self.next_level_experience_needed = 10
+        self.level = 1
+
     def movement(self):
         key_pressed = key.get_pressed()
         move_x = 0
@@ -68,7 +73,6 @@ class ProjectGPlayer(pygame.sprite.Sprite):
         self.movement()
         self.inventory.update()
 
-
-        # for bullet in self.weapon_bullet:
-        #    bullet.fire()
-        #    self.screen.blit(bullet.sprite, bullet.sprite_rect)
+    def gain_experience(self, experience):
+        self.experience += experience
+        print(self.experience)
