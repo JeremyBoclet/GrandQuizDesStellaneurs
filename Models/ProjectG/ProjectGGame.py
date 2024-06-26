@@ -6,7 +6,7 @@ import pygame
 
 from Models.ProjectG.Enemies.Blob import Blob
 from Models.ProjectG.ProjectGPlayer import ProjectGPlayer
-from Models.ProjectG.Weapon.LightningProjectile import LightningProjectile
+from Models.ProjectG.Weapon.Projectile.LightningProjectile import LightningProjectile
 
 WIDTH = 1920
 HEIGHT = 1080
@@ -40,7 +40,7 @@ class ProjectGGame:
 
         # Chronomètre pour l'apparition des ennemis
         self.enemy_spawn_time = 0
-        self.enemy_spawn_interval = 2  # Apparition d'un ennemi toutes les 3 secondes
+        self.enemy_spawn_interval = 1  # Apparition d'un ennemi toutes les 3 secondes
 
         # Limite d'ennemis à l'écran
         self.MAX_ENEMIES = 10
@@ -103,7 +103,14 @@ class ProjectGGame:
                         projectile.mark_enemy_hit(enemy)
                         self.hit_enemies_set.add(enemy)  # Ajouter l'ennemi touché à l'ensemble
                         if isinstance(projectile, LightningProjectile):
+                            projectile.trigger_electric_animation(enemy.rect.center, self.all_sprites)
                             projectile.bounce(self.all_enemies)
+
+                    # permet de reset le hit si le projectile sort de la collision ennemi
+                    for not_hit_enemies in self.all_enemies:
+                        if not_hit_enemies not in hit_enemies:
+                            projectile.clear_enemy_hit(not_hit_enemies)
+
 
         all_enemies_set = set(self.all_enemies)
         # Obtenir la liste des ennemis non touchés
@@ -121,6 +128,7 @@ class ProjectGGame:
         for enemy in self.all_enemies:
             enemy.draw_health_bar(self.screen)
             if enemy.health <= 0:
+                # Loot + kill ennemi
                 self.all_shards.add(enemy.spawn_shard())
                 self.all_enemies.remove(enemy)
 

@@ -1,6 +1,4 @@
-import pygame
-
-from Models.ProjectG.Weapon.Projectile_Scythe import Projectile_Scythe
+from Models.ProjectG.Weapon.Projectile.Projectile_Scythe import Projectile_Scythe
 
 
 class MultiScythe:
@@ -14,9 +12,3 @@ class MultiScythe:
             initial_angle = i * angle_gap
             projectile = Projectile_Scythe(self.weapon, player,initial_angle)
             self.weapon.projectile.add(projectile)
-
-    # def update(self, enemies):
-    #     self.weapon.projectile.update(enemies)
-    #
-    # def draw(self, screen):
-    #     self.weapon.projectile.draw(screen)

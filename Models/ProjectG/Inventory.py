@@ -1,3 +1,4 @@
+from Models.ProjectG.Weapon.Laser import Laser
 from Models.ProjectG.Weapon.Lightning import Lightning
 from Models.ProjectG.Weapon.Saw import Saw
 from Models.ProjectG.Weapon.Scythe import Scythe
@@ -8,6 +9,7 @@ from Models.ProjectG.Weapon.magic_staff import magic_staff
 class Inventory:
     def __init__(self, player, screen):
         self.player = player
+        # [Laser(), Lightning(),Saw(),magic_staff(),Star(),Scythe()]
         self.weapons = [Lightning()]
         self.screen = screen
         self.enemy_targeted = None
@@ -20,6 +22,5 @@ class Inventory:
 
     def update(self):
         for item in self.weapons:
-            if not self.enemy_targeted is None:
-                item.update(self.player, self.enemy_targeted)
-                item.projectile.draw(self.screen)
+            item.update(self.player, self.enemy_targeted)
+            item.projectile.draw(self.screen)

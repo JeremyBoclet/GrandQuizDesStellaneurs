@@ -93,4 +93,4 @@ class ProjectGPlayer(pygame.sprite.Sprite):
         # Barre de vie actuelle (rouge)
         current_xp_ratio = self.experience / self.next_level_experience_needed
         current_xp_width = bar_width * current_xp_ratio
-        pygame.draw.rect(surface, (255, 0, 0), (xp_bar_x, xp_bar_y, current_xp_width, bar_height))
+        pygame.draw.rect(surface, (0, 255, 0), (xp_bar_x, xp_bar_y, current_xp_width, bar_height))

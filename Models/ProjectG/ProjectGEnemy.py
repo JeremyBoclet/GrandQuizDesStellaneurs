@@ -29,9 +29,6 @@ class Enemy(pygame.sprite.Sprite):
         self.is_flashing = True
         self.flash_timer = time.time()
 
-        # if self.health <= 0:
-        #     self.loot = self.spawn_shard()
-
     def update(self, ennemies):
         # Éviter la superposition avec d'autres blobs
         self.avoid_overlap(ennemies)

@@ -10,8 +10,8 @@ class Blob(Enemy):
     def __init__(self, x, y, player):
         super().__init__()
         self.player = player
-        self.base_health = 30
-        self.health = 30
+        self.base_health = 20
+        self.health = 20
 
         size_factor = self.health / self.base_health
 

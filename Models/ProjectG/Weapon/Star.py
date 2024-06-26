@@ -2,7 +2,7 @@ import random
 
 import pygame
 
-from Models.ProjectG.Weapon.Projectile import Projectile
+from Models.ProjectG.Weapon.Projectile.Projectile import Projectile
 from Models.ProjectG.Weapon.Weapon import Weapon
 
 WIDTH = 1920

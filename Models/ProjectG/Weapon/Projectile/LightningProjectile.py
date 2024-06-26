@@ -1,7 +1,8 @@
 import pygame
 import math
 
-from Models.ProjectG.Weapon.Projectile import Projectile
+from Models.ProjectG.Animation.ElectricAnimation import ElectricAnimation
+from Models.ProjectG.Weapon.Projectile.Projectile import Projectile
 
 
 class LightningProjectile(Projectile):
@@ -62,3 +63,15 @@ class LightningProjectile(Projectile):
 
         self.rect.x += self.dx
         self.rect.y += self.dy
+
+        #Check si l'ennemi est mort
+        #if self.target.health <= 0:
+        #    self.kill()
+
+    def reroute(self,enemy):
+        self.target = enemy
+        self.update_direction()
+
+    def trigger_electric_animation(self, position, all_sprites):
+        animation = ElectricAnimation(position, self.weapon.animation_image_path)
+        all_sprites.add(animation)
