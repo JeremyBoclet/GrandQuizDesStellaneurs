@@ -8,6 +8,8 @@ class Saw(Weapon):
     def __init__(self):
         pygame.sprite.Sprite().__init__()
         super().__init__()
+        self.name = "Scie"
+
         self.speed = 10
         self.image = pygame.transform.scale(pygame.image.load("../Assets/ProjectG/saw.png").convert_alpha(),
                                             (60, 60))

@@ -1,5 +1,7 @@
 class Weapon():
     def __init__(self):
+        self.name = "ARME"
+
         self.max_range = 10000
         self.delete_on_hit = True
         self.speed = 1

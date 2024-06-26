@@ -7,16 +7,17 @@ from Models.ProjectG.Weapon.Weapon import Weapon
 class Lightning(Weapon):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((20, 20), pygame.SRCALPHA)# pygame.transform.scale(pygame.image.load("../Assets/ProjectG/scythe.png").convert_alpha(),(45, 45))
+        self.name = "Eclair"
+        self.image = pygame.Surface((20, 20), pygame.SRCALPHA)
         self.rect = self.image.get_rect(center=(100, 100))
 
         self.original_image = self.image
 
-        self.damage = 2
+        self.damage = 10
         self.speed = 10
         self.projectile = pygame.sprite.Group()
-        self.max_projectile = 2
-        self.cooldown = 200
+        self.max_projectile = 1
+        self.cooldown = 1000
         self.delete_on_hit = False
         self.max_bounce = 3
 
@@ -41,7 +42,7 @@ class Lightning(Weapon):
 
         self.projectile.update()
 
-        #check si l'enemi est mort pour rerouter le projectile
+        # check si l'enemi est mort pour rerouter le projectile
         for projectile in self.projectile:
             if self.wait_for_new_target:
                 projectile.reroute(enemy)

@@ -102,6 +102,6 @@ class Projectile(pygame.sprite.Sprite):
     def rotation(self):
         # Rotation de l'image du projectile
         if self.weapon.rotation_speed > 0:
-            self.angle_rotation += self.weapon.rotation_speed
+            self.angle_rotation -= self.weapon.rotation_speed
             self.image = pygame.transform.rotate(self.weapon.original_image, math.degrees(self.angle_rotation))
             self.rect = self.image.get_rect(center=self.rect.center)

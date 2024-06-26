@@ -7,6 +7,8 @@ from Models.ProjectG.Weapon.Weapon import Weapon
 class Scythe(Weapon):
     def __init__(self):
         super().__init__()
+        self.name = "Faux"
+
         self.image = pygame.transform.scale(pygame.image.load("../Assets/ProjectG/scythe.png").convert_alpha(),
                                             (45, 45))
 

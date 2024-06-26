@@ -10,7 +10,7 @@ class Inventory:
     def __init__(self, player, screen):
         self.player = player
         # [Laser(), Lightning(),Saw(),magic_staff(),Star(),Scythe()]
-        self.weapons = [Lightning()]
+        self.weapons = [Scythe()]
         self.screen = screen
         self.enemy_targeted = None
 
@@ -24,3 +24,4 @@ class Inventory:
         for item in self.weapons:
             item.update(self.player, self.enemy_targeted)
             item.projectile.draw(self.screen)
+

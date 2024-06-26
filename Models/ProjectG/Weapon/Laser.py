@@ -7,6 +7,7 @@ from Models.ProjectG.Weapon.Weapon import Weapon
 class Laser(Weapon):
     def __init__(self):
         super().__init__()
+        self.name = "Laser"
         self.current_length = 0
         self.damage = 10
         self.max_length = 200

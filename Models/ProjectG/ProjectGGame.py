@@ -5,8 +5,11 @@ import random
 import pygame
 
 from Models.ProjectG.Enemies.Blob import Blob
+from Models.ProjectG.Menu import Options
+from Models.ProjectG.Menu.LevelUpMenu import LevelUpMenu
 from Models.ProjectG.ProjectGPlayer import ProjectGPlayer
 from Models.ProjectG.Weapon.Projectile.LightningProjectile import LightningProjectile
+from Models.ProjectG.Weapon.Scythe import Scythe
 
 WIDTH = 1920
 HEIGHT = 1080
@@ -40,11 +43,14 @@ class ProjectGGame:
 
         # Chronomètre pour l'apparition des ennemis
         self.enemy_spawn_time = 0
-        self.enemy_spawn_interval = 1  # Apparition d'un ennemi toutes les 3 secondes
+        self.enemy_spawn_interval = 0.2  # Apparition d'un ennemi toutes les 3 secondes
 
         # Limite d'ennemis à l'écran
         self.MAX_ENEMIES = 10
         self.hit_enemies_set = set()
+
+        self.pause = False
+        self.level_up_menu = None
 
     def generate_random_position(self):
         """Génère une position aléatoire pour les ennemis sans chevauchement."""
@@ -74,72 +80,93 @@ class ProjectGGame:
     def update(self):
         self.screen.blit(self.background, (0, 0))
 
-        # Gestion de l'apparition des ennemis
-        if time.time() - self.enemy_spawn_time > self.enemy_spawn_interval:
-            if len(self.all_enemies) < self.MAX_ENEMIES:
-                x, y = self.generate_random_position()
-                new_blob = Blob(x, y, self.player)
-                self.all_enemies.add(new_blob)
-                self.enemy_spawn_time = time.time()
+        for event in pygame.event.get():
+            if self.pause:
+                choice = self.level_up_menu.handle_event(event)
+                if choice:
+                    self.player.inventory.weapons.append(choice)
+                    self.pause = False
+            else:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if self.cancel_rect.collidepoint(event.pos):
+                        pygame.quit()
 
-        # for enemy in self.all_enemies:
-        #     enemy.is_targeted = False
+        if self.pause:
+            self.level_up_menu.draw()
+        else:
+            # Gestion de l'apparition des ennemis
+            if time.time() - self.enemy_spawn_time > self.enemy_spawn_interval:
+                if len(self.all_enemies) < self.MAX_ENEMIES:
+                    x, y = self.generate_random_position()
+                    new_blob = Blob(x, y, self.player)
+                    self.all_enemies.add(new_blob)
+                    self.enemy_spawn_time = time.time()
 
-        self.player.inventory.set_enemy(self.get_closest_enemy())
+            # for enemy in self.all_enemies:
+            #     enemy.is_targeted = False
 
-        # Collision joueur / shard
-        shards = pygame.sprite.spritecollide(self.player, self.all_shards, True)
-        for shard in shards:
-            self.player.gain_experience(shard.experience_gain)
+            self.player.inventory.set_enemy(self.get_closest_enemy())
 
-        # Collision projectile / ennemies
-        for weapon in self.player.inventory.weapons:
-            collision = pygame.sprite.groupcollide(weapon.projectile, self.all_enemies, weapon.delete_on_hit, False)
-            for projectile, hit_enemies in collision.items():
-                # self.hit_enemies_set.clear()
-                for enemy in hit_enemies:
-                    if projectile.can_damage(enemy):
-                        enemy.take_damage(weapon.damage)
-                        projectile.mark_enemy_hit(enemy)
-                        self.hit_enemies_set.add(enemy)  # Ajouter l'ennemi touché à l'ensemble
-                        if isinstance(projectile, LightningProjectile):
-                            projectile.trigger_electric_animation(enemy.rect.center, self.all_sprites)
-                            projectile.bounce(self.all_enemies)
+            # Collision joueur / shard
+            shards = pygame.sprite.spritecollide(self.player, self.all_shards, True)
+            for shard in shards:
+                player_level = self.player.level
+                self.player.gain_experience(shard.experience_gain)
+                if player_level < self.player.level:
+                    options = random.sample(Options.option_available(), 3)
+                    self.level_up_menu = LevelUpMenu(self.screen, options)
+                    self.pause = True
 
-                    # permet de reset le hit si le projectile sort de la collision ennemi
-                    for not_hit_enemies in self.all_enemies:
-                        if not_hit_enemies not in hit_enemies:
-                            projectile.clear_enemy_hit(not_hit_enemies)
+            # Collision projectile / ennemies
+            for weapon in self.player.inventory.weapons:
+                collision = pygame.sprite.groupcollide(weapon.projectile, self.all_enemies, weapon.delete_on_hit, False)
+                for projectile, hit_enemies in collision.items():
+                    # self.hit_enemies_set.clear()
+                    for enemy in hit_enemies:
+                        if projectile.can_damage(enemy):
+                            enemy.take_damage(weapon.damage)
+                            projectile.mark_enemy_hit(enemy)
+                            self.hit_enemies_set.add(enemy)  # Ajouter l'ennemi touché à l'ensemble
+                            if isinstance(projectile, LightningProjectile):
+                                projectile.trigger_electric_animation(enemy.rect.center, self.all_sprites)
+                                projectile.bounce(self.all_enemies)
+
+                        # permet de reset le hit si le projectile sort de la collision ennemi
+                        for not_hit_enemies in self.all_enemies:
+                            if not_hit_enemies not in hit_enemies:
+                                projectile.clear_enemy_hit(not_hit_enemies)
 
 
-        all_enemies_set = set(self.all_enemies)
-        # Obtenir la liste des ennemis non touchés
-        non_hit_enemies = list(all_enemies_set - self.hit_enemies_set)
-        for enemy in non_hit_enemies:
-            enemy.is_targeted = False
+            all_enemies_set = set(self.all_enemies)
+            # Obtenir la liste des ennemis non touchés
+            non_hit_enemies = list(all_enemies_set - self.hit_enemies_set)
+            for enemy in non_hit_enemies:
+                enemy.is_targeted = False
 
-        # sprite
-        self.all_sprites.update()
-        self.all_sprites.draw(self.screen)
+            # xp
+            self.all_shards.update()
+            self.all_shards.draw(self.screen)
 
-        # enemies
-        self.all_enemies.update(self.all_enemies)
-        self.all_enemies.draw(self.screen)
-        for enemy in self.all_enemies:
-            enemy.draw_health_bar(self.screen)
-            if enemy.health <= 0:
-                # Loot + kill ennemi
-                self.all_shards.add(enemy.spawn_shard())
-                self.all_enemies.remove(enemy)
+            # sprite
+            self.all_sprites.update()
+            self.all_sprites.draw(self.screen)
 
-        # xp
-        self.all_shards.update()
-        self.all_shards.draw(self.screen)
+            # enemies
+            self.all_enemies.update(self.all_enemies)
+            self.all_enemies.draw(self.screen)
+            for enemy in self.all_enemies:
+                enemy.draw_health_bar(self.screen)
+                if enemy.health <= 0:
+                    # Loot + kill ennemi
+                    self.all_shards.add(enemy.spawn_shard())
+                    self.all_enemies.remove(enemy)
 
-        self.player.draw_experience_bar(self.screen)
 
-        # Bouton annuler
-        self.screen.blit(self.cancel_image,
-                         (20, self.screen.get_height() - self.cancel_image.get_height()))
 
-        self.cancel_rect = pygame.Rect(20, self.screen.get_height() - self.cancel_image.get_height(), 200, 65)
+            self.player.draw_experience_bar(self.screen)
+
+            # Bouton annuler
+            self.screen.blit(self.cancel_image,
+                             (20, self.screen.get_height() - self.cancel_image.get_height()))
+
+            self.cancel_rect = pygame.Rect(20, self.screen.get_height() - self.cancel_image.get_height(), 200, 65)

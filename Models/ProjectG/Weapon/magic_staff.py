@@ -8,6 +8,8 @@ class magic_staff(Weapon):
     def __init__(self):
         pygame.sprite.Sprite().__init__()
         super().__init__()
+        self.name = "Bâton"
+
         self.speed = 6
         self.image = pygame.transform.scale(pygame.image.load("../Assets/ProjectG/fireball.png").convert_alpha(),(60, 60))
         self.damage = 10

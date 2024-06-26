@@ -12,6 +12,8 @@ HEIGHT = 1080
 class Star(Weapon):
     def __init__(self):
         super().__init__()
+        self.name = "Etoiles"
+
         self.image = pygame.transform.scale(pygame.image.load("../Assets/ProjectG/star.png").convert_alpha(),
                                             (45, 45))
         self.damage = 10
