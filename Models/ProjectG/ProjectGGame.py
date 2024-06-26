@@ -6,6 +6,7 @@ import pygame
 
 from Models.ProjectG.Enemies.Blob import Blob
 from Models.ProjectG.ProjectGPlayer import ProjectGPlayer
+from Models.ProjectG.Weapon.LightningProjectile import LightningProjectile
 
 WIDTH = 1920
 HEIGHT = 1080
@@ -31,11 +32,11 @@ class ProjectGGame:
 
         self.all_enemies = pygame.sprite.Group()
 
-        blob = Blob(20, 20, self.player)
-        self.all_enemies.add(blob)
+        #blob = Blob(20, 20, self.player)
+        #self.all_enemies.add(blob)
 
         self.all_shards = pygame.sprite.Group()
-        self.player.inventory.set_enemy(blob)
+        #self.player.inventory.set_enemy(blob)
 
         # Chronomètre pour l'apparition des ennemis
         self.enemy_spawn_time = 0
@@ -101,6 +102,8 @@ class ProjectGGame:
                         enemy.take_damage(weapon.damage)
                         projectile.mark_enemy_hit(enemy)
                         self.hit_enemies_set.add(enemy)  # Ajouter l'ennemi touché à l'ensemble
+                        if isinstance(projectile, LightningProjectile):
+                            projectile.bounce(self.all_enemies)
 
         all_enemies_set = set(self.all_enemies)
         # Obtenir la liste des ennemis non touchés
@@ -108,9 +111,11 @@ class ProjectGGame:
         for enemy in non_hit_enemies:
             enemy.is_targeted = False
 
+        # sprite
         self.all_sprites.update()
         self.all_sprites.draw(self.screen)
 
+        # enemies
         self.all_enemies.update(self.all_enemies)
         self.all_enemies.draw(self.screen)
         for enemy in self.all_enemies:
@@ -119,6 +124,7 @@ class ProjectGGame:
                 self.all_shards.add(enemy.spawn_shard())
                 self.all_enemies.remove(enemy)
 
+        # xp
         self.all_shards.update()
         self.all_shards.draw(self.screen)
 

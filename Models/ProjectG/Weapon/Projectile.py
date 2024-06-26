@@ -11,6 +11,7 @@ class Projectile(pygame.sprite.Sprite):
                  can_bounce=False):
         super().__init__()
         self.weapon = weapon
+        self.damage = weapon.damage
         self.image = weapon.image
         self.rect = self.image.get_rect(center=(pos_x, pos_y))
         self.angle = math.atan2(target_y - pos_y, target_x - pos_x)

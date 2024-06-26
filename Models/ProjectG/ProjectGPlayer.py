@@ -85,7 +85,7 @@ class ProjectGPlayer(pygame.sprite.Sprite):
         bar_width = 1800
         bar_height = 5
         xp_bar_x = 50
-        xp_bar_y = 50
+        xp_bar_y = 10
 
         # Barre de fond (noir)
         pygame.draw.rect(surface, (0, 0, 0), (xp_bar_x, xp_bar_y, bar_width, bar_height))
