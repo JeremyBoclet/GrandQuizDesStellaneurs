@@ -78,7 +78,7 @@ class ProjectGPlayer(pygame.sprite.Sprite):
         if self.experience >= self.next_level_experience_needed:
             self.level += 1
             self.experience = self.next_level_experience_needed - self.experience
-            self.next_level_experience_needed *= 1.3
+            self.next_level_experience_needed *= 1.6
 
     def draw_experience_bar(self, surface):
         # Dimensions de la barre
