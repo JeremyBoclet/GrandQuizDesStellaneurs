@@ -6,12 +6,12 @@ from Models.ProjectG.Weapon.Star import Star
 from Models.ProjectG.Weapon.magic_staff import magic_staff
 
 
-def option_available():
-    return [Laser(), Lightning(),Saw(),magic_staff(),Star(),Scythe()]
-
-
-class Option:
+class Options:
     def __init__(self):
-        self.test = 1
-        option_available()
+        self.option_available = [magic_staff(), Star(), Scythe()]
 
+    def remove_option(self, option_to_delete):
+        for option in self.option_available:
+            if option.name == option_to_delete:
+                self.option_available.remove(option)
+                break

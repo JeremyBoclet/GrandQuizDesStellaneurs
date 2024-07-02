@@ -10,9 +10,6 @@ class LaserProjectile(Projectile):
         self.x = x
         self.y = y
         self.target = target
-        self.max_length = weapon.max_length
-        self.growth_rate = weapon.growth_rate
-        self.width = weapon.width
         self.color = (255, 0, 0)
         self.current_length = 0
         self.rect = self.image.get_rect(center=(x, y))
@@ -25,10 +22,10 @@ class LaserProjectile(Projectile):
         self.x = self.player.rect.centerx
         self.y = self.player.rect.centery
 
-        if self.current_length < self.max_length:
-            self.current_length += self.growth_rate
-            if self.current_length >= self.max_length:
-                self.current_length = self.max_length
+        if self.current_length < self.weapon.max_length:
+            self.current_length += self.weapon.growth_rate
+            if self.current_length >= self.weapon.max_length:
+                self.current_length = self.weapon.max_length
         else:
             # Une fois la taille maximale atteinte, commencer la rotation
             self.angle += self.weapon.rotation_speed
@@ -40,11 +37,11 @@ class LaserProjectile(Projectile):
         if self.turn_count == self.weapon.max_turn:
             self.kill()
 
-        self.image = pygame.Surface((self.current_length, self.width), pygame.SRCALPHA)
+        self.image = pygame.Surface((self.current_length, self.weapon.width), pygame.SRCALPHA)
         end_x = self.current_length * math.cos(self.angle)
         end_y = self.current_length * math.sin(self.angle)
-        pygame.draw.line(self.image, self.color, (0, self.width // 2), (self.current_length, self.width // 2),
-                         self.width)
+        pygame.draw.line(self.image, self.color, (0, self.weapon.width // 2), (self.current_length, self.weapon.width // 2),
+                         self.weapon.width)
         self.image = pygame.transform.rotate(self.image, -math.degrees(self.angle))
         self.rect = self.image.get_rect(center=(self.x + end_x // 2, self.y + end_y // 2))
 

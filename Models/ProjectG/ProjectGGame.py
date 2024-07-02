@@ -9,6 +9,7 @@ from Models.ProjectG.Menu import Options
 from Models.ProjectG.Menu.LevelUpMenu import LevelUpMenu
 from Models.ProjectG.ProjectGPlayer import ProjectGPlayer
 from Models.ProjectG.Weapon.Projectile.LightningProjectile import LightningProjectile
+from Models.ProjectG.Menu.Options import Options
 from Models.ProjectG.Weapon.Scythe import Scythe
 
 WIDTH = 1920
@@ -52,6 +53,8 @@ class ProjectGGame:
         self.pause = False
         self.level_up_menu = None
 
+        self.Options = Options()
+
     def generate_random_position(self):
         """Génère une position aléatoire pour les ennemis sans chevauchement."""
         while True:
@@ -84,7 +87,19 @@ class ProjectGGame:
             if self.pause:
                 choice = self.level_up_menu.handle_event(event)
                 if choice:
-                    self.player.inventory.weapons.append(choice)
+                    has_weapon = False
+                    for weapon in self.player.inventory.weapons:
+                        if weapon.name == choice.name:
+                            has_weapon = True
+                            weapon.level_up()
+                            if not weapon.can_level_up():
+                                self.Options.remove_option(choice.name)
+                            break
+
+                    if not has_weapon:
+                        print("new weapon")
+                        self.player.inventory.weapons.append(choice)
+
                     self.pause = False
             else:
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -113,7 +128,7 @@ class ProjectGGame:
                 player_level = self.player.level
                 self.player.gain_experience(shard.experience_gain)
                 if player_level < self.player.level:
-                    options = random.sample(Options.option_available(), 3)
+                    options = random.sample(self.Options.option_available, min(3, len(self.Options.option_available)))
                     self.level_up_menu = LevelUpMenu(self.screen, options)
                     self.pause = True
 

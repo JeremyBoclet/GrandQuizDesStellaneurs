@@ -14,11 +14,11 @@ class Scythe(Weapon):
 
         self.original_image = self.image
 
-        self.damage = 5
+        self.damage = 50
         self.speed = 1.5
         self.rect = self.image.get_rect(center=(100, 100))
         self.projectile = pygame.sprite.Group()
-        self.max_projectile = 6
+        self.max_projectile = 1
         self.radius = 250
         self.delete_on_hit = False
         self.rotation_speed = 0.1
@@ -31,3 +31,11 @@ class Scythe(Weapon):
         self.fire(player, enemy)
 
         self.projectile.update()
+
+    def set_new_level_attribute(self):
+        if 1 < self.current_level < 6:
+            self.max_projectile += 1
+        else:
+            self.speed += 0.2
+
+        self.projectile.empty()

@@ -27,7 +27,7 @@ class ProjectGPlayer(pygame.sprite.Sprite):
 
         # Gestion de l'experience
         self.experience = 0
-        self.next_level_experience_needed = 10
+        self.next_level_experience_needed = 1
         self.level = 1
 
     def movement(self):

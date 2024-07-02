@@ -55,7 +55,6 @@ class LightningProjectile(Projectile):
 
     def update_direction(self):
         # Calculer la direction vers le joueur
-        new_target_x, new_target_y = self.target.rect.center
         self.angle = math.atan2(self.target.rect.centery - self.rect.centery,
                                 self.target.rect.centerx - self.rect.centerx)
         self.dx = self.speed * math.cos(self.angle)
@@ -63,10 +62,6 @@ class LightningProjectile(Projectile):
 
         self.rect.x += self.dx
         self.rect.y += self.dy
-
-        #Check si l'ennemi est mort
-        #if self.target.health <= 0:
-        #    self.kill()
 
     def reroute(self,enemy):
         self.target = enemy

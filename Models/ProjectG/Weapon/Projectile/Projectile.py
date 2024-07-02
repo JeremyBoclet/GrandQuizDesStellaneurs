@@ -77,6 +77,7 @@ class Projectile(pygame.sprite.Sprite):
 
             # Rebondir à un angle de 90 degrés
             if self.bounce_count > self.weapon.max_bounce:
+                self.weapon.last_fire = pygame.time.get_ticks()
                 self.kill()
 
         # Si le projectile est en mode retour et atteint le joueur, le détruire
