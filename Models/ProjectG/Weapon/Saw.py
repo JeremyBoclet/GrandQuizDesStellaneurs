@@ -14,7 +14,7 @@ class Saw(Weapon):
         self.image = pygame.transform.scale(pygame.image.load("../Assets/ProjectG/saw.png").convert_alpha(),
                                             (60, 60))
         self.damage = 2
-        self.max_range = 600
+        self.max_range = 300
         self.cooldown = 1500
         self.delete_on_hit = False
         self.rect = self.image.get_rect(center=(100, 100))
@@ -40,3 +40,32 @@ class Saw(Weapon):
         self.fire(player, enemy)
 
         self.projectile.update()
+
+    def set_new_level_attribute(self):
+        match self.current_level:
+            case 2:
+                self.max_range += 100
+            case 3:
+                self.speed += 1.2
+                self.max_range += 100
+
+            case 4:
+                self.speed += 1.2
+            case 5:
+                self.cooldown = 1000
+            case 6:
+                self.damage += 5
+
+    def set_next_upgrade(self):
+        match self.current_level:
+            case 1:
+                    self.next_upgrade = ("Range augmentée")
+            case 2:
+                self.next_upgrade = ("Range augmentée /n"
+                                     "Augmente la vitesse")
+            case 3:
+                self.next_upgrade = "Augmente la vitesse"
+            case 4:
+                self.next_upgrade = ("Réduit le cooldown de à 1 seconde")
+            case 5:
+                self.next_upgrade = "Augmente les dégats%"

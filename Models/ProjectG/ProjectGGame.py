@@ -11,6 +11,7 @@ from Models.ProjectG.ProjectGPlayer import ProjectGPlayer
 from Models.ProjectG.Weapon.Lightning import Lightning
 from Models.ProjectG.Weapon.Projectile.LightningProjectile import LightningProjectile
 from Models.ProjectG.Menu.Options import Options
+from Models.ProjectG.Weapon.Saw import Saw
 from Models.ProjectG.Weapon.Scythe import Scythe
 from Models.ProjectG.Weapon.magic_staff import magic_staff
 
@@ -32,7 +33,7 @@ class ProjectGGame:
                                                  (screen.get_width(), screen.get_height()))
 
         self.player = ProjectGPlayer(self.screen)
-        self.player.inventory.add_weapon(magic_staff())
+        self.player.inventory.add_weapon(Lightning())
 
         self.all_sprites = pygame.sprite.Group()
         self.all_sprites.add(self.player)

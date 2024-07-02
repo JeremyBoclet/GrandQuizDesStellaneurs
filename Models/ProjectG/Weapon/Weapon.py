@@ -30,6 +30,5 @@ class Weapon():
     def set_new_level_attribute(self):
         print("ajuster les niveaux de l'arme")
 
-
     def can_level_up(self):
         return self.current_level < self.max_level
