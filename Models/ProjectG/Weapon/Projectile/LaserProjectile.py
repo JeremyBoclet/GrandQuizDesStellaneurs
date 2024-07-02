@@ -26,15 +26,17 @@ class LaserProjectile(Projectile):
             self.current_length += self.weapon.growth_rate
             if self.current_length >= self.weapon.max_length:
                 self.current_length = self.weapon.max_length
-        else:
+        elif self.weapon.max_turn !=0:
             # Une fois la taille maximale atteinte, commencer la rotation
             self.angle += self.weapon.rotation_speed
             if self.angle >= 2 * math.pi:
                 self.angle -= 2 * math.pi
                 self.turn_count += 1
                 self.hit_enemies = []
+        else:
+            self.kill()
 
-        if self.turn_count == self.weapon.max_turn:
+        if self.turn_count == self.weapon.max_turn and self.weapon.max_turn != 0:
             self.kill()
 
         self.image = pygame.Surface((self.current_length, self.weapon.width), pygame.SRCALPHA)
@@ -42,6 +44,7 @@ class LaserProjectile(Projectile):
         end_y = self.current_length * math.sin(self.angle)
         pygame.draw.line(self.image, self.color, (0, self.weapon.width // 2), (self.current_length, self.weapon.width // 2),
                          self.weapon.width)
+
         self.image = pygame.transform.rotate(self.image, -math.degrees(self.angle))
         self.rect = self.image.get_rect(center=(self.x + end_x // 2, self.y + end_y // 2))
 
