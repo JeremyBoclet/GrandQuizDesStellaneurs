@@ -18,7 +18,7 @@ class Lightning(Weapon):
         self.speed = 10
         self.projectile = pygame.sprite.Group()
         self.max_projectile = 1
-        self.cooldown = 1000
+        self.cooldown = 5000
         self.delete_on_hit = False
         self.max_bounce = 3
 
@@ -35,7 +35,7 @@ class Lightning(Weapon):
 
             # Cooldown des projectiles
             if now - self.last_fire >= self.cooldown and len(self.projectile) < self.max_projectile:
-                self.last_fire = pygame.time.get_ticks()
+                self.last_fire = 9999999 #Permet de déclencher le cooldown au kill du projectile
                 self.projectile.add(
                     LightningProjectile(player.rect.centerx, player.rect.centery, enemy, self, self.max_bounce))
         else:

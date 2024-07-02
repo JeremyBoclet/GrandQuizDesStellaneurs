@@ -32,11 +32,13 @@ class LightningProjectile(Projectile):
             # Choisir le nouvel ennemi le plus proche comme cible
             self.target = self.find_closest_enemy(self.target, all_enemies)
             if not self.target:
+                self.weapon.last_fire = pygame.time.get_ticks()
                 self.kill()
             else:
                 self.update_direction()
 
         else:
+            self.weapon.last_fire = pygame.time.get_ticks()
             self.kill()
 
     def find_closest_enemy(self, current_enemy, all_enemies):
