@@ -2,7 +2,7 @@ import pygame
 
 
 class ElectricAnimation(pygame.sprite.Sprite):
-    def __init__(self, position, image_paths, frame_duration=5):
+    def __init__(self, position, image_paths, frame_duration=3):
         super().__init__()
         self.images = [pygame.transform.scale(pygame.image.load(path).convert_alpha(),(70,70)) for path in image_paths]
         self.frame_duration = frame_duration

@@ -28,7 +28,7 @@ background = pygame.transform.scale(pygame.image.load("../assets/background.jpg"
 round_timer = 30
 
 # écran
-QUIZ = False
+QUIZ = True
 game = Game(screen)
 PasswordScreen = PasswordScreen(screen)
 MoneyDropScreen = DropScreen(screen)

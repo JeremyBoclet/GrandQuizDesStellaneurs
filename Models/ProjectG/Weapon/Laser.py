@@ -21,6 +21,8 @@ class Laser(Weapon):
         self.max_projectile = 1
         self.rotation_speed = 0.05
         self.max_turn = 4
+        self.next_upgrade = "Un laser grandit vers l'ennemi le plus proche"
+        self.ico = self.image
 
     def fire(self, player, enemy):
         if enemy is not None:

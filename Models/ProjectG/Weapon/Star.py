@@ -1,5 +1,4 @@
 import random
-
 import pygame
 
 from Models.ProjectG.Weapon.Projectile.Projectile import Projectile
@@ -27,6 +26,8 @@ class Star(Weapon):
         self.rotation_speed = 0
         self.original_image = self.image
         self.max_projectile = 1
+        self.next_upgrade = "Créé une étoile qui rebondit sur les bords"
+        self.ico = self.image
 
     def fire(self, player, enemy):
         if enemy is not None:
@@ -44,7 +45,6 @@ class Star(Weapon):
 
     def update(self, player, enemy):
         self.fire(player, enemy)
-
         self.projectile.update()
 
     def set_new_level_attribute(self):
@@ -66,3 +66,19 @@ class Star(Weapon):
                 self.speed += 5
 
         self.projectile.empty()
+
+    def set_next_upgrade(self):
+        match self.current_level:
+            case 2:
+                self.next_upgrade = (self.configuration.upgrades["PROJECTILE_SPEED_INCREASED"] + "/n" +
+                                     self.configuration.upgrades["REDUCE_COOLDOWN"])
+            case 3:
+                self.next_upgrade = self.configuration.upgrades["PROJECTILE_SPEED_INCREASED"]
+            case 4:
+                self.next_upgrade = (self.configuration.upgrades["BOUNCE_INCREASED"].format("2") + "/n" +
+                                     self.configuration.upgrades["REDUCE_COOLDOWN"])
+            case 5:
+                self.next_upgrade = (self.configuration.upgrades["BOUNCE_INCREASED"].format("2") + "/n" +
+                                     self.configuration.upgrades["ADD_PROJECTILE"].format("1") + "/n" +
+                                     self.configuration.upgrades["DAMAGE_INCREASED"] + "/n" +
+                                     self.configuration.upgrades["PROJECTILE_SPEED_INCREASED"])

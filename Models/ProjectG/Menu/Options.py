@@ -7,11 +7,26 @@ from Models.ProjectG.Weapon.magic_staff import magic_staff
 
 
 class Options:
-    def __init__(self):
-        self.option_available = [magic_staff(), Star(), Scythe()]
+    def __init__(self, weapons):
+        self.option_available = [Laser(), Lightning(),magic_staff()]
+
+        # Construire un dictionnaire des options disponibles
+        options_dict = {option.name: option for option in self.option_available}
+
+        # Parcourir les armes et mettre à jour les options correspondantes (en cas de présence de l'arme sur le joueur)
+        for weapon in weapons:
+            if weapon.name in options_dict:
+                self.set_next_upgrade(weapon.name)
 
     def remove_option(self, option_to_delete):
         for option in self.option_available:
             if option.name == option_to_delete:
                 self.option_available.remove(option)
                 break
+
+    def set_next_upgrade(self,option_to_change):
+        for option in self.option_available:
+            if option.name == option_to_change:
+                option.set_next_upgrade()
+                option.current_level += 1
+

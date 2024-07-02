@@ -22,6 +22,8 @@ class Saw(Weapon):
         self.angle = 0
         self.rotation_speed = 0.2
         self.original_image = self.image
+        self.next_upgrade = "Une scie visant l'ennemi le plus proche et revenant vers vous"
+        self.ico = self.image
 
     def fire(self, player, enemy):
         if enemy is not None:

@@ -1,16 +1,18 @@
 import math
 import time
 import random
-
 import pygame
+import copy
 
 from Models.ProjectG.Enemies.Blob import Blob
 from Models.ProjectG.Menu import Options
 from Models.ProjectG.Menu.LevelUpMenu import LevelUpMenu
 from Models.ProjectG.ProjectGPlayer import ProjectGPlayer
+from Models.ProjectG.Weapon.Lightning import Lightning
 from Models.ProjectG.Weapon.Projectile.LightningProjectile import LightningProjectile
 from Models.ProjectG.Menu.Options import Options
 from Models.ProjectG.Weapon.Scythe import Scythe
+from Models.ProjectG.Weapon.magic_staff import magic_staff
 
 WIDTH = 1920
 HEIGHT = 1080
@@ -30,30 +32,27 @@ class ProjectGGame:
                                                  (screen.get_width(), screen.get_height()))
 
         self.player = ProjectGPlayer(self.screen)
+        self.player.inventory.add_weapon(magic_staff())
 
         self.all_sprites = pygame.sprite.Group()
         self.all_sprites.add(self.player)
 
         self.all_enemies = pygame.sprite.Group()
 
-        #blob = Blob(20, 20, self.player)
-        #self.all_enemies.add(blob)
-
         self.all_shards = pygame.sprite.Group()
-        #self.player.inventory.set_enemy(blob)
 
         # Chronomètre pour l'apparition des ennemis
         self.enemy_spawn_time = 0
         self.enemy_spawn_interval = 0.2  # Apparition d'un ennemi toutes les 3 secondes
 
         # Limite d'ennemis à l'écran
-        self.MAX_ENEMIES = 10
+        self.MAX_ENEMIES = 20
         self.hit_enemies_set = set()
 
         self.pause = False
         self.level_up_menu = None
 
-        self.Options = Options()
+        self.Options = Options(self.player.inventory.weapons)
 
     def generate_random_position(self):
         """Génère une position aléatoire pour les ennemis sans chevauchement."""
@@ -92,13 +91,15 @@ class ProjectGGame:
                         if weapon.name == choice.name:
                             has_weapon = True
                             weapon.level_up()
+                            # Pour les tooltips
+                            self.Options.set_next_upgrade(choice.name)
                             if not weapon.can_level_up():
                                 self.Options.remove_option(choice.name)
                             break
 
                     if not has_weapon:
-                        print("new weapon")
-                        self.player.inventory.weapons.append(choice)
+                        self.player.inventory.add_weapon(copy.copy(choice))
+                        self.Options.set_next_upgrade(choice.name)
 
                     self.pause = False
             else:
@@ -150,7 +151,6 @@ class ProjectGGame:
                         for not_hit_enemies in self.all_enemies:
                             if not_hit_enemies not in hit_enemies:
                                 projectile.clear_enemy_hit(not_hit_enemies)
-
 
             all_enemies_set = set(self.all_enemies)
             # Obtenir la liste des ennemis non touchés

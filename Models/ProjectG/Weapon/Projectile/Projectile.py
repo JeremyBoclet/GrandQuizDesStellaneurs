@@ -1,7 +1,6 @@
 import math
 import pygame
 
-
 WIDTH = 1920
 HEIGHT = 1080
 

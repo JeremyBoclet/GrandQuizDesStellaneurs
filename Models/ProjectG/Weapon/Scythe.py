@@ -5,7 +5,7 @@ from Models.ProjectG.Weapon.Weapon import Weapon
 
 
 class Scythe(Weapon):
-    def __init__(self):
+    def __init__(self) -> object:
         super().__init__()
         self.name = "Faux"
 
@@ -22,6 +22,8 @@ class Scythe(Weapon):
         self.radius = 250
         self.delete_on_hit = False
         self.rotation_speed = 0.1
+        self.next_upgrade = "Une faux qui tourne en orbite"
+        self.ico = self.image
 
     def fire(self, player, enemy):
         if len(self.projectile) < self.max_projectile:

@@ -10,7 +10,7 @@ class Inventory:
     def __init__(self, player, screen):
         self.player = player
         # [Laser(), Lightning(),Saw(),magic_staff(),Star(),Scythe()]
-        self.weapons = [magic_staff()]
+        self.weapons = []
         self.screen = screen
         self.enemy_targeted = None
 
