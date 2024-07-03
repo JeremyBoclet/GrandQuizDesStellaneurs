@@ -9,8 +9,10 @@ from Models.ProjectG.Menu import Options
 from Models.ProjectG.Menu.LevelUpMenu import LevelUpMenu
 from Models.ProjectG.ProjectGPlayer import ProjectGPlayer
 from Models.ProjectG.Weapon.Bomb import Bomb
+from Models.ProjectG.Weapon.FallingStar import FallingStar
 from Models.ProjectG.Weapon.Lightning import Lightning
 from Models.ProjectG.Weapon.Projectile.BombProjectile import BombProjectile
+from Models.ProjectG.Weapon.Projectile.FallingStarProjectile import FallingStarProjectile
 from Models.ProjectG.Weapon.Projectile.LightningProjectile import LightningProjectile
 from Models.ProjectG.Menu.Options import Options
 from Models.ProjectG.Weapon.Saw import Saw
@@ -35,7 +37,7 @@ class ProjectGGame:
                                                  (screen.get_width(), screen.get_height()))
 
         self.player = ProjectGPlayer(self.screen)
-        self.player.inventory.add_weapon(Bomb())
+        self.player.inventory.add_weapon(FallingStar())
 
         self.all_sprites = pygame.sprite.Group()
         self.all_sprites.add(self.player)
@@ -168,6 +170,13 @@ class ProjectGGame:
                         if projectile.is_exploding:
                             projectile.explode(self.all_enemies)
                             projectile.trigger_explosion_animation(projectile.end_position,self.all_sprites)
+                    elif isinstance(projectile,FallingStarProjectile):
+                        # Cas étoile filante
+                        if not projectile.falling:
+                            projectile.trigger_animation(projectile.position, self.all_sprites)
+
+                        projectile.inflict_persistent_damage(self.all_enemies)
+                        projectile.draw(self.screen)
 
             all_enemies_set = set(self.all_enemies)
             # Obtenir la liste des ennemis non touchés
