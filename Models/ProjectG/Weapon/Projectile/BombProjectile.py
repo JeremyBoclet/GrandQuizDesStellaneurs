@@ -91,12 +91,10 @@ class BombProjectile(Projectile):
 
     def trigger_detonation_animation(self, position, all_sprites):
         if not self.detonation_animation_started:
-            print((-(8 * 2))+24)
             self.detonation_animation_started = True
             animation = Animation(position, self.weapon.detonation_animation_image_path,
                                   frame_duration= 8 * self.weapon.explosion_delay,
                                   size=self.weapon.size)
-            print(self.weapon.explosion_delay)
             all_sprites.add(animation)
 
     def trigger_explosion_animation(self, position, all_sprites):

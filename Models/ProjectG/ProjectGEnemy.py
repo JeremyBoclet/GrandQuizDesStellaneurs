@@ -48,8 +48,8 @@ class Enemy(pygame.sprite.Sprite):
                 self.image = self.default_sprite
 
     def draw_health_bar(self, surface):
-        if not self.is_targeted:
-            return
+        # if not self.is_targeted:
+        #     return
         # Dimensions des barres de vie
         bar_width = self.rect.width
         bar_height = 5

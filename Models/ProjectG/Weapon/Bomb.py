@@ -12,6 +12,7 @@ class Bomb(Weapon):
     def __init__(self):
         super().__init__()
 
+        self.name = "Bomb"
         self.delete_on_hit = False
         self.damage_on_hit = False
         self.size = (60, 60)
@@ -38,6 +39,7 @@ class Bomb(Weapon):
         self.explosion_radius = 100
         self.explosion_delay = 2
         self.damage = 20
+        self.next_upgrade = "Lance une bombe qui explose après un court moment"
 
     def fire(self, player, enemy):
         if enemy is not None:

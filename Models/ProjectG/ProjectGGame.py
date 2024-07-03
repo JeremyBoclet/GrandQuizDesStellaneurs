@@ -37,7 +37,7 @@ class ProjectGGame:
                                                  (screen.get_width(), screen.get_height()))
 
         self.player = ProjectGPlayer(self.screen)
-        self.player.inventory.add_weapon(FallingStar())
+        self.player.inventory.add_weapon(magic_staff())
 
         self.all_sprites = pygame.sprite.Group()
         self.all_sprites.add(self.player)
@@ -51,7 +51,7 @@ class ProjectGGame:
         self.enemy_spawn_interval = 0.2  # Apparition d'un ennemi toutes les 3 secondes
 
         # Limite d'ennemis à l'écran
-        self.MAX_ENEMIES = 20
+        self.MAX_ENEMIES = 50
         self.hit_enemies_set = set()
 
         self.pause = False
@@ -107,6 +107,7 @@ class ProjectGGame:
                             break
 
                     if not has_weapon:
+                        print('new weap')
                         self.player.inventory.add_weapon(copy.copy(choice))
                         self.Options.set_next_upgrade(choice.name)
 
@@ -170,11 +171,11 @@ class ProjectGGame:
                         if projectile.is_exploding:
                             projectile.explode(self.all_enemies)
                             projectile.trigger_explosion_animation(projectile.end_position,self.all_sprites)
-                    elif isinstance(projectile,FallingStarProjectile):
+                    if isinstance(projectile,FallingStarProjectile):
                         # Cas étoile filante
                         if not projectile.falling:
+                            projectile.explode_damage(self.all_enemies)
                             projectile.trigger_animation(projectile.position, self.all_sprites)
-
                         projectile.inflict_persistent_damage(self.all_enemies)
                         projectile.draw(self.screen)
 
