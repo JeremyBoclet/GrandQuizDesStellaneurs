@@ -54,6 +54,7 @@ class ProjectGGame:
         self.level_up_menu = None
 
         self.Options = Options(self.player.inventory.weapons)
+        self.clock = pygame.time.Clock()
 
     def generate_random_position(self):
         """Génère une position aléatoire pour les ennemis sans chevauchement."""
@@ -82,6 +83,9 @@ class ProjectGGame:
 
     def update(self):
         self.screen.blit(self.background, (0, 0))
+
+        self.clock.tick(60)
+        #print(self.clock.get_fps())
 
         for event in pygame.event.get():
             if self.pause:
@@ -159,6 +163,9 @@ class ProjectGGame:
             for enemy in non_hit_enemies:
                 enemy.is_targeted = False
 
+            for enemy in self.all_enemies:
+                if pygame.sprite.collide_rect(enemy,self.player):
+                    self.player.take_damage(enemy.damage)
             # xp
             self.all_shards.update()
             self.all_shards.draw(self.screen)
@@ -170,6 +177,9 @@ class ProjectGGame:
             # enemies
             self.all_enemies.update(self.all_enemies)
             self.all_enemies.draw(self.screen)
+
+            self.player.draw_health_bar(self.screen)
+
             for enemy in self.all_enemies:
                 enemy.draw_health_bar(self.screen)
                 if enemy.health <= 0:

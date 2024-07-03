@@ -22,6 +22,7 @@ class Enemy(pygame.sprite.Sprite):
         self.is_targeted = False
         self.player = None
         self.loot = None
+        self.damage = 0
 
     def take_damage(self, damage):
         self.is_targeted = True

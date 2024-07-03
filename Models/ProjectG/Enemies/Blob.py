@@ -33,6 +33,7 @@ class Blob(Enemy):
 
         self.spawn_cooldown = 200
         self.last_spawn = 0
+        self.damage = 20
 
     def update(self, enemies):
         super().update(enemies)

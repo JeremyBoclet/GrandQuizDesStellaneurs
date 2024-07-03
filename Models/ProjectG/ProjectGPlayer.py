@@ -2,9 +2,8 @@ from pygame import *
 
 import math
 import pygame
-
+import time
 from Models.ProjectG.Inventory import Inventory
-from Models.ProjectG.Weapon.magic_staff import magic_staff
 
 
 class ProjectGPlayer(pygame.sprite.Sprite):
@@ -27,8 +26,17 @@ class ProjectGPlayer(pygame.sprite.Sprite):
 
         # Gestion de l'experience
         self.experience = 0
-        self.next_level_experience_needed = 1
+        self.next_level_experience_needed = 2
         self.level = 1
+        self.base_health = 100
+        self.health = 100
+        self.is_flashing = False
+        self.flash_timer = 0
+        self.flash_duration = 0.005
+        self.default_sprite = self.image
+
+        self.image_hit = pygame.image.load("../Assets/ProjectG/Mage_hit.png")
+        self.image_hit = pygame.transform.scale(self.image_hit, (48, 54)).convert_alpha()
 
     def movement(self):
         key_pressed = key.get_pressed()
@@ -73,12 +81,25 @@ class ProjectGPlayer(pygame.sprite.Sprite):
         self.movement()
         self.inventory.update()
 
+        # Gestion du clignotement
+        if self.is_flashing:
+            current_time = time.time()
+            if current_time - self.flash_timer < self.flash_duration:
+                # Alterner la couleur pour le clignotement
+                if int(current_time * 10) % 2 == 0:
+                    self.image = self.image_hit  # Rouge pour le clignotement
+                else:
+                    self.image = self.default_sprite  # Vert pour la couleur normale
+            else:
+                self.is_flashing = False
+                self.image = self.default_sprite
+
     def gain_experience(self, experience):
         self.experience += experience
         if self.experience >= self.next_level_experience_needed:
             self.level += 1
             self.experience = self.next_level_experience_needed - self.experience
-            self.next_level_experience_needed *= 1# 1.6
+            self.next_level_experience_needed *= 1.6
 
     def draw_experience_bar(self, surface):
         # Dimensions de la barre
@@ -94,3 +115,27 @@ class ProjectGPlayer(pygame.sprite.Sprite):
         current_xp_ratio = self.experience / self.next_level_experience_needed
         current_xp_width = bar_width * current_xp_ratio
         pygame.draw.rect(surface, (0, 255, 0), (xp_bar_x, xp_bar_y, current_xp_width, bar_height))
+
+    def take_damage(self, damage):
+        if not self.is_flashing:
+            self.health -= damage
+
+        self.is_flashing = True
+        self.flash_timer = time.time()
+        if self.health <= 0:
+            print("ded")
+
+    def draw_health_bar(self, surface):
+        # Dimensions des barres de vie
+        bar_width = self.rect.width
+        bar_height = 5
+        health_bar_x = self.rect.x
+        health_bar_y = self.rect.y - 10
+
+        # Barre de fond (noir)
+        pygame.draw.rect(surface, (0, 0, 0), (health_bar_x, health_bar_y, bar_width, bar_height))
+
+        # Barre de vie actuelle (rouge)
+        current_health_ratio = self.health / self.base_health
+        current_health_width = bar_width * current_health_ratio
+        pygame.draw.rect(surface, (255, 0, 0), (health_bar_x, health_bar_y, current_health_width, bar_height))
