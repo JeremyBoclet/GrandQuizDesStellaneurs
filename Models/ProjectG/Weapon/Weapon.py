@@ -1,12 +1,16 @@
+import pygame
+
 from Models.ProjectG.Configuration import Configuration
 
 
-class Weapon():
+class Weapon:
     def __init__(self):
         self.name = "ARME"
         self.image = None
+        self.show_image = True
         self.max_range = 10000
         self.delete_on_hit = True
+        self.damage_on_hit = True
         self.speed = 1
         self.damage = 1
         self.cooldown = 1
@@ -18,6 +22,8 @@ class Weapon():
         self.next_upgrade = "NEXT_UPGRADE"
         self.configuration = Configuration()
         self.ico = self.image
+        self.max_projectile = 1
+        self.projectile = pygame.sprite.Group()
 
     def set_next_upgrade(self):
         self.next_upgrade = "NEXT_UPGRADE"

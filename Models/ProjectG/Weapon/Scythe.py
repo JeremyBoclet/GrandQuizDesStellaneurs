@@ -17,7 +17,6 @@ class Scythe(Weapon):
         self.damage = 50
         self.speed = 1.5
         self.rect = self.image.get_rect(center=(100, 100))
-        self.projectile = pygame.sprite.Group()
         self.max_projectile = 1
         self.radius = 250
         self.delete_on_hit = False

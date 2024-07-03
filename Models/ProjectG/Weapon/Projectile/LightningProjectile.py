@@ -1,7 +1,7 @@
 import pygame
 import math
 
-from Models.ProjectG.Animation.ElectricAnimation import ElectricAnimation
+from Models.ProjectG.Animation.Animation import Animation
 from Models.ProjectG.Weapon.Projectile.Projectile import Projectile
 
 
@@ -70,5 +70,5 @@ class LightningProjectile(Projectile):
         self.update_direction()
 
     def trigger_electric_animation(self, position, all_sprites):
-        animation = ElectricAnimation(position, self.weapon.animation_image_path)
+        animation = Animation(position, self.weapon.animation_image_path)
         all_sprites.add(animation)

@@ -17,7 +17,6 @@ class magic_staff(Weapon):
         self.damage = 10
         self.rect = self.image.get_rect(center=(100, 100))
         self.cooldown = 1500
-        self.projectile = pygame.sprite.Group()
         self.delete_on_hit = False
         self.max_enemy_hit = 1
         self.ico = self.image

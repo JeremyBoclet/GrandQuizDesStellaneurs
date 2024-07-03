@@ -21,7 +21,6 @@ class Star(Weapon):
         self.speed = 7
         self.delete_on_hit = False
         self.rect = self.image.get_rect(center=(100, 100))
-        self.projectile = pygame.sprite.Group()
         self.angle = 0
         self.rotation_speed = 0
         self.original_image = self.image

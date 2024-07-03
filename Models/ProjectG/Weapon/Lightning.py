@@ -16,7 +16,6 @@ class Lightning(Weapon):
 
         self.damage = 10
         self.speed = 10
-        self.projectile = pygame.sprite.Group()
         self.max_projectile = 1
         self.cooldown = 5000
         self.delete_on_hit = False

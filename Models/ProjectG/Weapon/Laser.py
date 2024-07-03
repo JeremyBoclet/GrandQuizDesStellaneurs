@@ -17,7 +17,6 @@ class Laser(Weapon):
         self.original_image = self.image
         self.delete_on_hit = False
         self.cooldown = 2000
-        self.projectile = pygame.sprite.Group()
         self.max_projectile = 1
         self.rotation_speed = 0.05
         self.max_turn = 0

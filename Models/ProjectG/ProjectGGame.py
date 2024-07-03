@@ -8,7 +8,9 @@ from Models.ProjectG.Enemies.Blob import Blob
 from Models.ProjectG.Menu import Options
 from Models.ProjectG.Menu.LevelUpMenu import LevelUpMenu
 from Models.ProjectG.ProjectGPlayer import ProjectGPlayer
+from Models.ProjectG.Weapon.Bomb import Bomb
 from Models.ProjectG.Weapon.Lightning import Lightning
+from Models.ProjectG.Weapon.Projectile.BombProjectile import BombProjectile
 from Models.ProjectG.Weapon.Projectile.LightningProjectile import LightningProjectile
 from Models.ProjectG.Menu.Options import Options
 from Models.ProjectG.Weapon.Saw import Saw
@@ -33,7 +35,7 @@ class ProjectGGame:
                                                  (screen.get_width(), screen.get_height()))
 
         self.player = ProjectGPlayer(self.screen)
-        self.player.inventory.add_weapon(Lightning())
+        self.player.inventory.add_weapon(Bomb())
 
         self.all_sprites = pygame.sprite.Group()
         self.all_sprites.add(self.player)
@@ -85,7 +87,7 @@ class ProjectGGame:
         self.screen.blit(self.background, (0, 0))
 
         self.clock.tick(60)
-        #print(self.clock.get_fps())
+        # print(self.clock.get_fps())
 
         for event in pygame.event.get():
             if self.pause:
@@ -144,7 +146,7 @@ class ProjectGGame:
                 for projectile, hit_enemies in collision.items():
                     # self.hit_enemies_set.clear()
                     for enemy in hit_enemies:
-                        if projectile.can_damage(enemy):
+                        if projectile.can_damage(enemy) and weapon.damage_on_hit:
                             enemy.take_damage(weapon.damage)
                             projectile.mark_enemy_hit(enemy)
                             self.hit_enemies_set.add(enemy)  # Ajouter l'ennemi touché à l'ensemble
@@ -157,6 +159,16 @@ class ProjectGGame:
                             if not_hit_enemies not in hit_enemies:
                                 projectile.clear_enemy_hit(not_hit_enemies)
 
+                for projectile in weapon.projectile:
+                    # Cas bombe
+                    if isinstance(projectile, BombProjectile):
+                        projectile.draw(self.screen)
+                        if projectile.explosion_started:
+                            projectile.trigger_detonation_animation(projectile.end_position,self.all_sprites)
+                        if projectile.is_exploding:
+                            projectile.explode(self.all_enemies)
+                            projectile.trigger_explosion_animation(projectile.end_position,self.all_sprites)
+
             all_enemies_set = set(self.all_enemies)
             # Obtenir la liste des ennemis non touchés
             non_hit_enemies = list(all_enemies_set - self.hit_enemies_set)
@@ -164,7 +176,7 @@ class ProjectGGame:
                 enemy.is_targeted = False
 
             for enemy in self.all_enemies:
-                if pygame.sprite.collide_rect(enemy,self.player):
+                if pygame.sprite.collide_rect(enemy, self.player):
                     self.player.take_damage(enemy.damage)
             # xp
             self.all_shards.update()
@@ -186,8 +198,6 @@ class ProjectGGame:
                     # Loot + kill ennemi
                     self.all_shards.add(enemy.spawn_shard())
                     self.all_enemies.remove(enemy)
-
-
 
             self.player.draw_experience_bar(self.screen)
 
