@@ -7,21 +7,30 @@ from Models.ProjectG.Weapon.Weapon import Weapon
 WIDTH = 1980
 HEIGHT = 1080
 
+
 class Bomb(Weapon):
     def __init__(self):
         super().__init__()
 
         self.delete_on_hit = False
         self.damage_on_hit = False
-        self.size = (60,60)
+        self.size = (60, 60)
         self.image = pygame.transform.scale(pygame.image.load("../Assets/ProjectG/bomb.png").convert_alpha(),
                                             self.size)
         self.rect = self.image.get_rect()
 
         self.original_image = self.image.copy()
 
+        # Indicateur de position cible
+        self.target_indicator_image = pygame.transform.scale(
+            pygame.image.load("../Assets/ProjectG/cible.png").convert_alpha(),
+            self.size)
+
+        self.target_indicator_rect = self.target_indicator_image.get_rect()
+
         self.detonation_animation_image_path = [f'..\Assets\ProjectG\Animation\\bomb_{i}.png' for i in range(1, 9)]
-        self.explosion_animation_image_path = [f'..\Assets\ProjectG\Animation\\explosion_bomb_{i}.png' for i in range(1, 57)]
+        self.explosion_animation_image_path = [f'..\Assets\ProjectG\Animation\\explosion_bomb_{i}.png' for i in
+                                               range(1, 57)]
         self.ico = self.image.copy()
         self.show_image = False
         self.cooldown = 2000
@@ -36,7 +45,7 @@ class Bomb(Weapon):
 
             # Cooldown des projectiles
             if (now - self.last_fire >= self.cooldown or self.last_fire == 0) and len(self.projectile) == 0:
-
+                self.last_fire = 9999999
                 for i in range(0, self.max_projectile):
                     self.projectile.add(
                         BombProjectile(player, self))
@@ -66,14 +75,16 @@ class Bomb(Weapon):
     def set_next_upgrade(self):
         match self.current_level:
             case 1:
-                    self.next_upgrade = ("Le projectile traverse un ennemi de plus")
+                self.next_upgrade = ("Augmente la taille de l'explosion")
             case 2:
-                self.next_upgrade = ("Le projectile traverse un ennemi de plus /n"
-                                     "Augmente la vitesse de 20%")
+                self.next_upgrade = ("Augmente la taille de l'explosion /n"
+                                     "Réduit le temps de recharge")
             case 3:
-                self.next_upgrade = "Augmente la vitesse de 20%"
+                self.next_upgrade = ("Augmente la vitesse de pose de la bombe /n"
+                                     "Réduit le temps de recharge")
             case 4:
-                self.next_upgrade = ("Réduit le cooldown de à 1 seconde")
+                self.next_upgrade = ("Augmente la taille de l'explosion /n"
+                                     "Augmente les dégats")
             case 5:
-                self.next_upgrade = ("Le projectile traverse un ennemi de plus /n"
-                                     "Augmente les dégats de 50%")
+                self.next_upgrade = ("Réduit le temps d'explosion /n"
+                                     "Augmente les dégats%")

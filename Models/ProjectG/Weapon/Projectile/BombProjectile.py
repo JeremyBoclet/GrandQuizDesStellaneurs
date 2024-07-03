@@ -48,6 +48,8 @@ class BombProjectile(Projectile):
         target_x = max(self.weapon.explosion_radius, min(target_x, WIDTH - self.weapon.explosion_radius))
         target_y = max(self.weapon.explosion_radius, min(target_y, HEIGHT - self.weapon.explosion_radius))
 
+        self.weapon.target_indicator_rect = self.weapon.target_indicator_image.get_rect(center=(target_x, target_y))
+
         return target_x, target_y
 
     def update(self):
@@ -81,7 +83,9 @@ class BombProjectile(Projectile):
 
     def draw(self, surface):
         if not self.explosion_started:
+            surface.blit(self.weapon.target_indicator_image, self.weapon.target_indicator_rect)
             surface.blit(self.image, self.rect)
+
         # Dessiner un cercle autour de la bombe pour indiquer la portée de l'explosion
         #pygame.draw.circle(surface, (255, 0, 0), self.rect.center, self.weapon.explosion_radius, 2)
 
@@ -97,7 +101,8 @@ class BombProjectile(Projectile):
 
     def trigger_explosion_animation(self, position, all_sprites):
         if not self.explosion_animation_started:
+            self.weapon.last_fire = pygame.time.get_ticks()
             self.explosion_animation_started = True
             animation = Animation(position, self.weapon.explosion_animation_image_path, frame_duration=2,
-                                  size=(self.weapon.explosion_radius * 2.5, self.weapon.explosion_radius * 2.5))
+                                  size=(self.weapon.explosion_radius * 2.2, self.weapon.explosion_radius * 2.2))
             all_sprites.add(animation)
