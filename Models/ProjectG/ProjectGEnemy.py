@@ -1,8 +1,10 @@
 import math
+import random
 import time
 
 import pygame.sprite
 
+from Models.ProjectG.Loots.RegenHealth import RegenHealth
 from Models.ProjectG.Loots.Shards import Shards
 
 
@@ -95,5 +97,16 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x += direction_x * self.speed
         self.rect.y += direction_y * self.speed
 
-    def spawn_shard(self):
-        return Shards(self.rect.centerx, self.rect.centery, "shard_1", 2)
+    def spawn_loots(self):
+        # Probabilités de drop : [shard, potion, rien]
+        loot_types = ['shard', 'potion', 'none']
+        drop_rates = [0.6, 0.2, 0.2]  # 60% shard, 20% potion, 20% rien
+
+        loot_choice = random.choices(loot_types, drop_rates)[0]
+
+        if loot_choice == 'shard':
+            return Shards(self.rect.centerx, self.rect.centery, "shard_1", 2)
+        elif loot_choice == 'potion':
+            return RegenHealth(self.rect.centerx, self.rect.centery)
+        else:
+            return None  # Aucun loot n'est généré

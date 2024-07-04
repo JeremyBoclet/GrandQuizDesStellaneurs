@@ -46,7 +46,7 @@ class ProjectGGame:
 
         self.all_enemies = pygame.sprite.Group()
 
-        self.all_shards = pygame.sprite.Group()
+        self.all_loots = pygame.sprite.Group()
         self.all_animation_sprite = pygame.sprite.Group()
         # Chronomètre pour l'apparition des ennemis
         self.enemy_spawn_time = 0
@@ -138,12 +138,12 @@ class ProjectGGame:
             self.player.inventory.set_enemy(self.get_closest_enemy())
 
             # Collision joueur / shard
-            self.player.attract_loots(self.all_shards)
+            self.player.attract_loots(self.all_loots)
 
-            shards = pygame.sprite.spritecollide(self.player, self.all_shards, True)
-            for shard in shards:
+            loots = pygame.sprite.spritecollide(self.player, self.all_loots, True)
+            for loot in loots:
                 player_level = self.player.level
-                self.player.gain_experience(shard.experience_gain)
+                loot.gain_loot(self.player)
                 if player_level < self.player.level:
                     options = random.sample(self.Options.option_available, min(3, len(self.Options.option_available)))
                     self.level_up_menu = LevelUpMenu(self.screen, options)
@@ -203,8 +203,8 @@ class ProjectGGame:
             self.InventoryDisplay.draw_inventory()
 
             # xp
-            self.all_shards.update()
-            self.all_shards.draw(self.screen)
+            self.all_loots.update()
+            self.all_loots.draw(self.screen)
 
             # Animation
             self.all_animation_sprite.update()
@@ -219,16 +219,15 @@ class ProjectGGame:
             self.all_sprites.update()
             self.all_sprites.draw(self.screen)
 
-
             self.player.draw_health_bar(self.screen)
 
-
-            
             for enemy in self.all_enemies:
                 enemy.draw_health_bar(self.screen)
                 if enemy.health <= 0:
                     # Loot + kill ennemi
-                    self.all_shards.add(enemy.spawn_shard())
+                    loot = enemy.spawn_loots()
+                    if loot is not None:
+                        self.all_loots.add(loot)
                     self.all_enemies.remove(enemy)
 
             self.player.draw_experience_bar(self.screen)

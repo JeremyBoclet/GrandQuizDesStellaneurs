@@ -98,13 +98,6 @@ class ProjectGPlayer(pygame.sprite.Sprite):
                 self.is_flashing = False
                 self.image = self.default_sprite
 
-    def gain_experience(self, experience):
-        self.experience += experience
-        if self.experience >= self.next_level_experience_needed:
-            self.level += 1
-            self.experience = self.next_level_experience_needed - self.experience
-            self.next_level_experience_needed *= 1.6
-
     def draw_experience_bar(self, surface):
         # Dimensions de la barre
         bar_width = 1800
