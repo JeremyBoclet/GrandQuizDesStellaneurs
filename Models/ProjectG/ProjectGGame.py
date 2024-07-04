@@ -53,7 +53,7 @@ class ProjectGGame:
         self.enemy_spawn_interval = 0.2  # Apparition d'un ennemi toutes les 3 secondes
 
         # Limite d'ennemis à l'écran
-        self.MAX_ENEMIES = 50
+        self.MAX_ENEMIES = 20
         self.hit_enemies_set = set()
 
         self.pause = False
@@ -138,6 +138,8 @@ class ProjectGGame:
             self.player.inventory.set_enemy(self.get_closest_enemy())
 
             # Collision joueur / shard
+            self.player.attract_loots(self.all_shards)
+
             shards = pygame.sprite.spritecollide(self.player, self.all_shards, True)
             for shard in shards:
                 player_level = self.player.level

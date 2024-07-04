@@ -38,6 +38,8 @@ class ProjectGPlayer(pygame.sprite.Sprite):
         self.image_hit = pygame.image.load("../Assets/ProjectG/Mage_hit.png")
         self.image_hit = pygame.transform.scale(self.image_hit, (48, 54)).convert_alpha()
 
+        self.attraction_radius = 170
+
     def movement(self):
         key_pressed = key.get_pressed()
         move_x = 0
@@ -80,6 +82,8 @@ class ProjectGPlayer(pygame.sprite.Sprite):
     def update(self):
         self.movement()
         self.inventory.update()
+
+        pygame.draw.circle(self.screen, (0, 0, 255), self.rect.center, self.attraction_radius, 1)
 
         # Gestion du clignotement
         if self.is_flashing:
@@ -138,3 +142,10 @@ class ProjectGPlayer(pygame.sprite.Sprite):
         current_health_ratio = self.health / self.base_health
         current_health_width = bar_width * current_health_ratio
         pygame.draw.rect(surface, (255, 0, 0), (health_bar_x, health_bar_y, current_health_width, bar_height))
+
+    def attract_loots(self, loots, speed=15):
+        for loot in loots:
+            dx, dy = loot.rect.centerx - self.rect.centerx, loot.rect.centery - self.rect.centery
+            distance = math.hypot(dx, dy)
+            if distance <= self.attraction_radius:
+                loot.move_towards(self.rect.centerx, self.rect.centery, speed)
