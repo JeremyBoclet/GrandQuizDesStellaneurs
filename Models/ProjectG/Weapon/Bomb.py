@@ -40,7 +40,7 @@ class Bomb(Weapon):
         self.explosion_delay = 2
         self.damage = 20
         self.next_upgrade = "Lance une bombe qui explose après un court moment"
-
+        self.max_level = 2
     def fire(self, player, enemy):
         if enemy is not None:
             now = pygame.time.get_ticks()

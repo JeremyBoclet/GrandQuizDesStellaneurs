@@ -1,3 +1,4 @@
+from Models.ProjectG.Loots.RegenHealth import RegenHealth
 from Models.ProjectG.Weapon.Bomb import Bomb
 from Models.ProjectG.Weapon.FallingStar import FallingStar
 from Models.ProjectG.Weapon.Laser import Laser
@@ -10,7 +11,8 @@ from Models.ProjectG.Weapon.magic_staff import magic_staff
 
 class Options:
     def __init__(self, weapons):
-        self.option_available = [Bomb(), FallingStar(),magic_staff(), Saw(), Lightning(),Laser(), magic_staff(),Star(),Scythe()]
+        # Bomb(), FallingStar(),magic_staff(), Saw(), Lightning(),Laser(), Star(),Scythe()
+        self.option_available = [Bomb(), FallingStar(),magic_staff(), Saw(), Lightning(),Laser(), Star(),Scythe()]
 
         # Construire un dictionnaire des options disponibles
         options_dict = {option.name: option for option in self.option_available}
@@ -24,11 +26,12 @@ class Options:
         for option in self.option_available:
             if option.name == option_to_delete:
                 self.option_available.remove(option)
+                if len(self.option_available) == 0:
+                    self.option_available.append(RegenHealth(1, 1))
                 break
 
-    def set_next_upgrade(self,option_to_change):
+    def set_next_upgrade(self, option_to_change):
         for option in self.option_available:
             if option.name == option_to_change:
                 option.set_next_upgrade()
                 option.current_level += 1
-

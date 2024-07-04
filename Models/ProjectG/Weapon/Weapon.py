@@ -24,6 +24,7 @@ class Weapon:
         self.ico = self.image
         self.max_projectile = 1
         self.projectile = pygame.sprite.Group()
+        self.attribute = "weapon"
 
     def set_next_upgrade(self):
         self.next_upgrade = "NEXT_UPGRADE"

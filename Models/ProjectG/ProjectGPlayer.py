@@ -119,7 +119,8 @@ class ProjectGPlayer(pygame.sprite.Sprite):
 
         self.is_flashing = True
         self.flash_timer = time.time()
-        #if self.health <= 0:
+        if self.health <= 0:
+            self.health = 0
 
     def draw_health_bar(self, surface):
         # Dimensions des barres de vie

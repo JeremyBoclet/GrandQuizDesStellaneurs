@@ -18,6 +18,7 @@ from Models.ProjectG.Weapon.Projectile.LightningProjectile import LightningProje
 from Models.ProjectG.Menu.Options import Options
 from Models.ProjectG.Weapon.Saw import Saw
 from Models.ProjectG.Weapon.Scythe import Scythe
+from Models.ProjectG.Weapon.Weapon import Weapon
 from Models.ProjectG.Weapon.magic_staff import magic_staff
 
 WIDTH = 1920
@@ -98,7 +99,7 @@ class ProjectGGame:
         for event in pygame.event.get():
             if self.pause:
                 choice = self.level_up_menu.handle_event(event)
-                if choice:
+                if choice and choice.attribute == "weapon":
                     has_weapon = False
                     for weapon in self.player.inventory.weapons:
                         if weapon.name == choice.name:
@@ -111,10 +112,12 @@ class ProjectGGame:
                             break
 
                     if not has_weapon:
-                        print('new weap')
                         self.player.inventory.add_weapon(copy.copy(choice))
                         self.Options.set_next_upgrade(choice.name)
 
+                    self.pause = False
+                elif choice and choice.attribute == "loot":
+                    choice.gain_loot(self.player)
                     self.pause = False
             else:
                 if event.type == pygame.MOUSEBUTTONDOWN:
