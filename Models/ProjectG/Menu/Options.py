@@ -10,7 +10,7 @@ from Models.ProjectG.Weapon.magic_staff import magic_staff
 
 class Options:
     def __init__(self, weapons):
-        self.option_available = [Bomb(), FallingStar(),magic_staff(), Saw(), Lightning()]
+        self.option_available = [Bomb(), FallingStar(),magic_staff(), Saw(), Lightning(),Laser(), magic_staff(),Star(),Scythe()]
 
         # Construire un dictionnaire des options disponibles
         options_dict = {option.name: option for option in self.option_available}

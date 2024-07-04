@@ -6,6 +6,7 @@ import copy
 
 from Models.ProjectG.Enemies.Blob import Blob
 from Models.ProjectG.Menu import Options
+from Models.ProjectG.Menu.InventoryDisplay import InventoryDisplay
 from Models.ProjectG.Menu.LevelUpMenu import LevelUpMenu
 from Models.ProjectG.ProjectGPlayer import ProjectGPlayer
 from Models.ProjectG.Weapon.Bomb import Bomb
@@ -39,6 +40,7 @@ class ProjectGGame:
         self.player = ProjectGPlayer(self.screen)
         self.player.inventory.add_weapon(magic_staff())
 
+
         self.all_sprites = pygame.sprite.Group()
         self.all_sprites.add(self.player)
 
@@ -59,6 +61,8 @@ class ProjectGGame:
 
         self.Options = Options(self.player.inventory.weapons)
         self.clock = pygame.time.Clock()
+
+        self.InventoryDisplay = InventoryDisplay(self.screen, self.player.inventory)
 
     def generate_random_position(self):
         """Génère une position aléatoire pour les ennemis sans chevauchement."""
@@ -189,13 +193,21 @@ class ProjectGGame:
                 if pygame.sprite.collide_rect(enemy, self.player):
                     self.player.take_damage(enemy.damage)
 
-            # Animation
-            self.all_animation_sprite.update()
-            self.all_animation_sprite.draw(self.screen)
+            #************************************************************
+            #*************************** DRAW ***************************
+            #************************************************************
+
+            # Inventaire
+            self.InventoryDisplay.draw_inventory()
 
             # xp
             self.all_shards.update()
             self.all_shards.draw(self.screen)
+
+            # Animation
+            self.all_animation_sprite.update()
+            self.all_animation_sprite.draw(self.screen)
+
 
             # enemies
             self.all_enemies.update(self.all_enemies)

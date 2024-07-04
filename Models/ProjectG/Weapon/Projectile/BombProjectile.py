@@ -73,7 +73,6 @@ class BombProjectile(Projectile):
             self.is_exploding = True
 
     def explode(self, all_enemies):
-        print("Bomb exploded!")
         # Logique de dégâts en zone
         for enemy in all_enemies:
             if self.rect.centerx - self.weapon.explosion_radius <= enemy.rect.centerx <= self.rect.centerx + self.weapon.explosion_radius and \
@@ -93,7 +92,7 @@ class BombProjectile(Projectile):
         if not self.detonation_animation_started:
             self.detonation_animation_started = True
             animation = Animation(position, self.weapon.detonation_animation_image_path,
-                                  frame_duration= 8 * self.weapon.explosion_delay,
+                                  frame_duration= 7 * self.weapon.explosion_delay,
                                   size=self.weapon.size)
             all_sprites.add(animation)
 
