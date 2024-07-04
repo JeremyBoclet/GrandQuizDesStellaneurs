@@ -45,7 +45,7 @@ class ProjectGGame:
         self.all_enemies = pygame.sprite.Group()
 
         self.all_shards = pygame.sprite.Group()
-
+        self.all_animation_sprite = pygame.sprite.Group()
         # Chronomètre pour l'apparition des ennemis
         self.enemy_spawn_time = 0
         self.enemy_spawn_interval = 0.2  # Apparition d'un ennemi toutes les 3 secondes
@@ -154,7 +154,7 @@ class ProjectGGame:
                             projectile.mark_enemy_hit(enemy)
                             self.hit_enemies_set.add(enemy)  # Ajouter l'ennemi touché à l'ensemble
                             if isinstance(projectile, LightningProjectile):
-                                projectile.trigger_electric_animation(enemy.rect.center, self.all_sprites)
+                                projectile.trigger_electric_animation(enemy.rect.center, self.all_animation_sprite)
                                 projectile.bounce(self.all_enemies)
 
                         # permet de reset le hit si le projectile sort de la collision ennemi
@@ -167,15 +167,15 @@ class ProjectGGame:
                     if isinstance(projectile, BombProjectile):
                         projectile.draw(self.screen)
                         if projectile.explosion_started:
-                            projectile.trigger_detonation_animation(projectile.end_position,self.all_sprites)
+                            projectile.trigger_detonation_animation(projectile.end_position,self.all_animation_sprite)
                         if projectile.is_exploding:
                             projectile.explode(self.all_enemies)
-                            projectile.trigger_explosion_animation(projectile.end_position,self.all_sprites)
+                            projectile.trigger_explosion_animation(projectile.end_position,self.all_animation_sprite)
                     if isinstance(projectile,FallingStarProjectile):
                         # Cas étoile filante
                         if not projectile.falling:
                             projectile.explode_damage(self.all_enemies)
-                            projectile.trigger_animation(projectile.position, self.all_sprites)
+                            projectile.trigger_animation(projectile.position, self.all_animation_sprite)
                         projectile.inflict_persistent_damage(self.all_enemies)
                         projectile.draw(self.screen)
 
@@ -188,20 +188,28 @@ class ProjectGGame:
             for enemy in self.all_enemies:
                 if pygame.sprite.collide_rect(enemy, self.player):
                     self.player.take_damage(enemy.damage)
+
+            # Animation
+            self.all_animation_sprite.update()
+            self.all_animation_sprite.draw(self.screen)
+
             # xp
             self.all_shards.update()
             self.all_shards.draw(self.screen)
-
-            # sprite
-            self.all_sprites.update()
-            self.all_sprites.draw(self.screen)
 
             # enemies
             self.all_enemies.update(self.all_enemies)
             self.all_enemies.draw(self.screen)
 
+            # sprite
+            self.all_sprites.update()
+            self.all_sprites.draw(self.screen)
+
+
             self.player.draw_health_bar(self.screen)
 
+
+            
             for enemy in self.all_enemies:
                 enemy.draw_health_bar(self.screen)
                 if enemy.health <= 0:
