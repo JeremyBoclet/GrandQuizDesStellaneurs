@@ -79,10 +79,13 @@ class ProjectGPlayer(pygame.sprite.Sprite):
         self.rect.x = self.pos[0]
         self.rect.y = self.pos[1]
 
+        # Debugging output
+        print(f"Player position: x={self.rect.x}, y={self.rect.y}")
     def update(self):
         self.movement()
         self.inventory.update()
 
+        # affichage de la zone d'attraction du loot
         pygame.draw.circle(self.screen, (0, 0, 255), self.rect.center, self.attraction_radius, 1)
 
         # Gestion du clignotement

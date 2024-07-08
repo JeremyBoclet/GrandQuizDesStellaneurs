@@ -6,6 +6,7 @@ import copy
 
 from Models.ProjectG.Enemies.Blob import Blob
 from Models.ProjectG.Menu import Options
+from Models.ProjectG.Menu.Camera import Camera
 from Models.ProjectG.Menu.InventoryDisplay import InventoryDisplay
 from Models.ProjectG.Menu.LevelUpMenu import LevelUpMenu
 from Models.ProjectG.ProjectGPlayer import ProjectGPlayer
@@ -36,11 +37,10 @@ class ProjectGGame:
 
         self.screen = screen
         self.background = pygame.transform.scale(pygame.image.load("../Assets/ProjectG/background.png").convert_alpha(),
-                                                 (screen.get_width(), screen.get_height()))
+                                                 (5000, 5000))
 
         self.player = ProjectGPlayer(self.screen)
         self.player.inventory.add_weapon(magic_staff())
-
 
         self.all_sprites = pygame.sprite.Group()
         self.all_sprites.add(self.player)
@@ -54,7 +54,7 @@ class ProjectGGame:
         self.enemy_spawn_interval = 0.2  # Apparition d'un ennemi toutes les 3 secondes
 
         # Limite d'ennemis à l'écran
-        self.MAX_ENEMIES = 20
+        self.MAX_ENEMIES = 0
         self.hit_enemies_set = set()
 
         self.pause = False
@@ -64,6 +64,14 @@ class ProjectGGame:
         self.clock = pygame.time.Clock()
 
         self.InventoryDisplay = InventoryDisplay(self.screen, self.player.inventory)
+
+        # Taille du monde
+        world_width = 1600
+        world_height = 800
+
+        # Création de la caméra
+        self.camera = Camera(world_width, world_height)
+
 
     def generate_random_position(self):
         """Génère une position aléatoire pour les ennemis sans chevauchement."""
@@ -207,20 +215,29 @@ class ProjectGGame:
 
             # xp
             self.all_loots.update()
-            self.all_loots.draw(self.screen)
+            # self.all_loots.draw(self.screen)
+            for entity in self.all_loots:
+                self.screen.blit(entity.image, self.camera.apply(entity))
 
             # Animation
             self.all_animation_sprite.update()
-            self.all_animation_sprite.draw(self.screen)
-
+            # self.all_animation_sprite.draw(self.screen)
+            for entity in self.all_animation_sprite:
+                self.screen.blit(entity.image, self.camera.apply(entity))
 
             # enemies
             self.all_enemies.update(self.all_enemies)
-            self.all_enemies.draw(self.screen)
+            for entity in self.all_enemies:
+                self.screen.blit(entity.image, self.camera.apply(entity))
+            # self.all_enemies.draw(self.screen)
 
             # sprite
+            # self.all_sprites.update()
+            self.player.update()
             self.all_sprites.update()
             self.all_sprites.draw(self.screen)
+            # self.camera.update(self.player)
+            # self.screen.blit(self.player.image, self.camera.apply(self.player))
 
             self.player.draw_health_bar(self.screen)
 
