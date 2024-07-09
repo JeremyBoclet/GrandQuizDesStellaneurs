@@ -16,8 +16,8 @@ class Enemy(pygame.sprite.Sprite):
         self.image_hit = None
         self.default_sprite = None
         self.rect = None
-        self.health = None
-        self.base_health = None
+        self.health = 1
+        self.base_health = 1
         self.is_flashing = False
         self.flash_timer = 0
         self.flash_duration = 0.5  # Durée du clignotement en secondes

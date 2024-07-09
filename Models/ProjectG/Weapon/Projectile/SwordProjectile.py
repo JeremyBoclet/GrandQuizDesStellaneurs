@@ -13,7 +13,6 @@ class SwordProjectile(Projectile):
         self.color = (255, 0, 0)
         self.current_length = 0
         self.rect = self.image.get_rect(center=(x, y))
-        print(f"direction = {target_x},{target_y}")
         self.angle = math.atan2(target_y - self.y, target_x - self.x) - math.radians(45)
         self.dx = self.weapon.growth_rate * math.cos(self.angle)
         self.dy = self.weapon.growth_rate * math.sin(self.angle)

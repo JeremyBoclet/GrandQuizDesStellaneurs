@@ -5,6 +5,7 @@ import pygame
 import copy
 
 from Models.ProjectG.Enemies.Blob import Blob
+from Models.ProjectG.Enemies.Boss import Boss
 from Models.ProjectG.Menu import Options
 from Models.ProjectG.Menu.InventoryDisplay import InventoryDisplay
 from Models.ProjectG.Menu.LevelUpMenu import LevelUpMenu
@@ -47,7 +48,7 @@ class ProjectGGame:
         self.enemy_spawn_interval = 0.2  # Apparition d'un ennemi toutes les 3 secondes
 
         # Limite d'ennemis à l'écran
-        self.MAX_ENEMIES = 1
+        self.MAX_ENEMIES = 0
         self.hit_enemies_set = set()
 
         self.pause = False
@@ -64,6 +65,8 @@ class ProjectGGame:
 
         self.InventoryDisplay = InventoryDisplay(self.screen, self.player.inventory)
 
+        boss = Boss(self.player)
+        self.all_enemies.add(boss)
 
     def generate_random_position(self):
         """Génère une position aléatoire pour les ennemis sans chevauchement."""
