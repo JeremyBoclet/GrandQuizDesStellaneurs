@@ -166,9 +166,9 @@ class Enemy(pygame.sprite.Sprite):
         dist = math.hypot(dx, dy)
         if dist != 0:
             dx, dy = dx / dist, dy / dist
-        self.direction = pygame.Vector2(dx, dy).normalize()
-        self.rect.x += dx * self.speed
-        self.rect.y += dy * self.speed
+            self.direction = pygame.Vector2(dx, dy).normalize()
+            self.rect.x += dx * self.speed
+            self.rect.y += dy * self.speed
 
     def wander(self):
         if self.target and math.hypot(self.rect.centerx - self.target.rect.centerx, self.rect.centery - self.target.rect.centery) < self.detection_range:
