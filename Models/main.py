@@ -63,7 +63,7 @@ current_game_mode = 0
 current_game_mode = ProjectG.game_mode_id
 
 while running:
-    screen.blit(background, (0, 0))
+    #screen.blit(background, (0, 0))
 
     if game.is_playing:
         # Question

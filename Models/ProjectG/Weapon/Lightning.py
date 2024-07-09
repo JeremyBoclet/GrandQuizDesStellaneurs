@@ -17,7 +17,7 @@ class Lightning(Weapon):
         self.damage = 10
         self.speed = 10
         self.max_projectile = 1
-        self.cooldown = 5000
+        self.cooldown = 200
         self.delete_on_hit = False
         self.max_bounce = 3
 

@@ -9,16 +9,22 @@ from Models.ProjectG.Inventory import Inventory
 class ProjectGPlayer(pygame.sprite.Sprite):
     def __init__(self, screen):
         super().__init__()
+
+        self.background_x = 0
+        self.background_y = 0
         self.screen = screen
-        self.pos = [200, 200]
         self.image = pygame.image.load("../Assets/ProjectG/Mage.png")
         self.image = pygame.transform.scale(self.image, (48, 54)).convert_alpha()
 
         self.sprite_left = pygame.transform.flip(self.image, True, False)
         self.sprite_right = self.image
 
-        self.rect = self.image.get_rect(center=(200, 200))
-        self.speed = 7
+        self.pos = [self.screen.get_width()//2 - 24, self.screen.get_height()//2-27]
+
+        self.rect = self.image.get_rect(center=self.pos)
+
+
+        self.speed = 4
 
         self.last_fire = 0
 
@@ -26,7 +32,7 @@ class ProjectGPlayer(pygame.sprite.Sprite):
 
         # Gestion de l'experience
         self.experience = 0
-        self.next_level_experience_needed = 2
+        self.next_level_experience_needed = 1000
         self.level = 1
         self.base_health = 100
         self.health = 100
@@ -40,19 +46,35 @@ class ProjectGPlayer(pygame.sprite.Sprite):
 
         self.attraction_radius = 170
 
+        self.direction = pygame.math.Vector2()
+        self.sprite_to_move = None
+
     def movement(self):
         key_pressed = key.get_pressed()
         move_x = 0
         move_y = 0
         if key_pressed[pygame.K_LEFT]:
+            for sprite_to_move in self.sprite_to_move:
+                sprite_to_move.rect.x += self.speed
             move_x = -1
+            self.background_x += self.speed
+
             self.image = self.sprite_left
         if key_pressed[pygame.K_RIGHT]:
+            for sprite_to_move in self.sprite_to_move:
+                sprite_to_move.rect.x -= self.speed
+            self.background_x -= self.speed
             move_x = 1
             self.image = self.sprite_right
         if key_pressed[pygame.K_UP]:
+            for sprite_to_move in self.sprite_to_move:
+                sprite_to_move.rect.y += self.speed
+            self.background_y += self.speed
             move_y = -1
         if key_pressed[pygame.K_DOWN]:
+            for sprite_to_move in self.sprite_to_move:
+                sprite_to_move.rect.y -= self.speed
+            self.background_y -= self.speed
             move_y = 1
 
             # Normalisation de la vitesse pour les mouvements diagonaux
@@ -63,8 +85,8 @@ class ProjectGPlayer(pygame.sprite.Sprite):
             move_x *= self.speed
             move_y *= self.speed
 
-        self.pos[0] += move_x
-        self.pos[1] += move_y
+        self.rect.x += move_x
+        self.rect.y += move_y
 
         # check pour ne pas sortir de l'écran
         if self.pos[0] <= 0:
@@ -79,8 +101,10 @@ class ProjectGPlayer(pygame.sprite.Sprite):
         self.rect.x = self.pos[0]
         self.rect.y = self.pos[1]
 
-        # Debugging output
-        print(f"Player position: x={self.rect.x}, y={self.rect.y}")
+    def additional_update(self, sprite_to_move):
+        self.sprite_to_move = sprite_to_move
+
+
     def update(self):
         self.movement()
         self.inventory.update()
@@ -101,6 +125,18 @@ class ProjectGPlayer(pygame.sprite.Sprite):
                 self.is_flashing = False
                 self.image = self.default_sprite
 
+        self.rect.center += self.direction * self.speed
+
+        # check pour ne pas sortir de l'écran
+        if self.pos[0] <= 0:
+            self.pos[0] = 0
+        if self.pos[0] >= self.screen.get_width() - 48:
+            self.pos[0] = self.screen.get_width() - 48
+        if self.pos[1] <= 0:
+            self.pos[1] = 0
+        if self.pos[1] >= self.screen.get_height() - 54:
+            self.pos[1] = self.screen.get_height() - 54
+
     def draw_experience_bar(self, surface):
         # Dimensions de la barre
         bar_width = 1800
@@ -115,6 +151,7 @@ class ProjectGPlayer(pygame.sprite.Sprite):
         current_xp_ratio = self.experience / self.next_level_experience_needed
         current_xp_width = bar_width * current_xp_ratio
         pygame.draw.rect(surface, (0, 255, 0), (xp_bar_x, xp_bar_y, current_xp_width, bar_height))
+
 
     def take_damage(self, damage):
         if not self.is_flashing:

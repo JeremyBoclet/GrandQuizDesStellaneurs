@@ -1,27 +1,35 @@
 import pygame
 
 
-class Camera:
-    def __init__(self, width, height):
-        self.camera = pygame.Rect(0, 0, width, height)
-        self.width = width
-        self.height = height
+class Camera(pygame.sprite.Group):
+    def __init__(self):
+        super().__init__()
+        self.display_surface = pygame.display.get_surface()
 
-    def apply(self, entity):
-        return entity.rect.move(self.camera.topleft)
+        # camera offset
+        self.offset = pygame.math.Vector2()
+        self.half_w = self.display_surface.get_size()[0] // 2
+        self.half_h = self.display_surface.get_size()[1] // 2
 
-    def update(self, target):
-        x = -target.rect.centerx + int(self.width / 2)
-        y = -target.rect.centery + int(self.height / 2)
+        # ground
+        self.ground_surf = pygame.image.load("../Assets/ProjectG/background.png").convert_alpha()
+        self.ground_rect = self.ground_surf.get_rect(topleft=(0, 0))
 
-        # Limiter le défilement à la taille de la carte
-        x = min(0, x)  # Ne pas dépasser le bord gauche
-        y = min(0, y)  # Ne pas dépasser le bord supérieur
-        x = max(-(self.camera.width - self.width), x)  # Ne pas dépasser le bord droit
-        y = max(-(self.camera.height - self.height), y)  # Ne pas dépasser le bord inférieur
+    def center_target_camera(self, target):
+        self.offset.x = target.rect.centerx - self.half_w
+        self.offset.y = target.rect.centery - self.half_h
+        print(f"target center x {target.rect.centerx}")
+    def custom_draw(self, player):
+        self.center_target_camera(player)
 
-        self.camera = pygame.Rect(x, y, self.width, self.height)
+        self.display_surface.fill('#71ddee')
 
-        # Debugging output
-        print(f"camera width = {self.camera.width}, self width={self.width}")
-        print(f"Camera coordinates: x={x}, y={y}")
+        # ground
+        ground_offset = self.ground_rect.topleft - self.offset
+        self.display_surface.blit(self.ground_surf, ground_offset)
+
+        # active elements
+        for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
+            offset_pos = sprite.rect.topleft - self.offset
+            self.display_surface.blit(sprite.image, offset_pos)
+

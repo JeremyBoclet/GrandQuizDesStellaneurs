@@ -6,7 +6,6 @@ import copy
 
 from Models.ProjectG.Enemies.Blob import Blob
 from Models.ProjectG.Menu import Options
-from Models.ProjectG.Menu.Camera import Camera
 from Models.ProjectG.Menu.InventoryDisplay import InventoryDisplay
 from Models.ProjectG.Menu.LevelUpMenu import LevelUpMenu
 from Models.ProjectG.ProjectGPlayer import ProjectGPlayer
@@ -39,38 +38,35 @@ class ProjectGGame:
         self.background = pygame.transform.scale(pygame.image.load("../Assets/ProjectG/background.png").convert_alpha(),
                                                  (5000, 5000))
 
-        self.player = ProjectGPlayer(self.screen)
-        self.player.inventory.add_weapon(magic_staff())
 
-        self.all_sprites = pygame.sprite.Group()
-        self.all_sprites.add(self.player)
 
         self.all_enemies = pygame.sprite.Group()
 
         self.all_loots = pygame.sprite.Group()
         self.all_animation_sprite = pygame.sprite.Group()
+
         # Chronomètre pour l'apparition des ennemis
         self.enemy_spawn_time = 0
         self.enemy_spawn_interval = 0.2  # Apparition d'un ennemi toutes les 3 secondes
 
         # Limite d'ennemis à l'écran
-        self.MAX_ENEMIES = 0
+        self.MAX_ENEMIES = 1
         self.hit_enemies_set = set()
 
         self.pause = False
         self.level_up_menu = None
 
+        self.player = ProjectGPlayer(self.screen)
+        self.player.inventory.add_weapon(Lightning())
+
+        self.all_sprites = pygame.sprite.Group()
+        self.all_sprites.add(self.player)
+
+
         self.Options = Options(self.player.inventory.weapons)
         self.clock = pygame.time.Clock()
 
         self.InventoryDisplay = InventoryDisplay(self.screen, self.player.inventory)
-
-        # Taille du monde
-        world_width = 1600
-        world_height = 800
-
-        # Création de la caméra
-        self.camera = Camera(world_width, world_height)
 
 
     def generate_random_position(self):
@@ -99,10 +95,9 @@ class ProjectGGame:
         return closest_enemy
 
     def update(self):
-        self.screen.blit(self.background, (0, 0))
 
         self.clock.tick(60)
-        # print(self.clock.get_fps())
+        # print(f"fps : {self.clock.get_fps()}")
 
         for event in pygame.event.get():
             if self.pause:
@@ -203,41 +198,40 @@ class ProjectGGame:
                 enemy.is_targeted = False
 
             for enemy in self.all_enemies:
-                if pygame.sprite.collide_rect(enemy, self.player):
-                    self.player.take_damage(enemy.damage)
+                if isinstance(enemy,Blob):
+                    if pygame.sprite.collide_rect(enemy, self.player):
+                        self.player.take_damage(enemy.damage)
 
             #************************************************************
             #*************************** DRAW ***************************
             #************************************************************
+            self.screen.fill('#71ddee')
+            self.screen.blit(self.background, (self.player.background_x, self.player.background_y))
+
+            move_all_sprite = self.all_loots.copy()
+            move_all_sprite.add(self.all_enemies.copy())
+            move_all_sprite.add(self.all_animation_sprite.copy())
+
+            self.player.additional_update(move_all_sprite)
 
             # Inventaire
             self.InventoryDisplay.draw_inventory()
 
             # xp
             self.all_loots.update()
-            # self.all_loots.draw(self.screen)
-            for entity in self.all_loots:
-                self.screen.blit(entity.image, self.camera.apply(entity))
+            self.all_loots.draw(self.screen)
 
             # Animation
             self.all_animation_sprite.update()
-            # self.all_animation_sprite.draw(self.screen)
-            for entity in self.all_animation_sprite:
-                self.screen.blit(entity.image, self.camera.apply(entity))
+            self.all_animation_sprite.draw(self.screen)
 
             # enemies
             self.all_enemies.update(self.all_enemies)
-            for entity in self.all_enemies:
-                self.screen.blit(entity.image, self.camera.apply(entity))
-            # self.all_enemies.draw(self.screen)
+            self.all_enemies.draw(self.screen)
 
             # sprite
-            # self.all_sprites.update()
-            self.player.update()
             self.all_sprites.update()
             self.all_sprites.draw(self.screen)
-            # self.camera.update(self.player)
-            # self.screen.blit(self.player.image, self.camera.apply(self.player))
 
             self.player.draw_health_bar(self.screen)
 
@@ -248,6 +242,7 @@ class ProjectGGame:
                     loot = enemy.spawn_loots()
                     if loot is not None:
                         self.all_loots.add(loot)
+                        self.all_sprites.add(loot)
                     self.all_enemies.remove(enemy)
 
             self.player.draw_experience_bar(self.screen)
@@ -257,3 +252,4 @@ class ProjectGGame:
                              (20, self.screen.get_height() - self.cancel_image.get_height()))
 
             self.cancel_rect = pygame.Rect(20, self.screen.get_height() - self.cancel_image.get_height(), 200, 65)
+

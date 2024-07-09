@@ -29,7 +29,7 @@ class Blob(Enemy):
         self.default_sprite = self.image
 
         self.rect = self.image.get_rect(center=(x, y))
-        self.speed = 2
+        self.speed = 4
 
         self.spawn_cooldown = 200
         self.last_spawn = 0

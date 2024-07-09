@@ -15,7 +15,7 @@ class Saw(Weapon):
                                             (60, 60))
         self.damage = 2
         self.max_range = 300
-        self.cooldown = 1500
+        self.cooldown = 200
         self.delete_on_hit = False
         self.rect = self.image.get_rect(center=(100, 100))
         self.angle = 0
