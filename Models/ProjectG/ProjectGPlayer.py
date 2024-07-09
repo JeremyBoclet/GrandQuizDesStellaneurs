@@ -24,7 +24,7 @@ class ProjectGPlayer(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.pos)
 
 
-        self.speed = 4
+        self.speed = 5
 
         self.last_fire = 0
 

@@ -25,6 +25,12 @@ class Enemy(pygame.sprite.Sprite):
         self.player = None
         self.loot = None
         self.damage = 0
+        self.detection_range = 400  # La distance maximale du triangle
+        self.angle_range = 30  # L'angle de la vision en degrés
+        self.player_in_sight = False
+        self.direction = pygame.Vector2(random.uniform(-1, 1), random.uniform(-1, 1)).normalize()
+        self.change_direction_time = pygame.time.get_ticks()
+        self.target = None
 
     def take_damage(self, damage):
         self.is_targeted = True
@@ -48,6 +54,15 @@ class Enemy(pygame.sprite.Sprite):
             else:
                 self.is_flashing = False
                 self.image = self.default_sprite
+
+        if self.is_player_in_detection_area(self.player):
+            self.player_in_sight = True
+            self.move_towards(self.player)
+        elif self.is_player_in_aggro_circle(self.player) and self.player_in_sight:
+            self.move_towards(self.player)
+        else:
+            self.player_in_sight = False
+            #self.wander()
 
     def draw_health_bar(self, surface):
         # if not self.is_targeted:
@@ -110,3 +125,72 @@ class Enemy(pygame.sprite.Sprite):
             return RegenHealth(self.rect.centerx, self.rect.centery)
         else:
             return None  # Aucun loot n'est généré
+
+    def is_player_in_aggro_circle(self, player):
+        distance = math.hypot(player.rect.centerx - self.rect.centerx, player.rect.centery - self.rect.centery)
+        return distance < self.detection_range
+
+    def is_player_in_detection_area(self, player):
+        if self.player_in_sight:
+            return False
+
+        # Calculez les coordonnées des trois points du triangle de repérage
+        angle_offset = math.atan2(self.direction.y, self.direction.x)
+        angle_left = angle_offset + math.radians(self.angle_range / 2)
+        angle_right = angle_offset - math.radians(self.angle_range / 2)
+
+        x1, y1 = self.rect.center
+        x2 = x1 + self.detection_range * math.cos(angle_left)
+        y2 = y1 + self.detection_range * math.sin(angle_left)
+        x3 = x1 + self.detection_range * math.cos(angle_right)
+        y3 = y1 + self.detection_range * math.sin(angle_right)
+
+        # Utilisez la fonction pygame pour détecter si le joueur est dans le triangle
+        triangle = [(x1, y1), (x2, y2), (x3, y3)]
+        return self.point_in_triangle(player.rect.center, triangle)
+
+    def point_in_triangle(self, point, triangle):
+        # Utilise l'algorithme de barycentric coordinates pour vérifier si un point est dans un triangle
+        def sign(p1, p2, p3):
+            return (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p3[1])
+
+        b1 = sign(point, triangle[0], triangle[1]) < 0.0
+        b2 = sign(point, triangle[1], triangle[2]) < 0.0
+        b3 = sign(point, triangle[2], triangle[0]) < 0.0
+
+        return ((b1 == b2) and (b2 == b3))
+
+    def move_towards(self, player):
+        self.target = player
+        dx, dy = player.rect.centerx - self.rect.centerx, player.rect.centery - self.rect.centery
+        dist = math.hypot(dx, dy)
+        if dist != 0:
+            dx, dy = dx / dist, dy / dist
+        self.direction = pygame.Vector2(dx, dy).normalize()
+        self.rect.x += dx * self.speed
+        self.rect.y += dy * self.speed
+
+    def wander(self):
+        if self.target and math.hypot(self.rect.centerx - self.target.rect.centerx, self.rect.centery - self.target.rect.centery) < self.detection_range:
+            return
+
+        current_time = pygame.time.get_ticks()
+        if current_time - self.change_direction_time > 1000:  # Change de direction toutes les secondes
+            self.direction = pygame.Vector2(random.uniform(-1, 1), random.uniform(-1, 1)).normalize()
+            self.change_direction_time = current_time
+
+        self.rect.x += self.direction.x * self.speed
+        self.rect.y += self.direction.y * self.speed
+
+    def draw_detection_area(self, screen):
+        angle_offset = math.atan2(self.direction.y, self.direction.x)
+        angle_left = angle_offset + math.radians(self.angle_range / 2)
+        angle_right = angle_offset - math.radians(self.angle_range / 2)
+
+        x1, y1 = self.rect.center
+        x2 = x1 + self.detection_range * math.cos(angle_left)
+        y2 = y1 + self.detection_range * math.sin(angle_left)
+        x3 = x1 + self.detection_range * math.cos(angle_right)
+        y3 = y1 + self.detection_range * math.sin(angle_right)
+
+        pygame.draw.polygon(screen, (0, 255, 0), [(x1, y1), (x2, y2), (x3, y3)], 2)

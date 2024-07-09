@@ -57,7 +57,7 @@ class ProjectGGame:
         self.level_up_menu = None
 
         self.player = ProjectGPlayer(self.screen)
-        self.player.inventory.add_weapon(Lightning())
+        self.player.inventory.add_weapon(FallingStar())
 
         self.all_sprites = pygame.sprite.Group()
         self.all_sprites.add(self.player)
@@ -237,6 +237,7 @@ class ProjectGGame:
 
             for enemy in self.all_enemies:
                 enemy.draw_health_bar(self.screen)
+                enemy.draw_detection_area(self.screen)
                 if enemy.health <= 0:
                     # Loot + kill ennemi
                     loot = enemy.spawn_loots()
