@@ -1,7 +1,7 @@
 import pygame
 
 from Models.ProjectG.Weapon.Projectile.LaserProjectile import LaserProjectile
-from Models.ProjectG.Weapon.Weapon import Weapon
+from Models.ProjectG.Weapon.MainWeapon.Weapon import Weapon
 
 
 class Laser(Weapon):

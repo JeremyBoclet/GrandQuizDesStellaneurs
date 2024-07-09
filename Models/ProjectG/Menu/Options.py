@@ -1,12 +1,12 @@
 from Models.ProjectG.Loots.RegenHealth import RegenHealth
-from Models.ProjectG.Weapon.Bomb import Bomb
-from Models.ProjectG.Weapon.FallingStar import FallingStar
-from Models.ProjectG.Weapon.Laser import Laser
-from Models.ProjectG.Weapon.Lightning import Lightning
-from Models.ProjectG.Weapon.Saw import Saw
-from Models.ProjectG.Weapon.Scythe import Scythe
-from Models.ProjectG.Weapon.Star import Star
-from Models.ProjectG.Weapon.magic_staff import magic_staff
+from Models.ProjectG.Weapon.MainWeapon.Bomb import Bomb
+from Models.ProjectG.Weapon.MainWeapon.FallingStar import FallingStar
+from Models.ProjectG.Weapon.MainWeapon.Laser import Laser
+from Models.ProjectG.Weapon.MainWeapon.Lightning import Lightning
+from Models.ProjectG.Weapon.MainWeapon.Saw import Saw
+from Models.ProjectG.Weapon.MainWeapon.Scythe import Scythe
+from Models.ProjectG.Weapon.MainWeapon.Star import Star
+from Models.ProjectG.Weapon.MainWeapon.magic_staff import magic_staff
 
 
 class Options:

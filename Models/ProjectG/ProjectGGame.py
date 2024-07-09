@@ -9,17 +9,14 @@ from Models.ProjectG.Menu import Options
 from Models.ProjectG.Menu.InventoryDisplay import InventoryDisplay
 from Models.ProjectG.Menu.LevelUpMenu import LevelUpMenu
 from Models.ProjectG.ProjectGPlayer import ProjectGPlayer
-from Models.ProjectG.Weapon.Bomb import Bomb
-from Models.ProjectG.Weapon.FallingStar import FallingStar
-from Models.ProjectG.Weapon.Lightning import Lightning
+from Models.ProjectG.Weapon.MainWeapon.FallingStar import FallingStar
+from Models.ProjectG.Weapon.MainWeapon.New_Sword import New_Sword
+from Models.ProjectG.Weapon.MainWeapon.Sword import Sword
 from Models.ProjectG.Weapon.Projectile.BombProjectile import BombProjectile
 from Models.ProjectG.Weapon.Projectile.FallingStarProjectile import FallingStarProjectile
 from Models.ProjectG.Weapon.Projectile.LightningProjectile import LightningProjectile
 from Models.ProjectG.Menu.Options import Options
-from Models.ProjectG.Weapon.Saw import Saw
-from Models.ProjectG.Weapon.Scythe import Scythe
-from Models.ProjectG.Weapon.Weapon import Weapon
-from Models.ProjectG.Weapon.magic_staff import magic_staff
+from Models.ProjectG.Weapon.Projectile.SwordProjectile import SwordProjectile
 
 WIDTH = 1920
 HEIGHT = 1080
@@ -57,11 +54,10 @@ class ProjectGGame:
         self.level_up_menu = None
 
         self.player = ProjectGPlayer(self.screen)
-        self.player.inventory.add_weapon(FallingStar())
+        self.player.inventory.add_weapon(New_Sword())
 
         self.all_sprites = pygame.sprite.Group()
         self.all_sprites.add(self.player)
-
 
         self.Options = Options(self.player.inventory.weapons)
         self.clock = pygame.time.Clock()
@@ -124,6 +120,8 @@ class ProjectGGame:
                     self.pause = False
             else:
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:  # clic gauche
+                        self.player.inventory.start_swing()
                     if self.cancel_rect.collidepoint(event.pos):
                         pygame.quit()
 
@@ -190,6 +188,8 @@ class ProjectGGame:
                             projectile.trigger_animation(projectile.position, self.all_animation_sprite)
                         projectile.inflict_persistent_damage(self.all_enemies)
                         projectile.draw(self.screen)
+                    # if isinstance(projectile,SwordProjectile) :
+                    #     projectile.trigger_animation(projectile.position, self.all_animation_sprite)
 
             all_enemies_set = set(self.all_enemies)
             # Obtenir la liste des ennemis non touchés
@@ -254,3 +254,4 @@ class ProjectGGame:
 
             self.cancel_rect = pygame.Rect(20, self.screen.get_height() - self.cancel_image.get_height(), 200, 65)
 
+            pygame.display.update()

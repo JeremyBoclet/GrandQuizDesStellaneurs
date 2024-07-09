@@ -1,7 +1,7 @@
 import pygame
 
 from Models.ProjectG.Weapon.Projectile.FireBall import FireBall
-from Models.ProjectG.Weapon.Weapon import Weapon
+from Models.ProjectG.Weapon.MainWeapon.Weapon import Weapon
 
 
 class magic_staff(Weapon):

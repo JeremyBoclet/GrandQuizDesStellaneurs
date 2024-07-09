@@ -1,7 +1,7 @@
 import pygame.sprite
 
 from Models.ProjectG.Weapon.Projectile.Projectile import Projectile
-from Models.ProjectG.Weapon.Weapon import Weapon
+from Models.ProjectG.Weapon.MainWeapon.Weapon import Weapon
 
 
 class Saw(Weapon):

@@ -1,8 +1,7 @@
-import random
 import pygame
 
 from Models.ProjectG.Weapon.Projectile.BombProjectile import BombProjectile
-from Models.ProjectG.Weapon.Weapon import Weapon
+from Models.ProjectG.Weapon.MainWeapon.Weapon import Weapon
 
 WIDTH = 1980
 HEIGHT = 1080

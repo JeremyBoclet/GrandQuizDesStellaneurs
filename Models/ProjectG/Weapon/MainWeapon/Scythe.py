@@ -1,7 +1,7 @@
 import pygame
 
 from Models.ProjectG.Weapon.Projectile.MultiScythe import MultiScythe
-from Models.ProjectG.Weapon.Weapon import Weapon
+from Models.ProjectG.Weapon.MainWeapon.Weapon import Weapon
 
 
 class Scythe(Weapon):
