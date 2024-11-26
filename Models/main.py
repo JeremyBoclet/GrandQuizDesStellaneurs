@@ -4,6 +4,7 @@ from Models.Business import convert_difficulty_to_number_password
 from Models.Business import convert_difficulty_to_number_wordle
 from Models.ProjectG.ProjectGGame import ProjectGGame
 from Models.Screen.DropScreen import DropScreen
+from Models.Screen.LogiqueScreen import LogiqueScreen
 from Models.Screen.Selection_Player_Screen import Selection_Player_Screen
 from Models.Screen.Game import Game
 from Models.Screen.PasswordScreen import PasswordScreen
@@ -28,7 +29,7 @@ background = pygame.transform.scale(pygame.image.load("../assets/background.jpg"
 round_timer = 30
 
 # écran
-QUIZ = True
+QUIZ = False
 game = Game(screen)
 PasswordScreen = PasswordScreen(screen)
 MoneyDropScreen = DropScreen(screen)
@@ -38,6 +39,8 @@ screen_round = Round(screen, QUIZ)
 selection_player_screen = Selection_Player_Screen(screen)
 selection_round = Selection_Round(screen, QUIZ)
 ProjectG = ProjectGGame(screen)
+LogiqueScreen = LogiqueScreen(screen)
+
 running = True
 
 # Event
@@ -60,10 +63,10 @@ classement_round = 6
 show_answer = False
 current_game_mode = 0
 
-current_game_mode = ProjectG.game_mode_id
+#current_game_mode = ProjectG.game_mode_id
 
 while running:
-    #screen.blit(background, (0, 0))
+    screen.blit(background, (0, 0))
 
     if game.is_playing:
         # Question
@@ -82,6 +85,8 @@ while running:
         TimerScreen.update(timer_for_round)
     elif current_game_mode == ProjectG.game_mode_id:
         ProjectG.update()
+    elif current_game_mode == LogiqueScreen.game_mode_id:
+        LogiqueScreen.update()
     elif selection_player_screen.is_selecting_player:
         # Sélection du joueur
         selection_player_screen.update(screen)
@@ -152,6 +157,12 @@ while running:
         selection_player_screen.has_Reorganized = False
         screen_round.update_round_projectg(game.current_player)
         current_round = 11
+    elif screen_round.is_round_logique_active:
+        # 100% logique
+        selection_player_screen.has_Reorganized = False
+        screen_round.update_round_logique(game.current_player)
+        current_round = 12
+
     # Met à jour l'écran
     pygame.display.flip()
     pygame.display.update()
@@ -271,6 +282,11 @@ while running:
                                 MoneyDropScreen.return_rect.collidepoint(event.pos) and MoneyDropScreen.game_over):
                             # Annuler
                             current_game_mode = 0
+                        if MoneyDropScreen.is_image_question:
+                            if MoneyDropScreen.image_question_rect.collidepoint(event.pos):
+                                MoneyDropScreen.zoom()
+                            else:
+                                MoneyDropScreen.is_zoomed = False
 
                     elif current_game_mode == WordleScreen.game_mode_id:
                         # WORDLE *******************************************
@@ -292,6 +308,14 @@ while running:
                         if ProjectG.cancel_rect.collidepoint(event.pos):
                             current_game_mode = 0
                             running = False
+                    elif current_game_mode == LogiqueScreen.game_mode_id:
+                        if LogiqueScreen.cancel_rect.collidepoint(event.pos):
+                            current_game_mode = 0
+
+                        for player in LogiqueScreen.get_players():
+                            if player.rect.collidepoint(event.pos):
+                                player.change_selection()
+
                     elif selection_player_screen.is_selecting_player:
                         # Sélection du joueur
                         for button in selection_player_screen.group_buttons:
@@ -313,6 +337,7 @@ while running:
                                 screen_round.is_round_wordle_active = (button.round_id == "wordle")
                                 screen_round.is_round_timer_active = (button.round_id == "timer")
                                 screen_round.is_round_projectG_active = (button.round_id == "projectG")
+                                screen_round.is_round_logique_active = (button.round_id == "Logique")
 
                                 running = (button.round_id != "Quit")
                                 selection_player_screen.save_points()
@@ -432,6 +457,13 @@ while running:
                                 for button in screen_round.group_buttons_round_projectg:
                                     if button.rect.collidepoint(event.pos):
                                         current_game_mode = ProjectG.game_mode_id
+                        # 100% Logique
+                        if screen_round.is_round_logique_active:
+                            if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
+                                for button in screen_round.group_buttons_round_logique:
+                                    if button.rect.collidepoint(event.pos):
+                                        current_game_mode = LogiqueScreen.game_mode_id
+                                        LogiqueScreen.set_all_player(game.get_all_players_points())
 
                 elif event.type == pygame.KEYDOWN:
                     if current_game_mode == MoneyDropScreen.game_mode_id and not MoneyDropScreen.wait_for_next_step:

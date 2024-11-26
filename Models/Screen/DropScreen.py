@@ -1,4 +1,5 @@
 import math
+import os
 
 import pygame
 import random
@@ -12,6 +13,10 @@ from Models.MoneyDropQuestion import MoneyDropQuestion
 
 class DropScreen:
     def __init__(self, screen):
+        self.image_question = None
+        self.image_question_rect = None
+        self.is_image_question = False
+        self.is_zoomed = False
         self.game_mode_id = 1100
         self.game_over = False
         self.screen = screen
@@ -94,7 +99,9 @@ class DropScreen:
                                          row["Guess_A"],
                                          row["Guess_B"],
                                          row["Guess_C"],
-                                         row["Guess_D"])
+                                         row["Guess_D"],
+                                         row["ExternalPath"],
+                                         row["TypeQuestion"])
 
             self.all_questions.append(question)
 
@@ -149,6 +156,7 @@ class DropScreen:
 
         self.current_question_l1 = self.font.render(question_l1, True, (240, 255, 255))
         self.current_question_l2 = self.font.render(question_l2, True, (240, 255, 255))
+
 
         if self.is_finale:
             self.set_final_answers()
@@ -276,6 +284,9 @@ class DropScreen:
             self.input_box_c.draw(self.screen)
             self.input_box_d.draw(self.screen)
 
+    def zoom(self):
+        self.is_zoomed = not self.is_zoomed
+
     def update(self):
         self.limit_text()
 
@@ -319,7 +330,7 @@ class DropScreen:
                           self.screen.get_height() / 3))
 
         # Montant max et restant
-        maximum_money = self.font.render('Maximum : ' + str(self.current_player.maximum_md_point) + '€', True,
+        maximum_money = self.font.render('Maximum : ' + str(self.current_player.maximum_md_point) + ' pts', True,
                                          (240, 255, 255))
         self.screen.blit(maximum_money, (10, 60))
 
@@ -329,7 +340,7 @@ class DropScreen:
                            - int(self.input_box_c.text if self.input_box_c.text != "" else 0)
                            - int(self.input_box_d.text if self.input_box_d.text != "" else 0))
 
-        remaining_money_font = self.font.render('Restant : ' + str(remaining_money) + '€', True,
+        remaining_money_font = self.font.render('Restant : ' + str(remaining_money) + ' pts', True,
                                                 (0, 255, 0) if remaining_money >= 0 else (255, 0, 0))
         self.screen.blit(remaining_money_font, (10, 140))
 
@@ -352,9 +363,8 @@ class DropScreen:
                                                       self.screen.get_height() - self.win_image.get_height()))
                     self.show_return_button()
 
-                    point = math.ceil(self.current_player.remaining_md_point / 1000)
                     self.point_earned_text = self.font.render(
-                        "+ {} points".format(point), True,
+                        "+ {} points".format(self.current_player.remaining_md_point), True,
                         (255, 255, 255))
 
                     self.screen.blit(self.point_earned_text,
@@ -363,7 +373,7 @@ class DropScreen:
 
                     if not self.game_over:
                         self.game_over = True
-                        self.current_player.add_point(point)
+                        self.current_player.add_point(self.current_player.remaining_md_point)
                 else:
                     # Next step
                     self.screen.blit(self.Next_image, (
@@ -381,6 +391,48 @@ class DropScreen:
                 self.valid_rect = pygame.Rect(self.screen.get_width() / 2 - 310,
                                               self.screen.get_height() - self.valid_image.get_height(), 600, 150)
 
+        self.is_image_question = False
+        # Cas special image, son
+        if self.question.type_question == "img":
+            self.is_image_question = True
+
+            # Si image on la montre + zoomable sur clic
+            if self.is_zoomed:
+                image_path = "../Assets/Annexe/zoom/" + self.question.external_path
+
+                if not os.path.exists(image_path):
+                    image_path = "../Assets/Annexe/" + self.question.external_path
+
+                self.image_question = pygame.image.load(image_path)
+                width = self.screen.get_width()
+                height = self.screen.get_height()
+            else:
+                self.image_question = pygame.image.load(
+                    "../Assets/Annexe/img.png")
+
+                width = 300
+                height = 200
+
+            self.image_question = pygame.transform.scale(self.image_question,
+                                                         (width, height)).convert_alpha()
+
+            if self.is_zoomed:
+                pos_x = 0
+                pos_y = 0
+            else:
+                pos_x = 50
+                pos_y = self.screen.get_height() / 2
+
+            self.image_question = pygame.transform.scale(self.image_question,
+                                                         (width, height)).convert_alpha()
+
+            self.screen.blit(self.image_question,
+                             (pos_x, pos_y))
+
+            self.image_question_rect = pygame.Rect(
+                pos_x,
+                pos_y, width, height)
+
     def limit_text(self):
         self.input_box_a.text = self.input_box_a.text[:len(str(self.current_player.maximum_md_point))]
         self.input_box_b.text = self.input_box_b.text[:len(str(self.current_player.maximum_md_point))]
@@ -390,7 +442,7 @@ class DropScreen:
     def reset_game(self):
         self.raz_zone()
         self.current_number_question = 0
-        self.current_player.set_md_point(250000)
+        self.current_player.set_md_point(400)
         self.set_question()
         self.defeat = False
         self.game_over = False

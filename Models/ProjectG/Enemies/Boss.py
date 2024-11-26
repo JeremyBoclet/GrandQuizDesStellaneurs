@@ -20,11 +20,23 @@ class Boss(Enemy):
         self.health = 1000
         self.base_health = 1000
         self.charge_distance = 500  # Distance maximale de charge
-        self.charge_speed = 7 # Vitesse de charge
+        self.charge_speed = 10 # Vitesse de charge
         self.charge_direction = None
         self.charge_target = None  # Position cible de la charge (derrière le joueur)
-        self.max_charge_duration = 120  # Durée maximale de la charge en frames
+        self.max_charge_duration = 60  # Durée maximale de la charge en frames
         self.charge_duration = 0  # Durée actuelle de la charge en frames
+
+        # Charger l'image de la destination
+        self.charge_destination_image =  pygame.transform.scale(
+            pygame.image.load("../Assets/ProjectG/cible.png").convert_alpha(),
+            (60,60))
+        self.charge_destination_rect = self.charge_destination_image.get_rect()
+
+        # Ajout d'un délai avant la charge
+        self.charge_delay = 60  # Délai en frames avant la charge
+        self.charge_delay_timer = 0
+        self.is_charging = False
+        self.arrow_color = (255, 0, 0)  # Couleur de la flèche
 
     def update(self, all_enemies):
         if not self.is_aggro:
@@ -32,14 +44,19 @@ class Boss(Enemy):
             if self.detect_player():
                 self.is_aggro = True
         else:
-            #self.move_towards(self.player)
             self.attack_timer -= 1
             if self.attack_timer <= 0 and self.detect_player():
                 self.attack()
                 self.attack_timer = self.attack_cooldown
 
-        if self.charge_direction:
-            self.charge()
+            if self.charge_delay_timer > 0:
+                self.charge_delay_timer -= 1
+                if self.charge_delay_timer == 0:
+                    self.is_charging = True
+                    self.charge_duration = self.max_charge_duration
+
+            if self.is_charging and self.charge_duration > 0:
+                self.update_charge()
 
     def move_sideways(self):
         self.rect.x += self.speed
@@ -72,32 +89,33 @@ class Boss(Enemy):
     def charge_attack(self):
         # Définir la direction de la charge (vers le joueur ou une direction prédéterminée)
         self.charge_target = self.calculate_behind_player()
-        self.charge_direction = pygame.math.Vector2(self.rect.center) - pygame.math.Vector2(self.charge_target)
-        if self.charge_direction.length() > 0:
-            self.charge_direction.normalize()
+        self.charge_direction = (
+                    pygame.math.Vector2(self.charge_target) - pygame.math.Vector2(self.rect.center)).normalize()
+        self.charge_delay_timer = self.charge_delay
+        self.charge_destination_rect.center = self.charge_target
 
-    def charge(self):
-        # Déplacer le boss dans la direction de la charge
+    def update_charge(self):
+        if self.charge_duration > 0:
+            self.rect.center += self.charge_direction * self.charge_speed
+            self.charge_duration -= 1
+            if self.charge_duration <= 0:
+                self.is_charging = False
+                self.charge_target = None
 
-        self.rect.x += self.charge_speed
-        self.rect.y +=  self.charge_speed
-
-        if self.rect.x == self.charge_direction.x:
-            self.charge_direction = None
-
-        # Vérifier si le boss a atteint la distance maximale de charge
-        distance_traveled = pygame.math.Vector2(self.rect.center) - pygame.math.Vector2(
-            (self.rect.x + self.rect.width) // 2, (self.rect.y + self.rect.height) // 2)
-
-        # Incrémenter le compteur de durée de la charge
-        # self.charge_duration += 1
-        # # Vérifier si le temps de charge maximum est écoulé
-        # if self.charge_duration >= self.max_charge_duration:
-        #     self.charge_target = None  # Arrêter la charge
-        print(distance_traveled.length())
-        if distance_traveled.length() > self.charge_distance:
-            print("stop charge")
-            self.charge_direction = None  # Arrêter la charge
+    def draw_arrow(self, screen):
+        if self.charge_delay_timer > 0:
+            start_pos = self.rect.center
+            end_pos = self.charge_target
+            progress = 1 - self.charge_delay_timer / self.charge_delay
+            current_end_pos = (pygame.math.Vector2(start_pos) + (
+                        pygame.math.Vector2(end_pos) - pygame.math.Vector2(start_pos)) * progress).xy
+            pygame.draw.line(screen, self.arrow_color, start_pos, current_end_pos, 5)
+            arrow_head_size = 10
+            arrow_direction = (pygame.math.Vector2(end_pos) - pygame.math.Vector2(start_pos)).normalize()
+            perpendicular_direction = pygame.math.Vector2(-arrow_direction.y, arrow_direction.x)
+            left_arrow_head = current_end_pos - arrow_direction * arrow_head_size + perpendicular_direction * arrow_head_size
+            right_arrow_head = current_end_pos - arrow_direction * arrow_head_size - perpendicular_direction * arrow_head_size
+            pygame.draw.polygon(screen, self.arrow_color, [current_end_pos, left_arrow_head, right_arrow_head])
 
     def jump_attack(self):
         # Implémentez la logique de l'attaque de saut

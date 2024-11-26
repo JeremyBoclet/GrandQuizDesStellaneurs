@@ -8,7 +8,7 @@ class Players:
         self.total_point = 0
         self.get_players_point()
         self.main_category_id = main_category_id
-        self.maximum_md_point = 250000
+        self.maximum_md_point = 400
         self.remaining_md_point = self.maximum_md_point
 
     def add_point(self, point):

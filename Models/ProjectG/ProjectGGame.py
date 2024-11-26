@@ -248,7 +248,9 @@ class ProjectGGame:
                         self.all_loots.add(loot)
                         self.all_sprites.add(loot)
                     self.all_enemies.remove(enemy)
-
+                # Dessiner la flèche si le délai de charge est actif
+                if enemy.charge_delay_timer > 0:
+                    enemy.draw_arrow(self.screen)
             self.player.draw_experience_bar(self.screen)
 
             # Bouton annuler

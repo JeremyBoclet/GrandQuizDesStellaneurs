@@ -31,6 +31,11 @@ class GameRounds(pygame.sprite.Sprite):
             case "projectG":
                 self.rect.x = self.screen.get_width() / 2 - 390
                 self.rect.y = self.screen.get_height() / 2
+
+            case "Logique":
+                self.rect.x = self.screen.get_width() / 2 - 190
+                self.rect.y = self.screen.get_height() / 2
+
             case "Quit":
                 self.rect.x = 10
                 self.rect.y = self.screen.get_height() - 60
