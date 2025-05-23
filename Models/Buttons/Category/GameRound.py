@@ -20,10 +20,10 @@ class GameRounds(pygame.sprite.Sprite):
                 self.rect.x = self.screen.get_width() / 2 - 390
 
             case "drop":
-                self.rect.x = self.screen.get_width() / 2 - 190
+                self.rect.x = self.screen.get_width() / 2 + 10
 
             case "wordle":
-                self.rect.x = self.screen.get_width() / 2 + 10
+                self.rect.x = self.screen.get_width() / 2 - 190
 
             case "timer":
                 self.rect.x = self.screen.get_width() / 2 + 210

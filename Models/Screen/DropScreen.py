@@ -84,7 +84,7 @@ class DropScreen:
         self.error_text = ""
 
         self.current_number_question = 0
-        self.MAX_QUESTION = 2
+        self.MAX_QUESTION = 8
         self.is_finale = False
 
         self.question = ""
@@ -327,7 +327,7 @@ class DropScreen:
                           self.screen.get_height() / 4))
         self.screen.blit(self.current_question_l2,
                          ((self.screen.get_width() - self.current_question_l2.get_width()) / 2,
-                          self.screen.get_height() / 3))
+                          (self.screen.get_height() / 4 )+ 60))
 
         # Montant max et restant
         maximum_money = self.font.render('Maximum : ' + str(self.current_player.maximum_md_point) + ' pts', True,

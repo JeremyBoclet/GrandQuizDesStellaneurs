@@ -18,8 +18,8 @@ class Selection_Round:
         else:
             self.group_buttons.add(GameRounds("password", screen))  # Password
             self.group_buttons.add(GameRounds("drop", screen))  # Money Drop
-            self.group_buttons.add(GameRounds("wordle", screen))  # Wordle
-            self.group_buttons.add(GameRounds("timer", screen))  # Timer
+            self.group_buttons.add(GameRounds("timer", screen))  # Wordle
+            self.group_buttons.add(GameRounds("wordle", screen))  # Timer
             #self.group_buttons.add(GameRounds("projectG", screen))  # Projet G
             self.group_buttons.add(GameRounds("Logique", screen))  # Projet G
 
