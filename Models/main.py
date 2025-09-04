@@ -29,7 +29,7 @@ background = pygame.transform.scale(pygame.image.load("../assets/background.jpg"
 round_timer = 30
 
 # écran
-QUIZ = False
+QUIZ = True
 game = Game(screen)
 PasswordScreen = PasswordScreen(screen)
 MoneyDropScreen = DropScreen(screen)
@@ -71,22 +71,6 @@ while running:
     if game.is_playing:
         # Question
         game.update(time_in_sec, current_round == 0, show_answer, timer_for_sound)
-    elif current_game_mode == PasswordScreen.game_mode_ID:
-        PasswordScreen.current_player = game.current_player
-        PasswordScreen.update()
-    elif current_game_mode == MoneyDropScreen.game_mode_id:
-        MoneyDropScreen.current_player = game.current_player
-        MoneyDropScreen.update()
-    elif current_game_mode == WordleScreen.game_mode_id:
-        WordleScreen.current_player = game.current_player
-        WordleScreen.update()
-    elif current_game_mode == TimerScreen.game_mode_id:
-        TimerScreen.current_player = game.current_player
-        TimerScreen.update(timer_for_round)
-    elif current_game_mode == ProjectG.game_mode_id:
-        ProjectG.update()
-    elif current_game_mode == LogiqueScreen.game_mode_id:
-        LogiqueScreen.update()
     elif selection_player_screen.is_selecting_player:
         # Sélection du joueur
         selection_player_screen.update(screen)
@@ -137,31 +121,6 @@ while running:
         selection_player_screen.has_Reorganized = False
         screen_round.update_round7(game.current_player)
         current_round = 7
-    elif screen_round.is_round_drop_active:
-        # Money Drop
-        selection_player_screen.has_Reorganized = False
-        screen_round.update_round_drop(game.current_player)
-        current_round = 8
-    elif screen_round.is_round_wordle_active:
-        # Wordle
-        selection_player_screen.has_Reorganized = False
-        screen_round.update_round_wordle(game.current_player)
-        current_round = 9
-    elif screen_round.is_round_timer_active:
-        # Timer ROUND
-        selection_player_screen.has_Reorganized = False
-        screen_round.update_round_timer(game.current_player)
-        current_round = 10
-    elif screen_round.is_round_projectG_active:
-        # Project G ROUND
-        selection_player_screen.has_Reorganized = False
-        screen_round.update_round_projectg(game.current_player)
-        current_round = 11
-    elif screen_round.is_round_logique_active:
-        # 100% logique
-        selection_player_screen.has_Reorganized = False
-        screen_round.update_round_logique(game.current_player)
-        current_round = 12
 
     # Met à jour l'écran
     pygame.display.flip()
@@ -249,73 +208,6 @@ while running:
                             for button in screen_round.group_buttons_finale:
                                 if button.question_id == last_question_id:
                                     button.had_been_chosen = False
-                    elif current_game_mode == PasswordScreen.game_mode_ID:
-                        # PASSWORD *******************************************
-                        if PasswordScreen.cancel_rect.collidepoint(event.pos) or (
-                                PasswordScreen.game_over and PasswordScreen.return_rect.collidepoint(event.pos)):
-                            # Annuler
-                            current_game_mode = 0
-                            PasswordScreen.game_over = False
-                        if not PasswordScreen.game_over:
-                            if PasswordScreen.good_answer_rect.collidepoint(event.pos):
-                                PasswordScreen.set_answer("valid")
-                                PasswordScreen.set_password()
-                            elif PasswordScreen.bad_answer_rect.collidepoint(event.pos):
-                                PasswordScreen.set_answer("error")
-                                PasswordScreen.set_password()
-                    elif current_game_mode == MoneyDropScreen.game_mode_id:
-                        # MONEY DROP *******************************************
-                        if MoneyDropScreen.wait_for_next_step:
-                            if MoneyDropScreen.Next_rect.collidepoint(
-                                    event.pos) and not MoneyDropScreen.is_finale and not MoneyDropScreen.game_over:
-                                MoneyDropScreen.valid_input()
-                        else:
-                            MoneyDropScreen.input_box_a.handle_event(event)
-                            MoneyDropScreen.input_box_b.handle_event(event)
-                            MoneyDropScreen.input_box_c.handle_event(event)
-                            MoneyDropScreen.input_box_d.handle_event(event)
-
-                            if MoneyDropScreen.error_text == "" and MoneyDropScreen.valid_rect.collidepoint(event.pos):
-                                # Valider
-                                MoneyDropScreen.valid_input()
-                        if MoneyDropScreen.cancel_rect.collidepoint(event.pos) or (
-                                MoneyDropScreen.return_rect.collidepoint(event.pos) and MoneyDropScreen.game_over):
-                            # Annuler
-                            current_game_mode = 0
-                        if MoneyDropScreen.is_image_question:
-                            if MoneyDropScreen.image_question_rect.collidepoint(event.pos):
-                                MoneyDropScreen.zoom()
-                            else:
-                                MoneyDropScreen.is_zoomed = False
-
-                    elif current_game_mode == WordleScreen.game_mode_id:
-                        # WORDLE *******************************************
-                        if WordleScreen.cancel_rect.collidepoint(event.pos):
-                            # Annuler
-                            current_game_mode = 0
-                            WordleScreen.is_game_over = False
-                            WordleScreen.defeat = False
-                            WordleScreen.point_earned = 0
-                        WordleScreen.input_box.handle_event(event)
-
-                    elif current_game_mode == TimerScreen.game_mode_id:
-                        if TimerScreen.cancel_rect.collidepoint(event.pos):
-                            # Annuler
-                            current_game_mode = 0
-                        if TimerScreen.stop_button_rect.collidepoint(event.pos):
-                            TimerScreen.stop_timer = True
-                    elif current_game_mode == ProjectG.game_mode_id:
-                        if ProjectG.cancel_rect.collidepoint(event.pos):
-                            current_game_mode = 0
-                            running = False
-                    elif current_game_mode == LogiqueScreen.game_mode_id:
-                        if LogiqueScreen.cancel_rect.collidepoint(event.pos):
-                            current_game_mode = 0
-
-                        for player in LogiqueScreen.get_players():
-                            if player.rect.collidepoint(event.pos):
-                                player.change_selection()
-
                     elif selection_player_screen.is_selecting_player:
                         # Sélection du joueur
                         for button in selection_player_screen.group_buttons:
@@ -332,12 +224,6 @@ while running:
                                 screen_round.is_round4_active = (button.round_id == 4)
                                 screen_round.is_finale_active = (button.round_id == 5)
                                 screen_round.is_ranking_active = (button.round_id == 6)
-                                screen_round.is_round7_active = (button.round_id == "password")
-                                screen_round.is_round_drop_active = (button.round_id == "drop")
-                                screen_round.is_round_wordle_active = (button.round_id == "wordle")
-                                screen_round.is_round_timer_active = (button.round_id == "timer")
-                                screen_round.is_round_projectG_active = (button.round_id == "projectG")
-                                screen_round.is_round_logique_active = (button.round_id == "Logique")
 
                                 running = (button.round_id != "Quit")
                                 selection_player_screen.save_points()
@@ -413,68 +299,5 @@ while running:
                                         game.is_playing = True
                                         button.had_been_chosen = True
                                         last_question_id = button.question_id
-                        # Round Mot de Passe
-                        if screen_round.is_round7_active:
-                            if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
-                                for button in screen_round.group_buttons_round7:
-                                    if button.rect.collidepoint(event.pos):
-                                        PasswordScreen.set_max_attempt(convert_difficulty_to_number_password(button.name))
-                                        PasswordScreen.password_pins.answered_password.clear()
-                                        PasswordScreen.password_pins.set_pins()
-                                        PasswordScreen.set_password()
-                                        current_game_mode = PasswordScreen.game_mode_ID
-                        # Round Money Drop
-                        if screen_round.is_round_drop_active:
-                            if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
-                                for button in screen_round.group_buttons_round_drop:
-                                    if button.rect.collidepoint(event.pos):
-                                        MoneyDropScreen.reset_game()
-                                        current_game_mode = MoneyDropScreen.game_mode_id
-                        # Round Wordle
-                        if screen_round.is_round_wordle_active:
-                            if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
-                                for button in screen_round.group_buttons_round_wordle:
-                                    if button.rect.collidepoint(event.pos):
-                                        WordleScreen.set_max_attempt(convert_difficulty_to_number_wordle(button.name))
-                                        WordleScreen.answered.clear()
-                                        WordleScreen.input_box.text = ""
-                                        WordleScreen.set_answer()
-                                        current_game_mode = WordleScreen.game_mode_id
-
-                        # Round Timer
-                        if screen_round.is_round_timer_active:
-                            if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
-                                for button in screen_round.group_buttons_round_timer:
-                                    if button.rect.collidepoint(event.pos):
-                                        game.is_playing = False
-                                        current_game_mode = TimerScreen.game_mode_id
-                                        TimerScreen.stop_timer = False
-                                        timer_for_round = 0
-                                        TimerScreen.game_over = False
-                        # Project G
-                        if screen_round.is_round_projectG_active:
-                            if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
-                                for button in screen_round.group_buttons_round_projectg:
-                                    if button.rect.collidepoint(event.pos):
-                                        current_game_mode = ProjectG.game_mode_id
-                        # 100% Logique
-                        if screen_round.is_round_logique_active:
-                            if not selection_player_screen.is_selecting_player and not selection_round.is_selecting_round:
-                                for button in screen_round.group_buttons_round_logique:
-                                    if button.rect.collidepoint(event.pos):
-                                        current_game_mode = LogiqueScreen.game_mode_id
-                                        LogiqueScreen.set_all_player(game.get_all_players_points())
-
-                elif event.type == pygame.KEYDOWN:
-                    if current_game_mode == MoneyDropScreen.game_mode_id and not MoneyDropScreen.wait_for_next_step:
-                        MoneyDropScreen.input_box_a.handle_event(event)
-                        MoneyDropScreen.input_box_b.handle_event(event)
-                        MoneyDropScreen.input_box_c.handle_event(event)
-                        MoneyDropScreen.input_box_d.handle_event(event)
-                    if current_game_mode == WordleScreen.game_mode_id and not WordleScreen.is_game_over:
-                        if event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN:
-                            WordleScreen.add_answer()
-                        WordleScreen.input_box.handle_event(event)
-                        WordleScreen.limit_text()
 
 pygame.quit()
