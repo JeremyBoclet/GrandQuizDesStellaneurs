@@ -40,6 +40,9 @@ class Selection_Player_Screen(pygame.sprite.Sprite):
         # df = self.bdd.request_query("SELECT PlayerName, Main_Category FROM GrandQuiz.dbo.Players")
         df.reset_index()
 
+        if(df.shape[0] <= 5):
+            x = self.screen.get_width() / 2 - 305
+
         for index, row in df.iterrows():
             self.group_buttons.add(Player_button(row["PlayerName"], x, y, row["Main_Category"]))
             y += 150

@@ -21,7 +21,7 @@ class Selection_Round:
             self.group_buttons.add(GameRounds("timer", screen))  # Wordle
             self.group_buttons.add(GameRounds("wordle", screen))  # Timer
             #self.group_buttons.add(GameRounds("projectG", screen))  # Projet G
-            self.group_buttons.add(GameRounds("Logique", screen))  # Projet G
+            #self.group_buttons.add(GameRounds("Logique", screen))  # 100% Logique
 
         self.group_buttons.add(Rounds(6, screen))  # Classement
         self.group_buttons.add(Rounds("Quit", screen)) # Quitter

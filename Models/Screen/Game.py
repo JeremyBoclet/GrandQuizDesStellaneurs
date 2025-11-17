@@ -1,4 +1,4 @@
-import pygame, sys, threading
+import pygame
 import os
 from Models.Bdd import Bdd
 from Models.Buttons.Button import Button
