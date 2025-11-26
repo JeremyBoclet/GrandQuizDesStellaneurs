@@ -21,7 +21,7 @@ pygame.display.set_caption("GRAND QUIZZ")
 # Changement de la taille (position)
 screen_width = 1500
 screen_height = 1000
-# screen = pygame.display.set_mode((screen_width, screen_height))
+#screen = pygame.display.set_mode((screen_width, screen_height))
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 background = pygame.transform.scale(pygame.image.load("../assets/background.jpg").convert_alpha(),
                                     (screen.get_width(), screen.get_height()))
