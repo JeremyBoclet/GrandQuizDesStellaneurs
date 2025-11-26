@@ -131,10 +131,10 @@ class DropScreen:
         self.question = self.all_questions[r[0]]
         self.all_questions.pop(r[0])
 
-        self.answer_a = self.font.render('A - ' + str(self.question.guess_A), True, (240, 255, 255))
-        self.answer_b = self.font.render('B - ' + str(self.question.guess_B), True, (240, 255, 255))
-        self.answer_c = self.font.render('C - ' + str(self.question.guess_C), True, (240, 255, 255))
-        self.answer_d = self.font.render('D - ' + str(self.question.guess_D), True, (240, 255, 255))
+        self.answer_a = self.font.render(str(self.question.guess_A), True, (240, 255, 255))
+        self.answer_b = self.font.render(str(self.question.guess_B), True, (240, 255, 255))
+        self.answer_c = self.font.render(str(self.question.guess_C), True, (240, 255, 255))
+        self.answer_d = self.font.render(str(self.question.guess_D), True, (240, 255, 255))
 
         if str(self.question.answer).lower() == str(self.question.guess_A).lower():
             self.right_answer = self.input_box_a
